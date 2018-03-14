@@ -24,7 +24,7 @@ namespace pride { namespace detection
         cxx17
     };
 
-    cxx_version_t get_cxx_version()
+    inline cxx_version_t get_cxx_version()
     {
     #if defined(PRI_CXX_17)
         return cxx_version_t::cxx17;
@@ -39,7 +39,7 @@ namespace pride { namespace detection
     #endif
     }
 
-    bool is_cxx_ge(cxx_version_t version)
+    inline bool is_cxx_ge(cxx_version_t version)
     {
         return get_cxx_version() >= version;
     }
