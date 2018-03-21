@@ -9,7 +9,7 @@
 
 namespace pride { namespace detection
 {
-    inline constexpr auto rtti() noexcept
+    inline constexpr auto rtti() noexcept -> bool
     {
     #if defined(PRI_RTII_ENABLED)
         return true;

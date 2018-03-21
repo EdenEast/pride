@@ -24,7 +24,7 @@ namespace pride { namespace detection
         cxx17
     };
 
-    inline cxx_version_t get_cxx_version()
+    inline auto get_cxx_version() -> cxx_version_t
     {
     #if defined(PRI_CXX_17)
         return cxx_version_t::cxx17;

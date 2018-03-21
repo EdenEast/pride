@@ -21,7 +21,7 @@ namespace pride { namespace detection
         unknown
     };
 
-    inline constexpr auto current_compiler() noexcept
+    inline constexpr auto current_compiler() noexcept -> compiler_t
     {
     #if defined(PRI_COMPILER_CLANG)
         return compiler_t::clang;

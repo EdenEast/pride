@@ -18,7 +18,7 @@ namespace pride { namespace detection
         unknown
     };
 
-    constexpr auto current_stdlib() noexcept
+    constexpr auto current_stdlib() noexcept -> stdlib_t
     {
     #if defined(PRI_STDLIB_LIBCXX)
         return stdlib_t::libcxx;

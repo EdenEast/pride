@@ -19,7 +19,7 @@ namespace pride { namespace detection
         unknown,
     };
 
-    inline constexpr auto current_arch() noexcept
+    inline constexpr auto current_arch() noexcept -> architecture_t
     {
     #if defined(PRI_ARCH_32)
         return architecture_t::x86;

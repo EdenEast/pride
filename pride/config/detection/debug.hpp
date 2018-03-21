@@ -7,7 +7,7 @@
 
 namespace pride { namespace detection
 {
-    inline constexpr auto debug() noexcept
+    inline constexpr auto debug() noexcept -> bool
     {
     #if defined(PRI_DEBUG)
         return true;

@@ -18,7 +18,7 @@ namespace pride { namespace detection
         unknown
     };
 
-    constexpr endian_t get_endian()
+    constexpr auto get_endian() -> endian_t
     {
     #if defined(PRI_LITTLE_ENDIAN)
         return endian_t::little;
