@@ -4,15 +4,15 @@
 namespace pride
 {
     template<typename Type>
-    class singleton
+    class singleton_t
     {
     protected:
-        singleton() {}
+        singleton_t() {}
     public:
-        singleton(const singleton&) = delete;
-        singleton(singleton&&) = delete;
-        singleton& operator=(const singleton&) = delete;
-        singleton& operator=(singleton&&) = delete;
+        singleton_t(const singleton_t&) = delete;
+        singleton_t(singleton_t&&) = delete;
+        singleton_t& operator=(const singleton_t&) = delete;
+        singleton_t& operator=(singleton_t&&) = delete;
 
         Type& instance()
         {

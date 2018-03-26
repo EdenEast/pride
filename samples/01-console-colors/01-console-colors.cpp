@@ -4,6 +4,7 @@ int main()
 {
     using namespace pride::console;
     using namespace std;
+
     cout << "Hi welcome to pride! This is the normal message color and style\n";
     cout << fg_t::blue << "Why are you feeling blue? We have colors that we can use!\n\n";
     
