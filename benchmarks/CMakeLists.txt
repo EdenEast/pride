@@ -10,5 +10,9 @@ option(CELERO_ENABLE_TESTS "Enable building and running unit tests." OFF)
 
 add_subdirectory("${CMAKE_SOURCE_DIR}/external/celero" "${CMAKE_BINARY_DIR}/external/celero")
 
-add_executable(bench guid.cpp)
+file(GLOB_RECURSE bench_files
+  *.h *.hpp *.cpp
+)
+add_executable(bench "${bench_files}")
 target_link_libraries(bench celero libpride)
+add_filter_group("${bench_files}" "${CMAKE_CURRENT_LIST_DIR}")
