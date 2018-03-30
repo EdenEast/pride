@@ -11,6 +11,7 @@ static int color_line()
 {
     using namespace pride::console;
     std::cout << fg_t::red << 1234 << fg_t::reset << '\n';
+    return 0;
 }
 
 BASELINE(Consle_Colors, Baseline, 30, 10000)

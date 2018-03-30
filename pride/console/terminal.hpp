@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <iostream>
 #include <memory>
 
@@ -36,14 +37,14 @@ namespace pride { namespace console
         bool support_ansi(const std::streambuf* stream) noexcept;
 #endif
     }
-    
+
     // --------------------------------------------------------------------------------------------
 
     bool has_color_support();
     bool is_terminal(const std::streambuf* os_buffer);
 
     // --------------------------------------------------------------------------------------------
-    
+
     inline bool has_color_support()
     {
 #if defined(PRI_OS_WINDOWS)
@@ -84,21 +85,21 @@ namespace pride { namespace console
 #elif defined (PRI_OS_WINDOWS)
         if (os_buffer == std::cout.rdbuf())
         {
-            static const bool cout_term = 
+            static const bool cout_term =
                 (_isatty(_fileno(stdout)) || impl::is_msys_pty(_fileno(stdout)));
             return cout_term;
         }
         else if (os_buffer == std::cerr.rdbuf())
         {
-            static const bool cerr_term = 
+            static const bool cerr_term =
                 (_isatty(_fileno(stderr)) || impl::is_msys_pty(_fileno(stderr)));
             return cerr_term;
         }
 #endif
         return false;
     }
-    
-    
+
+
 #if defined(PRI_OS_WINDOWS)
     namespace impl
     {
