@@ -1,4 +1,4 @@
-include(clone)
+include(git_clone)
 
 git_clone(catch "https://github.com/cruizemissile/catch2" "${CMAKE_SOURCE_DIR}/external")
 
@@ -15,4 +15,4 @@ file(GLOB_RECURSE test_files
 add_executable(tests "${test_files}")
 target_include_directories(tests PUBLIC "${CMAKE_CURRENT_LIST_DIR}")
 target_link_libraries(tests Catch libpride)
-add_filter_group("${test_files}" "${CMAKE_CURRENT_LIST_DIR}")
+target_source_group(tests)
