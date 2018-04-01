@@ -14,7 +14,7 @@ namespace pride
         singleton_t& operator=(const singleton_t&) = delete;
         singleton_t& operator=(singleton_t&&) = delete;
 
-        Type& instance()
+        static Type& instance()
         {
             static Type _instance;
             return _instance;
