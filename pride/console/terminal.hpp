@@ -28,7 +28,7 @@
 
 namespace pride { namespace console
 {
-    namespace impl
+    namespace detail
     {
 #if defined(PRI_OS_WINDOWS)
         bool is_msys_pty(int fd) noexcept;
@@ -86,13 +86,13 @@ namespace pride { namespace console
         if (os_buffer == std::cout.rdbuf())
         {
             static const bool cout_term =
-                (_isatty(_fileno(stdout)) || impl::is_msys_pty(_fileno(stdout)));
+                (_isatty(_fileno(stdout)) || detail::is_msys_pty(_fileno(stdout)));
             return cout_term;
         }
         else if (os_buffer == std::cerr.rdbuf())
         {
             static const bool cerr_term =
-                (_isatty(_fileno(stderr)) || impl::is_msys_pty(_fileno(stderr)));
+                (_isatty(_fileno(stderr)) || detail::is_msys_pty(_fileno(stderr)));
             return cerr_term;
         }
 #endif
@@ -101,7 +101,7 @@ namespace pride { namespace console
 
 
 #if defined(PRI_OS_WINDOWS)
-    namespace impl
+    namespace detail
     {
         inline bool is_msys_pty(int fd) noexcept
         {

@@ -7,7 +7,7 @@
 #include <iterator>
 #include <type_traits>
 
-namespace pride { namespace assert { namespace impl
+namespace pride { namespace assert { namespace detail
 {
     template<typename Type>
     class expression_lhs;

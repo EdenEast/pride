@@ -9,7 +9,7 @@
 #define PRI_IMPL_ASSERT(fail_func, expr) \
     do \
     { \
-        ::pride::assert::impl::bool_expression_t eval_expr(::pride::assert::impl::expression_decomposer_t() << expr); \
+        ::pride::assert::detail::bool_expression_t eval_expr(::pride::assert::detail::expression_decomposer_t() << expr); \
         if (pride::unlikely(!eval_expr)) \
         { \
             fail_func(__FILE__, __LINE__, PRI_FUNCTION, #expr, std::move(eval_expr)); \

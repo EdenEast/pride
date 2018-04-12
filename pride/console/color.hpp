@@ -85,7 +85,7 @@ namespace pride { namespace console
         native    = 2
     };
 
-    namespace impl
+    namespace detail
     {
         // A check to see if the type is a color enum class type
         template <typename T>
@@ -286,19 +286,19 @@ namespace pride { namespace console
         return os << "\033[" << static_cast<int>(value) << 'm';
     }
 #endif
-    } // namespace impl
+    } // namespace detail
 
     template<typename Type>
-    impl::enable_std_t<Type> operator<<(std::ostream& os, const Type value)
+    detail::enable_std_t<Type> operator<<(std::ostream& os, const Type value)
     {
-        const control_t control = impl::control_mode();
+        const control_t control = detail::control_mode();
         switch (control)
         {
         case control_t::automatic: 
             return has_color_support() && is_terminal(os.rdbuf()) ?
-                impl::set_color(os, value) : os;
+                detail::set_color(os, value) : os;
         case control_t::force:
-            return impl::set_color(os, value);
+            return detail::set_color(os, value);
         default:
             return os;
         }
@@ -306,10 +306,10 @@ namespace pride { namespace console
 
     inline void set_control_mode(const control_t mode) noexcept
     {
-        impl::control_mode() = mode;
+        detail::control_mode() = mode;
     }
     inline void set_win_term_mode(const win_term_t mode) noexcept
     {
-        impl::win_term_mode() = mode;
+        detail::win_term_mode() = mode;
     }
 }}

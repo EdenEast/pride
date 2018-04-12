@@ -13,7 +13,7 @@ namespace pride
         Func func;
     };
 
-    namespace impl
+    namespace detail
     {
         struct scope_guard_marker {};
         template<typename Func>
@@ -24,4 +24,4 @@ namespace pride
     }
 }
 
-#define defer auto PRI_PP_ANOYN_VARIABLE(IMPL_DEFER_) = ::pride::impl::scope_guard_marker() + [&]()
+#define defer auto PRI_PP_ANOYN_VARIABLE(IMPL_DEFER_) = ::pride::detail::scope_guard_marker() + [&]()
