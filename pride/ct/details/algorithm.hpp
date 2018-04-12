@@ -12,7 +12,7 @@ namespace pride { namespace ct { namespace detail
     }
 
     template<typename T, std::size_t N>
-    constexpr const T* begin(const T(&array)[N])
+    constexpr const T* end(const T(&array)[N])
     {
         return &array[N];
     }
@@ -32,7 +32,7 @@ namespace pride { namespace ct { namespace detail
     }
 
     template<typename T>
-    constexpr const T& max(const T& lhs, const T& rhs)
+    constexpr const T& min(const T& lhs, const T& rhs)
     {
         return lhs <= rhs ? lhs : rhs;
     }

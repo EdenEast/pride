@@ -90,4 +90,19 @@ namespace pride { namespace ct
     {
         return !(lhs == rhs);
     }
+
+#if defined(PRI_USE_CT_TEST)
+
+static_assert(cstring_t("one") == cstring_t("one"));
+static_assert(cstring_t("one") != cstring_t("two"));
+
+static_assert(cstring_t("size is 10").size() == 10);
+static_assert(cstring_t("length is 12").length() == 12);
+static_assert(cstring_t::length("length is 12") == 12);
+
+static_assert(cstring_t("this is the beginning").begin() == cstring_t("this is the beginning"));
+static_assert(cstring_t("this is the end of the line").end() == cstring_t(""));
+
+#endif
+
 }}
