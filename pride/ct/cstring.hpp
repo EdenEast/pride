@@ -93,15 +93,15 @@ namespace pride { namespace ct
 
 #if defined(PRI_USE_CT_TEST)
 
-static_assert(cstring_t("one") == cstring_t("one"));
-static_assert(cstring_t("one") != cstring_t("two"));
+static_assert(cstring_t("one") == cstring_t("one"), "cstring == operator failed");
+static_assert(cstring_t("one") != cstring_t("two"), "cstring != operator failed");
 
-static_assert(cstring_t("size is 10").size() == 10);
-static_assert(cstring_t("length is 12").length() == 12);
-static_assert(cstring_t::length("length is 12") == 12);
+static_assert(cstring_t("size is 10").size() == 10, "cstring size() failed");
+static_assert(cstring_t("length is 12").length() == 12, "cstring length() failed");
+static_assert(cstring_t::length("length is 12") == 12, "cstring static length() failed");
 
-static_assert(cstring_t("this is the beginning").begin() == cstring_t("this is the beginning"));
-static_assert(cstring_t("this is the end of the line").end() == cstring_t(""));
+static_assert(cstring_t("this is the beginning").begin() == cstring_t("this is the beginning"), "cstring begin() failed");
+static_assert(cstring_t("this is the end of the line").end() == cstring_t(""), "cstring end() failed");
 
 #endif
 

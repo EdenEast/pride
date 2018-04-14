@@ -28,8 +28,8 @@ namespace pride { namespace ct
 
 #if defined(PRI_USE_CT_TEST)
 
-static_assert(fnv1a_hash("is the same") == fnv1a_hash("is the same"));
-static_assert(fnv1a_hash("this is") != fnv1a_hash("not the same"));
+static_assert(fnv1a_hash("is the same") == fnv1a_hash("is the same"), "cstring == operator failed");
+static_assert(fnv1a_hash("this is") != fnv1a_hash("not the same"), "cstring != operator failed");
 
 #endif
 
