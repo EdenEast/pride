@@ -2,19 +2,29 @@
 #include <pride/ct.hpp>
 #include <iostream>
 
-struct something {};
-
-struct foo { int i = 10010; };
+struct foo
+{
+    constexpr static int i = 1337;
+    constexpr static const char* c = "this is foo";
+};
 
 int main()
 {
     using namespace std;
-    using namespace pride::ct;
+    using namespace pride;
 
-    cout << type_id<something>().name() << endl;
-    cout << unnaamed_type_id<something>().hash() << endl;
-    cout << (type_id<something>().hash() == unnaamed_type_id<something>().hash() ? "true" : "false") << endl;
-    cout << type_id(cout).name() << endl;
+    cout << "type_id<foo>().name() = " << ct::type_id<foo>().name() << '\n';
+    cout << "type_id<foo>().hash() = " << ct::type_id<foo>().hash() << "\n\n";
 
+    cout << "unnamed_type_id<foo>().hash() = " << ct::unnaamed_type_id<foo>().hash() << '\n';
+    cout << "type_id<foo>().hash() == unnamed_type_id<foo>().hash() -> (" << ct::type_id<foo>().hash() << " == " << ct::unnaamed_type_id<foo>().hash()
+         << ") -> " << (ct::type_id<foo>().hash() == ct::unnaamed_type_id<foo>().hash() ? "true" : "false") << "\n\n";
+
+    foo f;
+    cout << "type_id(f) = " << ct::type_id(f).name() << '\n';
+    cout << "type_id(f.i) = " << ct::type_id(f.i).name() << '\n';
+    cout << "type_id(f.c) = " << ct::type_id(f.c).name() << "\n\n";
+
+    cout << "ct::type_id<ct::static_value<int, foo::i>>() = " << ct::type_id<ct::static_value<int, foo::i>>().name() << '\n';
     return 0;
 }

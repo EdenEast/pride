@@ -1,5 +1,4 @@
 #include <pride/pride.hpp>
-#include <pride/ct/hash.hpp>
 
 int main()
 {
