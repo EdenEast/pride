@@ -2,6 +2,7 @@
 #pragma once
 
 #include "details/algorithm.hpp"
+#include "hash.hpp"
 #include <cstring>
 #include <string>
 #include <ostream>
@@ -42,6 +43,11 @@ namespace pride { namespace ct
         constexpr std::size_t size() const
         {
             return length();
+        }
+
+        constexpr hash_t hash() const
+        {
+            return hash::fnv1a(length(), begin());
         }
 
         std::string str() const

@@ -65,10 +65,4 @@ int main()
     cout << bgb_t::black << "Black, " << bgb_t::blue << "Blue, " << bgb_t::cyan << "Cyan, "
          << bgb_t::green << "Green, " << bgb_t::grey << "Grey, " << bgb_t::magenta << "Magenta, "
          << bgb_t::red << "Red, " << bgb_t::yellow << "Yellow." << bg_t::reset << style_t::reset << "\n\n";
-
-    cout << pride::ct::fnv1a_hash("s") << '\n';
-    cout << pride::ct::fnv1a_hash("ss") << '\n';
-    cout << pride::ct::fnv1a_hash("sss") << '\n';
-    cout << pride::ct::fnv1a_hash("ssss") << '\n';
-    cout << pride::ct::fnv1a_hash("sssss") << '\n';
 }
