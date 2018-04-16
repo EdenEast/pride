@@ -48,7 +48,7 @@ namespace pride { namespace ct
         {
             static constexpr cstring_t apply()
             {
-                return pride::ct::pretty_function::type<T>().pad(
+                return pride::ct::detail::pretty_function::type<T>().pad(
                     PRI_TYPE_PRETTY_FUNCTION_LEFT,
                     PRI_TYPE_PRETTY_FUNCTION_RIGHT
                 );
@@ -69,7 +69,7 @@ namespace pride { namespace ct
         {
             static constexpr cstring_t apply()
             {
-                 return pretty_function::value<T, Value>().pad(
+                 return pride::ct::detail::pretty_function::value<T, Value>().pad(
                      PRI_VALUE_PRETTY_FUNCTION_LEFT + pride::ct::detail::typename_length<T>::value + PRI_VALUE_PRETTY_FUNCTION_SEPARATION,
                      PRI_VALUE_PRETTY_FUNCTION_RIGHT
                  );

@@ -13,7 +13,7 @@
     #define PRI_PRETTY_FUNCTION __FUNCSIG__
 #endif
 
-namespace pride { namespace ct
+namespace pride { namespace ct { namespace detail
 {
     namespace pretty_function
     {
@@ -29,16 +29,16 @@ namespace pride { namespace ct
             return { PRI_PRETTY_FUNCTION };
         }
     }
-}}
+}}}
 
 #if defined(PRI_COMPILER_CLANG)
-    #define PRI_TYPE_PRETTY_FUNCTION_PREFIX "pride::ct::cstring_t pride::ct::pretty_function::type() [T = "
+    #define PRI_TYPE_PRETTY_FUNCTION_PREFIX "pride::ct::cstring_t pride::ct::detail::pretty_function::type() [T = "
     #define PRI_TYPE_PRETTY_FUNCTION_SUFFIX "]"
 #elif defined(PRI_COMPILER_GCC) && !defined(PRI_COMPILER_CLANG)
-    #define PRI_TYPE_PRETTY_FUNCTION_PREFIX "constexpr pride::ct::cstring_t pride::ct::pretty_function::type() [with T = "
+    #define PRI_TYPE_PRETTY_FUNCTION_PREFIX "constexpr pride::ct::cstring_t pride::ct::detail::pretty_function::type() [with T = "
     #define PRI_TYPE_PRETTY_FUNCTION_SUFFIX "]"
 #elif defined(PRI_COMPILER_MSVC)
-    #define PRI_TYPE_PRETTY_FUNCTION_PREFIX "class pride::ct::cstring_t __cdecl pride::ct::pretty_function::type<"
+    #define PRI_TYPE_PRETTY_FUNCTION_PREFIX "class pride::ct::cstring_t __cdecl pride::ct::detail::pretty_function::type<"
     #define PRI_TYPE_PRETTY_FUNCTION_SUFFIX ">(void)"
 #else
     #error "No support for this compiler."
@@ -48,15 +48,15 @@ namespace pride { namespace ct
 #define PRI_TYPE_PRETTY_FUNCTION_RIGHT (sizeof(PRI_TYPE_PRETTY_FUNCTION_SUFFIX) - 1)
 
 #if defined(PRI_COMPILER_CLANG)
-    #define PRI_VALUE_PRETTY_FUNCTION_PREFIX "pride::ct::cstring_t pride::ct::pretty_function::value() [T = "
+    #define PRI_VALUE_PRETTY_FUNCTION_PREFIX "pride::ct::cstring_t pride::ct::detail::pretty_function::value() [T = "
     #define PRI_VALUE_PRETTY_FUNCTION_SEPARATOR "; Value = "
     #define PRI_VALUE_PRETTY_FUNCTION_SUFFIX "]"
 #elif defined(PRI_COMPILER_GCC) && !defined(PRI_COMPILER_CLANG)
-    #define PRI_VALUE_PRETTY_FUNCTION_PREFIX "constexpr pride::ct::cstring_t pride::ct::pretty_function::value() [with T = "
+    #define PRI_VALUE_PRETTY_FUNCTION_PREFIX "constexpr pride::ct::cstring_t pride::ct::detail::pretty_function::value() [with T = "
     #define PRI_VALUE_PRETTY_FUNCTION_SEPARATOR "; T Value = "
     #define PRI_VALUE_PRETTY_FUNCTION_SUFFIX "]"
 #elif defined(PRI_COMPILER_MSVC)
-    #define PRI_VALUE_PRETTY_FUNCTION_PREFIX "class pride::ct::cstring_t __cdecl pride::ct::pretty_function::value<"
+    #define PRI_VALUE_PRETTY_FUNCTION_PREFIX "class pride::ct::cstring_t __cdecl pride::ct::detail::pretty_function::value<"
     #define PRI_VALUE_PRETTY_FUNCTION_SEPARATOR "; T Value = "
     #define PRI_VALUE_PRETTY_FUNCTION_SUFFIX ">(void)"
 #else
