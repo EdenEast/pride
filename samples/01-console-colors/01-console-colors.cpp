@@ -7,7 +7,7 @@ int main()
 
     cout << "Hi welcome to pride! This is the normal message color and style\n";
     cout << fg_t::blue << "Why are you feeling blue? We have colors that we can use!\n\n";
-    
+
     cout << fg_t::reset << "Ok so what colors can we use? Lets list some colors\n";
     cout << fg_t::black << "Black, " << fg_t::blue << "Blue, " << fg_t::cyan << "Cyan, "
          << fg_t::green << "Green, " << fg_t::grey << "Grey, " << fg_t::magenta << "Magenta, "
