@@ -13,18 +13,23 @@ int main()
     using namespace std;
     using namespace pride;
 
-    cout << "type_id<foo>().name() = " << ct::type_id<foo>().name() << '\n';
-    cout << "type_id<foo>().hash() = " << ct::type_id<foo>().hash() << "\n\n";
+    cout << "type_name<foo> = " << pride::ct::type_name<foo>.str << '\n';
+    cout << "decay_type_name<foo> = " << pride::ct::decay_type_name<foo> << '\n';
+    cout << "type_hash<foo> = " << pride::ct::type_hash<foo> << '\n' << '\n';
 
-    cout << "unnamed_type_id<foo>().hash() = " << ct::unnaamed_type_id<foo>().hash() << '\n';
-    cout << "type_id<foo>().hash() == unnamed_type_id<foo>().hash() -> (" << ct::type_id<foo>().hash() << " == " << ct::unnaamed_type_id<foo>().hash()
-         << ") -> " << (ct::type_id<foo>().hash() == ct::unnaamed_type_id<foo>().hash() ? "true" : "false") << "\n\n";
+    cout << "type_name<const char*> = " << pride::ct::type_name<const char*>.str << '\n';
+    cout << "decay_type_name<const char*> = " << pride::ct::decay_type_name<const char*> << '\n';
+    cout << "type_hash<const char*> = " << pride::ct::type_hash<const char*> << '\n' << '\n';
 
-    foo f;
-    cout << "type_id(f) = " << ct::type_id(f).name() << '\n';
-    cout << "type_id(f.i) = " << ct::type_id(f.i).name() << '\n';
-    cout << "type_id(f.c) = " << ct::type_id(f.c).name() << "\n\n";
+    cout << "type_name<const foo&> = " << pride::ct::type_name<const foo&>.str << '\n';
+    cout << "decay_type_name<const foo&> = " << pride::ct::decay_type_name<const foo&> << '\n';
+    cout << "type_hash<const foo&> = " << pride::ct::type_hash<const foo&> << '\n' << '\n';
 
-    cout << "ct::type_id<ct::static_value<int, foo::i>>() = " << ct::type_id<ct::static_value<int, foo::i>>().name() << '\n';
+    // checking ct::string to see if find is working correctly
+    // pride::ct::string str = "this is some compile time string";
+    // cout << str << '\n';
+    // cout << "find: " << str.find("compile") << " rfind: " << str.rfind("compile")
+    //      << " substr: " << pride::ct::strlen("compile") << " diff: " << str.rfind("compile") - str.find("compile") << '\n';
+
     return 0;
 }
