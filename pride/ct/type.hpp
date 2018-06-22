@@ -1,9 +1,19 @@
 
 #pragma once
 
+#include "../config/detection/compiler.hpp"
 #include "string.hpp"
 #include "hash.hpp"
+#include <array>
 #include <utility>
+
+#if defined(PRI_COMPILER_MSVC)
+#define PRI_FUNCTION __FUNCSIG__
+#define PRI_FIND(s) s.crop(s.find("::tid<") + 6, pride::ct::strlen(">::type_name(void) noexcept"))
+#else
+#define PRI_FUNCTION __PRETTY_FUNCTION__
+#define PRI_FIND(s) s.crop(s.find("= ") + 2, pride::ct::strlen("]"))
+#endif
 
 namespace pride::ct
 {
@@ -20,8 +30,8 @@ namespace pride::ct
         {
             static constexpr string type_name() noexcept
             {
-                constexpr string s = { __PRETTY_FUNCTION__ };
-                constexpr string t = s.crop(s.find("= ") + 2, pride::ct::strlen("]"));
+                constexpr string s = { PRI_FUNCTION };
+                constexpr string t = PRI_FIND(s);
                 return t;
             };
 
@@ -35,8 +45,8 @@ namespace pride::ct
         {
             static constexpr string type_name() noexcept
             {
-                constexpr string s = { __PRETTY_FUNCTION__ };
-                constexpr string t = s.crop(s.find("= ") + 2, pride::ct::strlen("]"));
+                constexpr string s = { PRI_FUNCTION };
+                constexpr string t = PRI_FIND(s);
                 return t;
             }
 
@@ -69,6 +79,9 @@ namespace pride::ct
     template<typename T>
     static constexpr hash_t decay_type_hash = type_hash<std::decay_t<T>>;
 }
+
+#undef PRI_FUNCTION
+#undef PRI_FIND
 
 #if defined(PRI_USE_CT_TEST)
     // static_assert(pride::ct::type_name<int> == pride::ct::string{"int"});

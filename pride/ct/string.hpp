@@ -3,6 +3,9 @@
 
 #include <iostream>
 
+#pragma warning( push )
+#pragma warning( disable : 4146)
+
 namespace pride::ct
 {
     struct string
@@ -137,3 +140,5 @@ namespace pride::ct
         return 0;
     }
 } // namespace pride::ct
+
+#pragma warning( pop )
