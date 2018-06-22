@@ -71,10 +71,10 @@ namespace pride::ct
     static constexpr string decay_type_name = type_name<std::decay_t<T>>;
 
     template<typename T>
-    static constexpr hash_t type_hash = { hash::fnv1a(detail::tholder<T>::name.size() - 1, detail::tholder<T>::name.data()) }; // detail::tid<T>::hash;
+    static constexpr hash_t type_hash = { hash::fnv1a(detail::tholder<T>::name.data(), detail::tholder<T>::name.size() - 1) }; // detail::tid<T>::hash;
 
     template<auto V>
-    static constexpr hash_t value_hash = { hash::fnv1a(detail::vholder<V>::name.size() - 1, detail::vholder<V>::name.data()) }; // detail::tid<T>::hash;
+    static constexpr hash_t value_hash = { hash::fnv1a(detail::vholder<V>::name.data(),detail::vholder<V>::name.size() - 1) }; // detail::tid<T>::hash;
 
     template<typename T>
     static constexpr hash_t decay_type_hash = type_hash<std::decay_t<T>>;

@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "hash.hpp"
 #include <iostream>
 
 #pragma warning( push )
@@ -37,7 +38,7 @@ namespace pride::ct
         constexpr const char* begin() const noexcept { return str; }
         constexpr const char* end() const noexcept { return str + size; }
 
-        constexpr hash_t hash() const noexcept { return hash::fnv1a(size, str); }
+        constexpr hash_t hash() const noexcept { return hash::fnv1a(str, size); }
 
         constexpr size_t find(const string& substring) const noexcept
         {
