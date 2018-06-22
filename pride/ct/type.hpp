@@ -84,6 +84,7 @@ namespace pride::ct
 #undef PRI_FIND
 
 #if defined(PRI_USE_CT_TEST)
-    // static_assert(pride::ct::type_name<int> == pride::ct::string{"int"});
-    // static_assert(pride::ct::type_name<float> == pride::ct::string{"float"});
+    static_assert(pride::ct::type_name<int> == pride::ct::string{"int"});
+    static_assert(pride::ct::type_name<float> == pride::ct::string{"float"});
+    static_assert(pride::ct::decay_type_name<const int&> == pride::ct::type_name<int>);
 #endif

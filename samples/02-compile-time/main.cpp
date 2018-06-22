@@ -25,6 +25,11 @@ int main()
     cout << "decay_type_name<const foo&> = " << pride::ct::decay_type_name<const foo&> << '\n';
     cout << "type_hash<const foo&> = " << pride::ct::type_hash<const foo&> << '\n' << '\n';
 
+    // Testing compile time checking of value_name
+    constexpr int value = 0;
+    cout << pride::ct::value_name<value> << '\n';
+    // static_assert(pride::ct::value_name<value> == pride::ct::type_name<int>);
+
     // checking ct::string to see if find is working correctly
     // pride::ct::string str = "this is some compile time string";
     // cout << str << '\n';

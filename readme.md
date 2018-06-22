@@ -30,14 +30,19 @@ target_link_libraries(sample ${PRIDE_LIB})
 
 ### Compile Time Features
 
-- **`pride::ct::nameof<T>()`** : `constexpr` demangled full qualified type name
-- **`pride::ct::nameof<T, T Value>()`** : `constexpr` demangled value type
-- **`pride::ct::type_id<T>()`** : `constexpr` `std::type_info` - like type id
-- **`pride::ct::unnamed_type_id<T>()`** : `constexpr` `std::type_info` - like hash-only type id
-- **`pride::ct::hash::fnv1a("")`** : `constexpr` hash c style string  and cstring_t
-- **`pride::ct::cstring_t`** : `constexpr` c style compile time string
-- **`pride::ct::static_value<T, Value>`** : `constexpr` way to pass values as template parameters
-- **`pride::ct::type_list<...>`** : `constexpr` compile time way to store list of types 
+- type traits
+- fnv1a hash function
+- constexpr string
+- static_value
+- type_list
+
+### Compiler support
+
+Pride is built to be a c++17 library and with that come the requirement for newer compilers. Pride is supported on clang, gcc, and msvc.
+
+- clang 5.0
+- gcc 8.1.1
+- msvc [need to check msvc version]
 
 ###  Todo
 
