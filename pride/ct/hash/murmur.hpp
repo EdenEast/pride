@@ -1,4 +1,3 @@
-// https://github.com/sztomi/constexpr_murmurhash/blob/master/constexpr_murmur3.h
 // https://en.wikipedia.org/wiki/MurmurHash
 #pragma once
 

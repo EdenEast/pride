@@ -1,4 +1,3 @@
-// https://github.com/vivkin/constexprhash/blob/master/constexprhash.h
 #pragma once
 
 #include <cstdint>
