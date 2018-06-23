@@ -1,11 +1,14 @@
 
 #pragma once
 
+#include "../config/detection/compiler.hpp"
 #include "hash.hpp"
 #include <iostream>
 
-#pragma warning( push )
-#pragma warning( disable : 4146)
+#if defined (PRI_COMPILER_MSVC)
+    #pragma warning( push )
+    #pragma warning( disable : 4146)
+#endif
 
 namespace pride::ct
 {
@@ -142,4 +145,6 @@ namespace pride::ct
     }
 } // namespace pride::ct
 
-#pragma warning( pop )
+#if defined (PRI_COMPILER_MSVC)
+    #pragma warning( pop )
+#endif

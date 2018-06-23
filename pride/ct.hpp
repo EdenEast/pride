@@ -1,7 +1,6 @@
 
 #pragma once
 
-#include "ct/cstring.hpp"
 #include "ct/hash.hpp"
 #include "ct/list.hpp"
 #include "ct/pair.hpp"

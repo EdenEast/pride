@@ -38,9 +38,7 @@ namespace pride::hash
         template<typename T, typename U, size_t N>
         constexpr T process(const U(&input)[N], const T prime, T hash)
         {
-            for (size_t i = 0; i < (N - 1); ++i)
-                hash = compute(input[i], prime, hash);
-            return hash;
+            return process(input, N, prime, hash);
         }
 
         template<typename T, typename U>
@@ -54,9 +52,7 @@ namespace pride::hash
         template<typename T, typename U, size_t N>
         constexpr T fnv1a(const U(&input)[N])
         {
-            static_assert(std::is_same<U, char>() || std::is_same<U, wchar_t>(), "Input type is not supported");
-            static_assert(std::is_same<T, uint64_t>() || std::is_same<T, uint32_t>(), "Hash type is not supported");
-            return process<T>(input, N, constant<T>::prime, constant<T>::offset);
+            return fnv1a(input, N);
         }
 
         template<typename T, typename U>
