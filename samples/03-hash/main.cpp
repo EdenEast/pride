@@ -35,4 +35,9 @@ int main()
     cout << "_mm3_32: " << "here is a test string"_mm3_32 << '\n';
     cout << "-----------------------------------------------\n\n";
 
+    cout << "xxhash\n";
+    cout << "-----------------------------------------------\n";
+    cout << "xxhash32: " << hash::xxhash32(sample) << '\n';
+    cout << "xxhash64: " << hash::xxhash64(sample) << '\n';
+    cout << "-----------------------------------------------\n\n";
 }
