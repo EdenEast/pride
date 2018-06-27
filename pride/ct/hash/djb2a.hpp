@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace pride::hash
+namespace pride::ct::hash
 {
     constexpr uint32_t djb2a(const char* s, uint32_t h = 5381)
     {
@@ -12,5 +12,5 @@ namespace pride::hash
 
 constexpr uint32_t operator "" _djb2a(const char* ptr, const size_t len)
 {
-    return ::pride::hash::djb2a(ptr);
+    return ::pride::ct::hash::djb2a(ptr);
 }

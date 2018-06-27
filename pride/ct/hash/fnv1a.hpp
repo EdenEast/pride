@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <type_traits>
 
-namespace pride::hash
+namespace pride::ct::hash
 {
     namespace detail::fnv1a
     {
@@ -103,30 +103,30 @@ namespace pride::hash
 
 constexpr pride::hash_t operator "" _fnv1a(const char* ptr, const size_t len)
 {
-    return ::pride::hash::detail::fnv1a::fnv1a<pride::hash32_t>(ptr, len);
+    return ::pride::ct::hash::detail::fnv1a::fnv1a<pride::hash32_t>(ptr, len);
 }
 
 constexpr pride::hash_t operator "" _fnv1a(const wchar_t* ptr, const size_t len)
 {
-    return ::pride::hash::detail::fnv1a::fnv1a<pride::hash32_t>(ptr, len);
+    return ::pride::ct::hash::detail::fnv1a::fnv1a<pride::hash32_t>(ptr, len);
 }
 
 constexpr pride::hash32_t operator "" _fnv1a32(const char* ptr, const size_t len)
 {
-    return ::pride::hash::detail::fnv1a::fnv1a<pride::hash32_t>(ptr, len);
+    return ::pride::ct::hash::detail::fnv1a::fnv1a<pride::hash32_t>(ptr, len);
 }
 
 constexpr pride::hash32_t operator "" _fnv1a32(const wchar_t* ptr, const size_t len)
 {
-    return ::pride::hash::detail::fnv1a::fnv1a<pride::hash32_t>(ptr, len);
+    return ::pride::ct::hash::detail::fnv1a::fnv1a<pride::hash32_t>(ptr, len);
 }
 
 constexpr pride::hash64_t operator "" _fnv1a64(const char* ptr, const size_t len)
 {
-    return ::pride::hash::detail::fnv1a::fnv1a<pride::hash64_t>(ptr, len);
+    return ::pride::ct::hash::detail::fnv1a::fnv1a<pride::hash64_t>(ptr, len);
 }
 
 constexpr pride::hash64_t operator "" _fnv1a64(const wchar_t* ptr, const size_t len)
 {
-    return ::pride::hash::detail::fnv1a::fnv1a<pride::hash64_t>(ptr, len);
+    return ::pride::ct::hash::detail::fnv1a::fnv1a<pride::hash64_t>(ptr, len);
 }

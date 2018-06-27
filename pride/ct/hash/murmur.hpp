@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <stdexcept>
 
-namespace pride::hash
+namespace pride::ct::hash
 {
     namespace detail::mm3
     {
@@ -107,5 +107,5 @@ namespace pride::hash
 
 constexpr uint32_t operator "" _mm3_32(const char* ptr, const size_t len)
 {
-    return ::pride::hash::mm3_32(ptr);
+    return ::pride::ct::hash::mm3_32(ptr);
 }

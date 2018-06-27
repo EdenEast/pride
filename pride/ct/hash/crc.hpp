@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 
-namespace pride::hash
+namespace pride::ct::hash
 {
     namespace detail::crc32
     {
@@ -28,5 +28,5 @@ namespace pride::hash
 
 constexpr uint32_t operator "" _crc32(const char* ptr, const size_t len)
 {
-    return ::pride::hash::detail::crc32::crc32(ptr);
+    return ::pride::ct::hash::detail::crc32::crc32(ptr);
 }

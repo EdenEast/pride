@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <limits>
 
-namespace pride::hash
+namespace pride::ct::hash
 {
     namespace detail::xxhash
     {
@@ -342,10 +342,10 @@ namespace pride::hash
 
 constexpr pride::hash32_t operator "" _xxhash32(const char* key, const size_t len)
 {
-    return ::pride::hash::xxhash32(key, len);
+    return ::pride::ct::hash::xxhash32(key, len);
 }
 
 constexpr pride::hash64_t operator "" _xxhash64(const char* key, const size_t len)
 {
-    return ::pride::hash::xxhash64(key, len);
+    return ::pride::ct::hash::xxhash64(key, len);
 }
