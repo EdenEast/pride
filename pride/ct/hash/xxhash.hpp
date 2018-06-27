@@ -150,7 +150,7 @@ namespace pride::hash
                 // step 6
                 acc = final_mix(acc);
 
-                return len;
+                return acc;
             }
 
         private:
@@ -322,19 +322,19 @@ namespace pride::hash
         };
 
         template<typename T>
-        constexpr T xxhash(const char* buf, size_t len, hash_t seed)
+        constexpr T xxhash(const char* buf, size_t len, T seed)
         {
-            static_assert(std::is_same<T, uint32_t>() || std::is_same<T, uint64_t>(), "Hash type is not supported");
+            static_assert(std::is_same<T, uint32_t>() || std::is_same<T, uint64_t>(), "HasSh type is not supported");
             return xxhasher<T>::hash(buf, len, seed);
         }
     }
 
-    constexpr hash32_t xxhash32(const char* buf, hash_t seed = detail::xxhash::constant<uint32_t>::seed)
+    constexpr hash32_t xxhash32(const char* buf, hash32_t seed = detail::xxhash::constant<uint32_t>::seed)
     {
         return detail::xxhash::xxhash<uint32_t>(buf, pride::ct::strlen(buf), seed);
     }
 
-    constexpr hash64_t xxhash64(const char* buf, hash_t seed = detail::xxhash::constant<uint64_t>::seed)
+    constexpr hash64_t xxhash64(const char* buf, hash64_t seed = detail::xxhash::constant<uint64_t>::seed)
     {
         return detail::xxhash::xxhash<uint64_t>(buf, pride::ct::strlen(buf), seed);
     }

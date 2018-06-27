@@ -14,6 +14,5 @@ namespace pride
 #else
     using hash_t = uint32_t;
 #endif
-    static_assert(sizeof(hash_t) == sizeof(uintptr_t));
-
+    static_assert(sizeof(hash_t) == sizeof(uintptr_t), "hash_t is not the same size as the uint ptr");
 }

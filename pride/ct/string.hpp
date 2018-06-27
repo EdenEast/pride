@@ -41,7 +41,7 @@ namespace pride::ct
         constexpr const char* begin() const noexcept { return str; }
         constexpr const char* end() const noexcept { return str + size; }
 
-        constexpr hash_t hash() const noexcept { return hash::fnv1a(str, size); }
+        constexpr hash_t hash() const noexcept { return ::pride::hash::fnv1a(str, size); }
 
         constexpr size_t find(const string& substring) const noexcept
         {
@@ -122,8 +122,10 @@ namespace pride::ct
 
     namespace detail
     {
-        inline static constexpr size_t strlen(const char* const str)
+        template<typename Char>
+        inline static constexpr size_t strlen(const Char* const str)
         {
+            static_assert(std::is_same<Char, char>() || std::is_same<Char, wchar_t>(), "Cannot strlen type that is not a char, wchar");
             return str[0] ? strlen(str + 1) + 1 : 0;
         }
     }
@@ -135,6 +137,17 @@ namespace pride::ct
     }
 
     inline constexpr size_t strlen(const char* const str)
+    {
+        return detail::strlen(str);
+    }
+
+    template<size_t N>
+    constexpr size_t strlen(const wchar_t(&)[N])
+    {
+        return N - 1;
+    }
+
+    inline constexpr size_t strlen(const wchar_t* const str)
     {
         return detail::strlen(str);
     }
