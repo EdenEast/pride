@@ -57,7 +57,7 @@ namespace pride::hash
             constexpr static std::array<uint64_t, 5> primes {{
                 11400714785074694791ULL, 14029467366897019727ULL, 1609587929392839161ULL, 9650029242287828579ULL, 2870177450012600261ULL
             }};
-            static constexpr uint64_t seed = 0x024B7CF4;
+            static constexpr uint64_t seed = 0x2836a5de78b865f5ULL;
         };
 
         using const32 = constant<uint32_t>;
@@ -75,7 +75,11 @@ namespace pride::hash
                 *(uint64_t*)ptr : swap64(*(uint64_t*)ptr);
         }
 
-        uint32_t endian_align32(const void* input, size_t len, uint32_t seed)
+        template<typename Hash>
+        Hash compute(const void* data, size_t len, Hash seed);
+
+        template<>
+        uint32_t compute<uint32_t>(const void* input, size_t len, uint32_t seed)
         {
             const uint8_t* p = (const uint8_t*)input;
             const uint8_t* end = p + len;
@@ -84,28 +88,28 @@ namespace pride::hash
             if (len>=16)
             {
                 const uint8_t* const limit = end - 16;
-                uint32_t v1 = seed + constant<uint32_t>::primes[1] + constant<uint32_t>::primes[2];
-                uint32_t v2 = seed + constant<uint32_t>::primes[2];
+                uint32_t v1 = seed + constant<uint32_t>::primes[0] + constant<uint32_t>::primes[1];
+                uint32_t v2 = seed + constant<uint32_t>::primes[1];
                 uint32_t v3 = seed + 0;
-                uint32_t v4 = seed - constant<uint32_t>::primes[1];
+                uint32_t v4 = seed - constant<uint32_t>::primes[0];
 
                 do
                 {
-                    v1 += read32(p) * constant<uint32_t>::primes[2];
+                    v1 += read32(p) * constant<uint32_t>::primes[1];
                     v1 = rotl32(v1, 13);
-                    v1 *= constant<uint32_t>::primes[1];
+                    v1 *= constant<uint32_t>::primes[0];
                     p+=4;
-                    v2 += read32(p) * constant<uint32_t>::primes[2];
+                    v2 += read32(p) * constant<uint32_t>::primes[1];
                     v2 = rotl32(v2, 13);
-                    v2 *= constant<uint32_t>::primes[1];
+                    v2 *= constant<uint32_t>::primes[0];
                     p+=4;
-                    v3 += read32(p) * constant<uint32_t>::primes[2];
+                    v3 += read32(p) * constant<uint32_t>::primes[1];
                     v3 = rotl32(v3, 13);
-                    v3 *= constant<uint32_t>::primes[1];
+                    v3 *= constant<uint32_t>::primes[0];
                     p+=4;
-                    v4 += read32(p) * constant<uint32_t>::primes[2];
+                    v4 += read32(p) * constant<uint32_t>::primes[1];
                     v4 = rotl32(v4, 13);
-                    v4 *= constant<uint32_t>::primes[1];
+                    v4 *= constant<uint32_t>::primes[0];
                     p+=4;
                 }
                 while (p<=limit);
@@ -114,35 +118,36 @@ namespace pride::hash
             }
             else
             {
-                h32  = seed + constant<uint32_t>::primes[5];
+                h32  = seed + constant<uint32_t>::primes[4];
             }
 
             h32 += (uint32_t) len;
 
             while (p+4<=end)
             {
-                h32 += read32(p) * constant<uint32_t>::primes[3];
-                h32  = rotl32(h32, 17) * constant<uint32_t>::primes[4] ;
+                h32 += read32(p) * constant<uint32_t>::primes[2];
+                h32  = rotl32(h32, 17) * constant<uint32_t>::primes[3];
                 p+=4;
             }
 
             while (p<end)
             {
-                h32 += (*p) * constant<uint32_t>::primes[5];
-                h32 = rotl32(h32, 11) * constant<uint32_t>::primes[1] ;
+                h32 += (*p) * constant<uint32_t>::primes[4];
+                h32 = rotl32(h32, 11) * constant<uint32_t>::primes[0] ;
                 p++;
             }
 
             h32 ^= h32 >> 15;
-            h32 *= constant<uint32_t>::primes[2];
+            h32 *= constant<uint32_t>::primes[1];
             h32 ^= h32 >> 13;
-            h32 *= constant<uint32_t>::primes[3];
+            h32 *= constant<uint32_t>::primes[2];
             h32 ^= h32 >> 16;
 
             return h32;
         }
 
-        uint64_t endian_align64(const void* input, size_t len, uint64_t seed)
+        template<>
+        uint64_t compute<uint64_t>(const void* input, size_t len, uint64_t seed)
         {
             const uint8_t* p = (const uint8_t*)input;
             const uint8_t* end = p + len;
@@ -151,61 +156,61 @@ namespace pride::hash
             if (len>=32)
             {
                 const uint8_t* const limit = end - 32;
-                uint64_t v1 = seed + const64::primes[1] + const64::primes[2];
-                uint64_t v2 = seed + const64::primes[2];
+                uint64_t v1 = seed + const64::primes[0] + const64::primes[1];
+                uint64_t v2 = seed + const64::primes[1];
                 uint64_t v3 = seed + 0;
-                uint64_t v4 = seed - const64::primes[1];
+                uint64_t v4 = seed - const64::primes[0];
 
                 do
                 {
-                    v1 += read64(p) * const64::primes[2];
+                    v1 += read64(p) * const64::primes[1];
                     p+=8;
                     v1 = rotl64(v1, 31);
-                    v1 *= const64::primes[1];
-                    v2 += read64(p) * const64::primes[2];
+                    v1 *= const64::primes[0];
+                    v2 += read64(p) * const64::primes[1];
                     p+=8;
                     v2 = rotl64(v2, 31);
-                    v2 *= const64::primes[1];
-                    v3 += read64(p) * const64::primes[2];
+                    v2 *= const64::primes[0];
+                    v3 += read64(p) * const64::primes[1];
                     p+=8;
                     v3 = rotl64(v3, 31);
-                    v3 *= const64::primes[1];
-                    v4 += read64(p) * const64::primes[2];
+                    v3 *= const64::primes[0];
+                    v4 += read64(p) * const64::primes[1];
                     p+=8;
                     v4 = rotl64(v4, 31);
-                    v4 *= const64::primes[1];
+                    v4 *= const64::primes[0];
                 }
                 while (p<=limit);
 
                 h64 = rotl64(v1, 1) + rotl64(v2, 7) + rotl64(v3, 12) + rotl64(v4, 18);
 
-                v1 *= const64::primes[2];
-                v1 = rotl64(v1, 31);
                 v1 *= const64::primes[1];
+                v1 = rotl64(v1, 31);
+                v1 *= const64::primes[0];
                 h64 ^= v1;
-                h64 = h64 * const64::primes[1] + const64::primes[4];
+                h64 = h64 * const64::primes[0] + const64::primes[3];
 
-                v2 *= const64::primes[2];
-                v2 = rotl64(v2, 31);
                 v2 *= const64::primes[1];
+                v2 = rotl64(v2, 31);
+                v2 *= const64::primes[0];
                 h64 ^= v2;
-                h64 = h64 * const64::primes[1] + const64::primes[4];
+                h64 = h64 * const64::primes[0] + const64::primes[3];
 
-                v3 *= const64::primes[2];
-                v3 = rotl64(v3, 31);
                 v3 *= const64::primes[1];
+                v3 = rotl64(v3, 31);
+                v3 *= const64::primes[0];
                 h64 ^= v3;
-                h64 = h64 * const64::primes[1] + const64::primes[4];
+                h64 = h64 * const64::primes[0] + const64::primes[3];
 
-                v4 *= const64::primes[2];
-                v4 = rotl64(v4, 31);
                 v4 *= const64::primes[1];
+                v4 = rotl64(v4, 31);
+                v4 *= const64::primes[0];
                 h64 ^= v4;
-                h64 = h64 * const64::primes[1] + const64::primes[4];
+                h64 = h64 * const64::primes[0] + const64::primes[3];
             }
             else
             {
-                h64  = seed + const64::primes[5];
+                h64  = seed + const64::primes[4];
             }
 
             h64 += (uint64_t) len;
@@ -213,50 +218,35 @@ namespace pride::hash
             while (p + 8 <= end)
             {
                 uint64_t k1 = read64(p);
-                k1 *= const64::primes[2];
-                k1 = rotl64(k1,31);
                 k1 *= const64::primes[1];
+                k1 = rotl64(k1,31);
+                k1 *= const64::primes[0];
                 h64 ^= k1;
-                h64 = rotl64(h64,27) * const64::primes[1] + const64::primes[4];
+                h64 = rotl64(h64,27) * const64::primes[0] + const64::primes[3];
                 p+=8;
             }
 
             if (p + 4 <= end)
             {
-                h64 ^= (uint64_t)(read32(p)) * const64::primes[1];
-                h64 = rotl64(h64, 23) * const64::primes[2] + const64::primes[3];
+                h64 ^= (uint64_t)(read32(p)) * const64::primes[0];
+                h64 = rotl64(h64, 23) * const64::primes[1] + const64::primes[2];
                 p+=4;
             }
 
             while (p < end)
             {
-                h64 ^= (*p) * const64::primes[5];
-                h64 = rotl64(h64, 11) * const64::primes[1];
+                h64 ^= (*p) * const64::primes[4];
+                h64 = rotl64(h64, 11) * const64::primes[0];
                 p++;
             }
 
             h64 ^= h64 >> 33;
-            h64 *= const64::primes[2];
+            h64 *= const64::primes[1];
             h64 ^= h64 >> 29;
-            h64 *= const64::primes[3];
+            h64 *= const64::primes[2];
             h64 ^= h64 >> 32;
 
             return h64;
-        }
-
-        template<typename Hash>
-        Hash compute(const void* data, size_t len, Hash seed);
-
-        template<>
-        hash64_t compute<hash64_t>(const void* data, size_t len, hash64_t seed)
-        {
-            return endian_align64(data, len, seed);
-        }
-
-        template<>
-        hash32_t compute<hash32_t>(const void* data, size_t len, hash32_t seed)
-        {
-            return endian_align32(data, len, seed);
         }
 
         template<typename Hash, typename T>

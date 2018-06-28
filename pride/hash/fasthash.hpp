@@ -10,12 +10,8 @@ namespace pride::hash
     {
         template<typename Hash>
         struct constant;
-
-        template<>
-        struct constant<hash32_t> { static constexpr hash32_t seed = 0xE9481AFC; };
-
-        template<>
-        struct constant<hash64_t> { static constexpr hash64_t seed = 0xA16231A7; };
+        template<>struct constant<hash32_t> { static constexpr hash32_t seed = 0xE9481AFC; };
+        template<>struct constant<hash64_t> { static constexpr hash64_t seed = 0x7483b72ab337ef62ULL; };
 
         // Compression function for a Merkle-Damgard construction.
         static inline uint64_t mix(uint64_t h)
@@ -39,7 +35,8 @@ namespace pride::hash
             uint64_t h = seed ^ (len * m);
             uint64_t v;
 
-            while (pos != end) {
+            while (pos != end)
+            {
                 v  = *pos++;
                 h ^= mix(v);
                 h *= m;
@@ -48,7 +45,8 @@ namespace pride::hash
             pos2 = (const unsigned char*)pos;
             v = 0;
 
-            switch (len & 7) {
+            switch (len & 7)
+            {
             case 7: v ^= (uint64_t)pos2[6] << 48; break;
             case 6: v ^= (uint64_t)pos2[5] << 40; break;
             case 5: v ^= (uint64_t)pos2[4] << 32; break;
@@ -67,7 +65,7 @@ namespace pride::hash
         uint32_t compute<uint32_t>(const void* data, size_t len, uint32_t seed)
         {
             auto result = compute<uint64_t>(data, len, seed);
-            return result - (result >> 32);
+            return static_cast<uint32_t>(result - (result >> 32));
         }
 
         template<typename Hash, typename T>
@@ -93,5 +91,5 @@ namespace pride::hash
     hash64_t fasthash64(const T* data, size_t len, hash64_t seed = detail::fasthash::constant<hash64_t>::seed)
     {
         return detail::fasthash::fasthash<hash64_t>(data, len, seed);
-    }
-}
+    } // namespace detail::fasthash
+} // namespace pride::hash
