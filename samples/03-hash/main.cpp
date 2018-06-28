@@ -16,6 +16,11 @@ int main()
 
     const char* sample = "here is a test string";
 
+    cout << "crc\n";
+    cout << "-----------------------------------------------\n";
+    cout << "crc32:   0x" << std::hex << pride::hash::crc32(sample, strlen(sample)) << '\n';
+    cout << "-----------------------------------------------\n\n";
+
     cout << "fast hash\n";
     cout << "-----------------------------------------------\n";
     cout << "fasthash:   0x" << std::hex << pride::hash::fasthash(sample, strlen(sample)) << '\n';
