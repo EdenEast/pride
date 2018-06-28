@@ -8,6 +8,7 @@
 #if defined (PRI_COMPILER_MSVC)
     #pragma warning( push )
     #pragma warning( disable : 4146)
+    #pragma warning( disable : 4307)
 #endif
 
 namespace pride::ct

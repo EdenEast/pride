@@ -5,6 +5,7 @@
 #include <array>
 #include <cstdint>
 #include <limits>
+#include <type_traits>
 
 namespace pride::ct::hash
 {
@@ -19,31 +20,31 @@ namespace pride::ct::hash
         template<>
         struct constant<uint64_t> { static constexpr uint64_t seed = 201801011200ULL; };
 
-        template<typename T>
-        constexpr T rotl(T n, size_t shift)
+        template<typename Hash>
+        constexpr Hash rotl(Hash n, size_t shift)
         {
-            static_assert(std::numeric_limits<T>::is_integer, "Can only work with integers only");
+            static_assert(std::numeric_limits<Hash>::is_integer, "Can only work with integers only");
             return n;
         }
 
-        template<typename T>
-        constexpr T read(const char* p) { return static_cast<T>(*p); }
+        template<typename Hash, typename Char>
+        constexpr Hash read(const Char* p) { return static_cast<Hash>(*p); }
 
-        template<>
-        constexpr uint8_t read(const char* p)
+        template<typename Char>
+        constexpr uint8_t read(const Char* p)
         {
             return uint8_t(p[0]);
         }
 
-        template<>
-        constexpr uint16_t read(const char* p)
+        template<typename Char>
+        constexpr uint16_t read(const Char* p)
         {
             return  ((static_cast<uint16_t>(uint8_t(p[0])) << 0)
                    | (static_cast<uint16_t>(uint8_t(p[1])) << 8));
         }
 
-        template<>
-        constexpr uint32_t read(const char* p)
+        template<typename Char>
+        constexpr uint32_t read(const Char* p)
         {
             return  ((static_cast<uint32_t>(uint8_t(p[0]))  << 0)
 				    | (static_cast<uint32_t>(uint8_t(p[1])) << 8)
@@ -51,8 +52,8 @@ namespace pride::ct::hash
 				    | (static_cast<uint32_t>(uint8_t(p[3])) << 24));
         }
 
-        template<>
-        constexpr uint64_t read(const char* p)
+        template<typename Char>
+        constexpr uint64_t read(const Char* p)
         {
             return  ((static_cast<std::uint64_t>(std::uint8_t(p[0]))  << 0)
                     | (static_cast<std::uint64_t>(std::uint8_t(p[1])) << 8)
@@ -64,7 +65,7 @@ namespace pride::ct::hash
                     | (static_cast<std::uint64_t>(std::uint8_t(p[7])) << 56));
         }
 
-        template<typename T>
+        template<typename Hash>
         class xxhasher {};
 
         template<>
@@ -74,19 +75,20 @@ namespace pride::ct::hash
             using hash_type = std::uint32_t;
             using long_type = std::uint64_t;
 
-            constexpr static hash_type hash(const char* input, std::size_t len, hash_type seed)
+            template<typename Char>
+            constexpr static hash_type hash(const Char* input, std::size_t len, hash_type seed)
             {
                 if (input == nullptr)
                     len = 0;
 
-                const char* src { input };
-                const char* end { src + len };
+                const Char* src { input };
+                const Char* end { src + len };
                 hash_type acc = 0;
 
                 // step 1
                 if (len >= 16)
                 {
-                    const char* limit { end - 16 };
+                    const Char* limit { end - 16 };
         			hash_type acc0 = static_cast<hash_type>(seed + static_cast<long_type>(primes[0]) + static_cast<long_type>(primes[1]));
         			hash_type acc1 = static_cast<hash_type>(seed + static_cast<long_type>(primes[1]));
                     hash_type acc2 = seed;
@@ -117,7 +119,7 @@ namespace pride::ct::hash
                 // step 5
                 if (len >= 4)
                 {
-                    const char* limit{ end - 4 };
+                    const Char* limit{ end - 4 };
                     while (src <= limit)
                     {
                         acc = static_cast<hash_type>(
@@ -194,19 +196,20 @@ namespace pride::ct::hash
             using hash_type = std::uint64_t;
             using long_type = std::uintmax_t;
 
-            constexpr static hash_type hash(const char* input, std::size_t len, hash_type seed)
+            template<typename Char>
+            constexpr static hash_type hash(const Char* input, std::size_t len, hash_type seed)
             {
                 if (input == nullptr)
                     len = 0;
 
-                const char* src{ input };
-                const char* end{ src + len };
+                const Char* src{ input };
+                const Char* end{ src + len };
                 hash_type acc = 0;
 
                 // step 1.
                 if (len >= 32)
                 {
-                    const char* limit{ end - 32 };
+                    const Char* limit{ end - 32 };
                     hash_type acc0 = static_cast<hash_type>(seed + static_cast<long_type>(primes[0] + static_cast<long_type>(primes[1])));
                     hash_type acc1 = static_cast<hash_type>(seed + static_cast<long_type>(primes[1]));
                     hash_type acc2 = seed + 0;
@@ -215,14 +218,14 @@ namespace pride::ct::hash
                     // step 2.
                     do
                     {
-                        acc0 = round(acc0, read<std::uint64_t>(src));
-                        src += sizeof(std::uint64_t);
-                        acc1 = round(acc1, read<std::uint64_t>(src));
-                        src += sizeof(std::uint64_t);
-                        acc2 = round(acc2, read<std::uint64_t>(src));
-                        src += sizeof(std::uint64_t);
-                        acc3 = round(acc3, read<std::uint64_t>(src));
-                        src += sizeof(std::uint64_t);
+                        acc0 = round(acc0, read<hash_type>(src));
+                        src += sizeof(hash_type);
+                        acc1 = round(acc1, read<hash_type>(src));
+                        src += sizeof(hash_type);
+                        acc2 = round(acc2, read<hash_type>(src));
+                        src += sizeof(hash_type);
+                        acc3 = round(acc3, read<hash_type>(src));
+                        src += sizeof(hash_type);
                     } while (src <= limit);
 
                     // step 3.
@@ -239,7 +242,7 @@ namespace pride::ct::hash
                 // step 5.
                 if (len >= 8)
                 {
-                    const char* limit{ end - 8 };
+                    const Char* limit{ end - 8 };
                     while (src <= limit)
                     {
                         acc = static_cast<hash_type>(
@@ -251,7 +254,7 @@ namespace pride::ct::hash
 
                 if (len >= 4)
                 {
-                    const char* limit{ end - 4 };
+                    const Char* limit{ end - 4 };
                     while (src <= limit)
                     {
                         acc = static_cast<hash_type>(
@@ -321,31 +324,93 @@ namespace pride::ct::hash
             }
         };
 
-        template<typename T>
-        constexpr T xxhash(const char* buf, size_t len, T seed)
+        template<typename Hash, typename Char>
+        constexpr Hash xxhash(const Char* buf, size_t len, Hash seed)
         {
-            static_assert(std::is_same<T, uint32_t>() || std::is_same<T, uint64_t>(), "HasSh type is not supported");
-            return xxhasher<T>::hash(buf, len, seed);
+            static_assert(std::is_same<Hash, uint32_t>() || std::is_same<Hash, uint64_t>(), "HasSh type is not supported");
+            return xxhasher<Hash>::hash(buf, len, seed);
         }
     }
 
-    constexpr hash32_t xxhash32(const char* buf, hash32_t seed = detail::xxhash::constant<uint32_t>::seed)
+    // hash_t  ----------------------------------------------------------------
+
+    template<typename Char, size_t N>
+    constexpr hash_t xxhash(const Char(&input)[N])
     {
-        return detail::xxhash::xxhash<uint32_t>(buf, pride::ct::strlen(buf), seed);
+        return detail::xxhash::xxhash<hash_t>(input, N - 1, detail::xxhash::constant<hash_t>::seed);
     }
 
-    constexpr hash64_t xxhash64(const char* buf, hash64_t seed = detail::xxhash::constant<uint64_t>::seed)
+    template<typename Char>
+    constexpr hash_t xxhash(const Char* buf, size_t len)
     {
-        return detail::xxhash::xxhash<uint64_t>(buf, pride::ct::strlen(buf), seed);
+        return detail::xxhash::xxhash<hash_t>(buf, len, detail::xxhash::constant<hash_t>::seed);
     }
+
+    // hash32_t  --------------------------------------------------------------
+
+    template<typename Char, size_t N>
+    constexpr hash32_t xxhash32(const Char(&input)[N])
+    {
+        return detail::xxhash::xxhash<hash32_t>(input, N - 1, detail::xxhash::constant<hash32_t>::seed);
+    }
+
+    template<typename Char>
+    constexpr hash32_t xxhash32(const Char* buf, size_t len)
+    {
+        return detail::xxhash::xxhash<hash32_t>(buf, len, detail::xxhash::constant<hash32_t>::seed);
+    }
+
+    // hash64_t  --------------------------------------------------------------
+
+    template<typename Char, size_t N>
+    constexpr hash64_t xxhash64(const Char(&input)[N])
+    {
+        return detail::xxhash::xxhash<hash64_t>(input, N - 1, detail::xxhash::constant<hash64_t>::seed);
+    }
+
+    template<typename Char>
+    constexpr hash64_t xxhash64(const Char* buf, size_t len)
+    {
+        return detail::xxhash::xxhash<hash64_t>(buf, len, detail::xxhash::constant<hash64_t>::seed);
+    }
+
+    // ------------------------------------------------------------------------
 }
 
-constexpr pride::hash32_t operator "" _xxhash32(const char* key, const size_t len)
+// hash_t  --------------------------------------------------------------------
+
+constexpr pride::hash_t operator "" _xxhash(const char* key, size_t len)
+{
+    return ::pride::ct::hash::xxhash(key, len);
+}
+
+constexpr pride::hash_t operator "" _xxhash(const wchar_t* key, size_t len)
+{
+    return ::pride::ct::hash::xxhash(key, len);
+}
+
+// hash32_t  ------------------------------------------------------------------
+
+constexpr pride::hash32_t operator "" _xxhash32(const char* key, size_t len)
 {
     return ::pride::ct::hash::xxhash32(key, len);
 }
 
-constexpr pride::hash64_t operator "" _xxhash64(const char* key, const size_t len)
+constexpr pride::hash32_t operator "" _xxhash32(const wchar_t* key, size_t len)
+{
+    return ::pride::ct::hash::xxhash32(key, len);
+}
+
+// hash64_t  ------------------------------------------------------------------
+
+constexpr pride::hash64_t operator "" _xxhash64(const char* key, size_t len)
 {
     return ::pride::ct::hash::xxhash64(key, len);
 }
+
+constexpr pride::hash64_t operator "" _xxhash64(const wchar_t* key, size_t len)
+{
+    return ::pride::ct::hash::xxhash64(key, len);
+}
+
+// ----------------------------------------------------------------------------

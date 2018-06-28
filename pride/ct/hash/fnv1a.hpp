@@ -56,7 +56,7 @@ namespace pride::ct::hash
         }
     }
 
-    // hash_t  --------------------------------------------------------------
+    // hash_t  ----------------------------------------------------------------
 
     template<typename Char, size_t N>
     constexpr hash_t fnv1a(const Char(&input)[N])
@@ -75,7 +75,7 @@ namespace pride::ct::hash
     template<typename Char, size_t N>
     constexpr hash32_t fnv1a32(const Char(&input)[N])
     {
-        return detail::fnv1a::fnv1a<hash32_t>(input, N);
+        return detail::fnv1a::fnv1a<hash32_t>(input, N - 1);
     }
 
     template<typename Char>
@@ -89,7 +89,7 @@ namespace pride::ct::hash
     template<typename Char, size_t N>
     constexpr hash64_t fnv1a64(const Char(&input)[N])
     {
-        return detail::fnv1a::fnv1a<hash64_t>(input, N);
+        return detail::fnv1a::fnv1a<hash64_t>(input, N - 1);
     }
 
     template<typename Char>
@@ -98,7 +98,7 @@ namespace pride::ct::hash
         return detail::fnv1a::fnv1a<hash64_t>(input, len);
     }
 
-    // ----------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 }
 
 constexpr pride::hash_t operator "" _fnv1a(const char* ptr, const size_t len)
