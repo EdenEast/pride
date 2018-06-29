@@ -61,3 +61,4 @@ build-clang/
 #
 external/catch/
 external/celero/
+external/benchmark/
