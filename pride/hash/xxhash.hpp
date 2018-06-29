@@ -63,13 +63,13 @@ namespace pride::hash
         using const32 = constant<uint32_t>;
         using const64 = constant<uint32_t>;
 
-        uint32_t read32(const void* ptr)
+        inline uint32_t read32(const void* ptr)
         {
             return pride::detection::is_little_endian() ?
                 *(uint32_t*)ptr : swap32(*(uint32_t*)ptr);
         }
 
-        uint64_t read64(const void* ptr)
+        inline uint64_t read64(const void* ptr)
         {
             return pride::detection::is_little_endian() ?
                 *(uint64_t*)ptr : swap64(*(uint64_t*)ptr);
@@ -79,7 +79,7 @@ namespace pride::hash
         Hash compute(const void* data, size_t len, Hash seed);
 
         template<>
-        uint32_t compute<uint32_t>(const void* input, size_t len, uint32_t seed)
+        inline uint32_t compute<uint32_t>(const void* input, size_t len, uint32_t seed)
         {
             const uint8_t* p = (const uint8_t*)input;
             const uint8_t* end = p + len;
@@ -147,7 +147,7 @@ namespace pride::hash
         }
 
         template<>
-        uint64_t compute<uint64_t>(const void* input, size_t len, uint64_t seed)
+        inline uint64_t compute<uint64_t>(const void* input, size_t len, uint64_t seed)
         {
             const uint8_t* p = (const uint8_t*)input;
             const uint8_t* end = p + len;

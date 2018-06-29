@@ -42,7 +42,7 @@ namespace pride::hash
         Hash compute(const void* data, size_t len, Hash seed);
 
         template<>
-        uint32_t compute<uint32_t>(const void* key, size_t len, uint32_t seed)
+        inline uint32_t compute<uint32_t>(const void* key, size_t len, uint32_t seed)
         {
             const uint8_t * data = (const uint8_t*)key;
             const int nblocks = len / 4;
@@ -82,7 +82,7 @@ namespace pride::hash
         }
 
         template<>
-        uint64_t compute<uint64_t>(const void* key, size_t len, uint64_t seed)
+        inline uint64_t compute<uint64_t>(const void* key, size_t len, uint64_t seed)
         {
             const uint64_t m = 0xc6a4a7935bd1e995ULL;
             const int r = 47;

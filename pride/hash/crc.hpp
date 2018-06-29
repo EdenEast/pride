@@ -77,7 +77,7 @@ namespace pride::hash
         Hash compute(const void* key, size_t len, Hash seed);
 
         template<>
-        uint32_t compute(const void* key, size_t len, uint32_t seed)
+        inline uint32_t compute(const void* key, size_t len, uint32_t seed)
         {
             uint8_t* data = (uint8_t*)key;
             uint32_t crc = seed ^ 0xffffffffL;
@@ -96,7 +96,7 @@ namespace pride::hash
         }
 
         template<typename Hash, typename T>
-        Hash crc(const T* data, size_t len, Hash seed)
+        inline Hash crc(const T* data, size_t len, Hash seed)
         {
             return compute<Hash>(reinterpret_cast<const void*>(data), len, seed);
         }
