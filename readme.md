@@ -16,6 +16,19 @@ add_executable(sample)
 target_link_libraries(sample ${PRIDE_LIB})
 ```
 
+## Build and Development
+
+```bash
+# clone pride and its submodules
+git clone --recurse-submodules -j8 https://github.com/cruizemissile/pride && cd pride
+
+# generate and build with cmake
+cmake . -Bbuild && cmake --build build
+
+# note: if you want to build with just the samples and skip tests and benchmarks run with NO_TEST on
+cmake . -Bbuild -DNO_TESTS=ON && cmake --build build
+```
+
 ## Features:
 
 - Detection for architecture, compiler, operating system, c++ version, endian-ness, debug, rtti, and stdlib
