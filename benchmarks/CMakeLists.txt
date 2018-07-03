@@ -12,7 +12,4 @@ add_external_git_repo(
 target_set_folder(benchmark "Benchmarks/Google")
 target_set_folder(benchmark_main "Benchmarks/Google")
 
-add_executable(hash ${CMAKE_CURRENT_LIST_DIR}/hash.cpp)
-target_link_libraries(hash ${PRIDE_LIB} benchmark)
-target_source_group(hash)
-target_set_folder(hash "Benchmarks")
+create_executables_per_files(EXTENTIONS "*.cpp" FOLDER "Benchmarks" DEPENDS benchmark ${PRIDE_LIB})
