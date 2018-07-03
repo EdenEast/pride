@@ -81,12 +81,18 @@ std::vector<collision_info_t> process(std::string name, Func func)
     return result;
 }
 
-int main()
+bool cmd_option_exists(char** begin, char** end, const std::string& option)
+{
+    return std::find(begin, end, option) != end;
+}
+
+int main(int argc, char*    [])
 {
     using namespace pride;
     using std::cout;
 
-    const char* sample = "here is a test string";
+    if (cmd_option_exists(argv, argv + argc, "-f"))
+        std::cout.setf(std::ios_base::unitbuf);
 
     read_word_list();
     cout << '\n';
