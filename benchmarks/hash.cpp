@@ -4,8 +4,19 @@
 #include <iostream>
 #include <cstring>
 
-constexpr const char* test_string = "this is a test string";
+constexpr const char* test_string = "This is a long string to make sure it is not short string optimized!";
 constexpr size_t test_size = pride::ct::strlen(test_string);
+
+static void crc32(benchmark::State& state)
+{
+    while (state.KeepRunning())
+    {
+        benchmark::DoNotOptimize(
+            pride::hash::crc32(test_string, test_size)
+        );
+    }
+}
+BENCHMARK(crc32)->Unit(benchmark::kNanosecond);
 
 static void fasthash32(benchmark::State& state)
 {
