@@ -27,7 +27,7 @@ std::string get_file_dir()
 
 struct collision_info_t
 {
-    pride::hash64_t hash;
+    pride::hash64_t hash = 0;
     std::vector<std::string> words;
 };
 
@@ -81,12 +81,20 @@ std::vector<collision_info_t> process(std::string name, Func func)
     return result;
 }
 
+template<typename T>
+std::string to_string_with_precision(const T a_value, const int n = 5)
+{
+    std::ostringstream out;
+    out << std::setprecision(n) << a_value;
+    return out.str();
+}
+
 bool cmd_option_exists(char** begin, char** end, const std::string& option)
 {
     return std::find(begin, end, option) != end;
 }
 
-int main(int argc, char*    [])
+int main(int argc, char* argv[])
 {
     using namespace pride;
     using std::cout;
@@ -95,6 +103,7 @@ int main(int argc, char*    [])
         std::cout.setf(std::ios_base::unitbuf);
 
     read_word_list();
+    cout << "There are " << word_list.size() << " amount of words\n";
     cout << '\n';
 
     auto crc32_result      = process<pride::hash32_t>(std::string("crc32"),      [](auto key, size_t len){ return pride::hash::crc32(key, len); });      cout << '\n';
@@ -107,18 +116,35 @@ int main(int argc, char*    [])
     auto xxhash32_result   = process<pride::hash32_t>(std::string("xxhash32"),   [](auto key, size_t len){ return pride::hash::xxhash32(key, len); });   cout << '\n';
     auto xxhash64_result   = process<pride::hash64_t>(std::string("xxhash64"),   [](auto key, size_t len){ return pride::hash::xxhash64(key, len); });   cout << '\n';
 
+    size_t precision = 3;
+    auto crc32_pst      = to_string_with_precision((static_cast<float>(crc32_result.size())      / static_cast<float>(word_list.size())) * 100, precision) + " %";
+    auto fasthash32_pst = to_string_with_precision((static_cast<float>(fasthash32_result.size()) / static_cast<float>(word_list.size())) * 100, precision) + " %";
+    auto fasthash64_pst = to_string_with_precision((static_cast<float>(fasthash64_result.size()) / static_cast<float>(word_list.size())) * 100, precision) + " %";
+    auto fnv1a32_pst    = to_string_with_precision((static_cast<float>(fnv1a32_result.size())    / static_cast<float>(word_list.size())) * 100, precision) + " %";
+    auto fnv1a64_pst    = to_string_with_precision((static_cast<float>(fnv1a64_result.size())    / static_cast<float>(word_list.size())) * 100, precision) + " %";
+    auto mm332_pst      = to_string_with_precision((static_cast<float>(mm332_result.size())      / static_cast<float>(word_list.size())) * 100, precision) + " %";
+    auto mm364_pst      = to_string_with_precision((static_cast<float>(mm364_result.size())      / static_cast<float>(word_list.size())) * 100, precision) + " %";
+    auto xxhash32_pst   = to_string_with_precision((static_cast<float>(xxhash32_result.size())   / static_cast<float>(word_list.size())) * 100, precision) + " %";
+    auto xxhash64_pst   = to_string_with_precision((static_cast<float>(xxhash64_result.size())   / static_cast<float>(word_list.size())) * 100, precision) + " %";
+
     size_t width = 18;
-    std::string bar(width * 2 + 3, '-');
+    std::string bar(width * 3 + 4, '-');
+    std::string underheader(width, '-');
+
+    #define setl() std::setw(width) << std::left
+    #define setr() std::setw(width) << std::right
 
     cout << bar << '\n';
-    cout << '|' << std::setw(width) << std::right << "crc32"      << '|' << std::setw(width) << std::left << crc32_result.size()      << '|' << '\n';
-    cout << '|' << std::setw(width) << std::right << "fasthash32" << '|' << std::setw(width) << std::left << fasthash32_result.size() << '|' << '\n';
-    cout << '|' << std::setw(width) << std::right << "fasthash64" << '|' << std::setw(width) << std::left << fasthash64_result.size() << '|' << '\n';
-    cout << '|' << std::setw(width) << std::right << "fnv1a32"    << '|' << std::setw(width) << std::left << fnv1a32_result.size()    << '|' << '\n';
-    cout << '|' << std::setw(width) << std::right << "fnv1a64"    << '|' << std::setw(width) << std::left << fnv1a64_result.size()    << '|' << '\n';
-    cout << '|' << std::setw(width) << std::right << "mm332"      << '|' << std::setw(width) << std::left << mm332_result.size()      << '|' << '\n';
-    cout << '|' << std::setw(width) << std::right << "mm364"      << '|' << std::setw(width) << std::left << mm364_result.size()      << '|' << '\n';
-    cout << '|' << std::setw(width) << std::right << "xxhash32"   << '|' << std::setw(width) << std::left << xxhash32_result.size()   << '|' << '\n';
-    cout << '|' << std::setw(width) << std::right << "xxhash64"   << '|' << std::setw(width) << std::left << xxhash64_result.size()   << '|' << '\n';
+    cout << '|' << setr() << "Hash Name"  << '|' << setl() << "Collistions"            << '|' << setr() << "Percentage"   << '|' << '\n';
+    cout << '|' << setr() << underheader  << '|' << setl() << underheader              << '|' << setr() << underheader    << '|' << '\n';
+    cout << '|' << setr() << "crc32"      << '|' << setl() << crc32_result.size()      << '|' << setr() << crc32_pst      << '|' << '\n';
+    cout << '|' << setr() << "fasthash32" << '|' << setl() << fasthash32_result.size() << '|' << setr() << fasthash32_pst << '|' << '\n';
+    cout << '|' << setr() << "fasthash64" << '|' << setl() << fasthash64_result.size() << '|' << setr() << fasthash64_pst << '|' << '\n';
+    cout << '|' << setr() << "fnv1a32"    << '|' << setl() << fnv1a32_result.size()    << '|' << setr() << fnv1a32_pst    << '|' << '\n';
+    cout << '|' << setr() << "fnv1a64"    << '|' << setl() << fnv1a64_result.size()    << '|' << setr() << fnv1a64_pst    << '|' << '\n';
+    cout << '|' << setr() << "mm332"      << '|' << setl() << mm332_result.size()      << '|' << setr() << mm332_pst      << '|' << '\n';
+    cout << '|' << setr() << "mm364"      << '|' << setl() << mm364_result.size()      << '|' << setr() << mm364_pst      << '|' << '\n';
+    cout << '|' << setr() << "xxhash32"   << '|' << setl() << xxhash32_result.size()   << '|' << setr() << xxhash32_pst   << '|' << '\n';
+    cout << '|' << setr() << "xxhash64"   << '|' << setl() << xxhash64_result.size()   << '|' << setr() << xxhash64_pst   << '|' << '\n';
     cout << bar << '\n';
 }
