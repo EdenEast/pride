@@ -2,6 +2,7 @@
 #pragma once
 
 #include "assert.hpp"
+#include "cmd.hpp"
 #include "config.hpp"
 #include "console.hpp"
 #include "ct.hpp"

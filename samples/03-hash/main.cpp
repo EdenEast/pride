@@ -1,106 +1,113 @@
 
-#include <pride/pride.hpp>
-#include <algorithm>
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <utility>
-#include <unordered_map>
-#include <vector>
-#include <iomanip>
+ #include <pride/pride.hpp>
+ #include <algorithm>
+ #include <iostream>
+ #include <string>
+ #include <fstream>
+ #include <sstream>
+ #include <utility>
+ #include <unordered_map>
+ #include <vector>
+ #include <iomanip>
 
-std::vector<std::string> word_list;
+ std::vector<std::string> word_list;
 
-std::pair<std::string, std::string> split_path(const std::string path)
-{
-    std::string copy = path;
-    std::replace(copy.begin(), copy.end(), '\\', '/');
-    auto idx = path.find_last_of("/\\");
-    return std::make_pair(path.substr(0, idx), path.substr(idx + 1));
-}
+ std::pair<std::string, std::string> split_path(const std::string path)
+ {
+     std::string copy = path;
+     std::replace(copy.begin(), copy.end(), '\\', '/');
+     auto idx = path.find_last_of("/\\");
+     return std::make_pair(path.substr(0, idx), path.substr(idx + 1));
+ }
 
-std::string get_file_dir()
-{
-    return split_path(__FILE__).first;
-}
+ std::string get_file_dir()
+ {
+     return split_path(__FILE__).first;
+ }
 
-struct collision_info_t
-{
-    pride::hash64_t hash = 0;
-    std::vector<std::string> words;
-};
+ struct collision_info_t
+ {
+     pride::hash64_t hash = 0;
+     std::vector<std::string> words;
+ };
 
-void read_word_list()
-{
-    std::cout << "Reading word list... ";
-    std::string filename = get_file_dir() + "/word-list.txt";
-    std::ifstream ifs(filename.c_str());
-    if (!ifs)
-    {
-        std::cerr << "Cannot open file\n";
-        std::exit(1);
-    }
+ void read_word_list()
+ {
+     std::cout << "Reading word list... ";
+     std::string filename = get_file_dir() + "/word-list.txt";
+     std::ifstream ifs(filename.c_str());
+     if (!ifs)
+     {
+         std::cerr << "Cannot open file\n";
+         std::exit(1);
+     }
 
-    std::string line;
-    int count = 0;
-    while(std::getline(ifs, line))
-        word_list.push_back(line);
-    ifs.close();
-    std::cout << "Complete\n";
-}
+     std::string line;
+     int count = 0;
+     while(std::getline(ifs, line))
+         word_list.push_back(line);
+     ifs.close();
+     std::cout << "Complete\n";
+ }
 
-template<typename Hash, typename Func>
-std::vector<collision_info_t> process(std::string name, Func func)
-{
-    std::unordered_map<Hash, std::vector<std::string>> buffer;
-    std::vector<collision_info_t> result;
-    std::cout << "Starting to process " << name << '\n';
+ template<typename Hash, typename Func>
+ std::vector<collision_info_t> process(std::string name, Func func)
+ {
+     std::unordered_map<Hash, std::vector<std::string>> buffer;
+     std::vector<collision_info_t> result;
+     std::cout << "Starting to process " << name << '\n';
 
-    std::cout << "Generating " << name << " hash... ";
-    for (auto& s : word_list)
-    {
-        Hash h = func(s.c_str(), s.size());
-        buffer[h].push_back(s);
-    }
-    std::cout << "Complete\n";
+     std::cout << "Generating " << name << " hash... ";
+     for (auto& s : word_list)
+     {
+         Hash h = func(s.c_str(), s.size());
+         buffer[h].push_back(s);
+     }
+     std::cout << "Complete\n";
 
-    std::cout << "Processing hash colisions... ";
-    for(const auto& pair : buffer)
-    {
-        if (pair.second.size() > 1)
-        {
-            collision_info_t info;
-            info.hash = pair.first;
-            for(const auto& s : pair.second)
-                info.words.push_back(s);
-            result.push_back(info);
-        }
-    }
-    std::cout << "Complete\n";
-    return result;
-}
+     std::cout << "Processing hash colisions... ";
+     for(const auto& pair : buffer)
+     {
+         if (pair.second.size() > 1)
+         {
+             collision_info_t info;
+             info.hash = pair.first;
+             for(const auto& s : pair.second)
+                 info.words.push_back(s);
+             result.push_back(info);
+         }
+     }
+     std::cout << "Complete\n";
+     return result;
+ }
 
-template<typename T>
-std::string to_string_with_precision(const T a_value, const int n = 5)
-{
-    std::ostringstream out;
-    out << std::setprecision(n) << a_value;
-    return out.str();
-}
+ template<typename T>
+ std::string to_string_with_precision(const T a_value, const int n = 5)
+ {
+     std::ostringstream out;
+     out << std::setprecision(n) << a_value;
+     return out.str();
+ }
 
-bool cmd_option_exists(char** begin, char** end, const std::string& option)
-{
-    return std::find(begin, end, option) != end;
-}
-
-int main(int argc, char* argv[])
-{
+ int main(int argc, char* argv[])
+ {
     using namespace pride;
     using std::cout;
 
-    if (cmd_option_exists(argv, argv + argc, "-f"))
-        std::cout.setf(std::ios_base::unitbuf);
+    pride::cmd::cmd_t cmdline("hash", "Calculate hashes and their collisions for all english words");
+    cmdline
+        .show_positional_help()
+        .allow_unrecognised_options()
+        .add_options()
+        ("h,help", "Show this help", pride::cmd::value<bool>())
+        ("f,force", "force flush of output when printing");
+
+    auto result = cmdline.parse(argc, argv);
+    if (result.count("help"))
+    {
+        std::cout << cmdline.help() << std::endl;
+        return 0;
+    }
 
     read_word_list();
     cout << "There are " << word_list.size() << " amount of words\n";
@@ -147,4 +154,6 @@ int main(int argc, char* argv[])
     cout << '|' << setr() << "xxhash32"   << '|' << setl() << xxhash32_result.size()   << '|' << setr() << xxhash32_pst   << '|' << '\n';
     cout << '|' << setr() << "xxhash64"   << '|' << setl() << xxhash64_result.size()   << '|' << setr() << xxhash64_pst   << '|' << '\n';
     cout << bar << '\n';
-}
+
+    return 0;
+ }
