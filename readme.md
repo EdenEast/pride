@@ -36,6 +36,7 @@ cmake . -Bbuild -DNO_TESTS=ON && cmake --build build
 - Preprocessor helper utilities
 - Cross platform console color output and terminal utilities
 - Assert
+- Command line options parser
 - Guid
 - Singleton
 - Scope Guards and defer macro
