@@ -12,7 +12,7 @@
     const std::string RQUOTE("’");
 #endif
 
-namespace pride::cmd::detail
+namespace pride::cmd
 {
     class option_exception_t : public std::exception
     {

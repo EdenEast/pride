@@ -152,15 +152,15 @@ namespace pride::cmd
         std::regex_match(opts.c_str(), result, detail::option_pattern);
 
         if (result.empty())
-            throw detail::invalid_option_format_error_t(opts);
+            throw invalid_option_format_error_t(opts);
 
         const auto& short_match = result[2];
         const auto& long_match = result[3];
 
         if (!short_match.length() && !long_match.length())
-            throw detail::invalid_option_format_error_t(opts);
+            throw invalid_option_format_error_t(opts);
         else if (long_match.length() == 1 && short_match.length())
-            throw detail::invalid_option_format_error_t(opts);
+            throw invalid_option_format_error_t(opts);
 
         auto option_name = long_match.length() == 1 ?
             std::make_pair(long_match.str(), short_match.str()) : std::make_pair(short_match.str(), long_match.str());
@@ -334,7 +334,7 @@ namespace pride::cmd
     {
         auto in = _options.emplace(option, details);
         if (!in.second)
-            throw detail::option_exists_error_t(option);
+            throw option_exists_error_t(option);
     }
 
     inline std::string cmd_t::help_one_group(const std::string& g) const
@@ -442,7 +442,7 @@ namespace pride::cmd
     {
         auto iter = _options.find(opt);
         if (iter == _options.end())
-            throw detail::option_not_present_exception_t(opt);
+            throw option_not_present_exception_t(opt);
         return _results.find(iter->second)->second;
     }
 
@@ -450,7 +450,7 @@ namespace pride::cmd
     {
         auto iter = _options.find(option);
         if (iter == _options.end())
-            throw detail::option_not_exists_exception_t(option);
+            throw option_not_exists_exception_t(option);
 
         parse_option(iter->second, option, arg);
     }
@@ -533,7 +533,7 @@ namespace pride::cmd
                             if (_allow_unrecognised)
                                 continue;
                             else
-                                throw detail::option_not_exists_exception_t(name);
+                                throw option_not_exists_exception_t(name);
                         }
 
                         auto value = iter->second;
@@ -542,7 +542,7 @@ namespace pride::cmd
                         else if (value->value().has_implicit())
                             parse_option(value, name, value->value().implicit_value());
                         else
-                            throw detail::option_requires_argument_exception_t(name);
+                            throw option_requires_argument_exception_t(name);
                     }
                 }
                 else if (result[1].length() != 0)
@@ -562,7 +562,7 @@ namespace pride::cmd
                         }
                         else
                         {
-                            throw detail::option_not_exists_exception_t(name);
+                            throw option_not_exists_exception_t(name);
                         }
                     }
 
@@ -626,7 +626,7 @@ namespace pride::cmd
             if (value->value().has_implicit())
                 parse_option(value, name, value->value().implicit_value());
             else
-                throw detail::missing_argument_exception_t(name);
+                throw missing_argument_exception_t(name);
         }
         else
         {

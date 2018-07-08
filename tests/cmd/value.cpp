@@ -31,7 +31,7 @@ TEST_CASE("cmd::vale")
 
             uint64_t result;
             for (auto& v : values)
-                REQUIRE_THROWS_AS(pride::cmd::detail::parse_value(v, result), pride::cmd::detail::argument_incorrect_type_t);
+                REQUIRE_THROWS_AS(pride::cmd::detail::parse_value(v, result), pride::cmd::argument_incorrect_type_t);
         }
 
         SECTION("Parse valid decimal values")
@@ -56,7 +56,7 @@ TEST_CASE("cmd::vale")
 
             uint64_t result;
             for (auto& v : values)
-                REQUIRE_THROWS_AS(pride::cmd::detail::parse_value(v, result), pride::cmd::detail::argument_incorrect_type_t);
+                REQUIRE_THROWS_AS(pride::cmd::detail::parse_value(v, result), pride::cmd::argument_incorrect_type_t);
         }
     } // SECTION("Integer parsing")
 }
