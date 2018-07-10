@@ -1,0 +1,9 @@
+#!/bin/bash
+
+clipp_header_url="https://raw.githubusercontent.com/muellan/clipp/master/include/clipp.h"
+clipp_readme_url="https://raw.githubusercontent.com/muellan/clipp/master/README.md"
+
+root_dir=$(dirname ${BASH_SOURCE[0]})
+
+curl -o ${root_dir}/clipp.hpp $clipp_header_url
+curl -o ${root_dir}/readme.md $clipp_readme_url

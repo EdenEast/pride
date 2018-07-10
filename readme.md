@@ -36,7 +36,7 @@ cmake . -Bbuild -DNO_TESTS=ON && cmake --build build
 - Preprocessor helper utilities
 - Cross platform console color output and terminal utilities
 - Assert
-- Command line options parser
+- Command line interface using [muellan/clipp](https://github.com/muellan/clipp)
 - Guid
 - Singleton
 - Scope Guards and defer macro
