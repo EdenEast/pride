@@ -1,14 +1,31 @@
 
  #include <pride/pride.hpp>
  #include <algorithm>
- #include <iostream>
- #include <string>
+ #include <chrono>
  #include <fstream>
- #include <sstream>
- #include <utility>
- #include <unordered_map>
- #include <vector>
  #include <iomanip>
+ #include <iostream>
+ #include <sstream>
+ #include <string>
+ #include <tuple>
+ #include <unordered_map>
+ #include <utility>
+ #include <vector>
+
+class timer_t
+{
+public:
+    timer_t() : _beg(_clock::now()) {}
+    void reset() { _beg = _clock::now(); }
+    uint64_t delta() const {
+        return std::chrono::duration_cast<std::chrono::nanoseconds>
+            (_clock::now() - _beg).count(); }
+
+private:
+    using _clock = std::chrono::high_resolution_clock;
+    // using _second = std::chrono::duration<double, std::ratio<1> >;
+    std::chrono::time_point<_clock> _beg;
+};
 
  std::vector<std::string> word_list;
 
@@ -51,34 +68,51 @@
  }
 
  template<typename Hash, typename Func>
- std::vector<collision_info_t> process(std::string name, Func func)
+ std::vector<collision_info_t> process(std::string name, Func func, double& time_result)
  {
-     std::unordered_map<Hash, std::vector<std::string>> buffer;
-     std::vector<collision_info_t> result;
-     std::cout << "Starting to process " << name << '\n';
+    std::unordered_map<Hash, std::vector<std::string>> buffer;
+    std::vector<collision_info_t> result;
+    std::vector<uint64_t> times;
+    std::cout << "Starting to process " << name << '\n';
 
-     std::cout << "Generating " << name << " hash... ";
-     for (auto& s : word_list)
-     {
-         Hash h = func(s.c_str(), s.size());
-         buffer[h].push_back(s);
-     }
-     std::cout << "Complete\n";
+    std::cout << "Generating " << name << " hash... ";
+    times.reserve(word_list.size());
+    timer_t t;
 
-     std::cout << "Processing hash colisions... ";
-     for(const auto& pair : buffer)
-     {
-         if (pair.second.size() > 1)
-         {
-             collision_info_t info;
-             info.hash = pair.first;
-             for(const auto& s : pair.second)
-                 info.words.push_back(s);
-             result.push_back(info);
-         }
-     }
-     std::cout << "Complete\n";
-     return result;
+    for (auto& s : word_list)
+    {
+        t.reset();
+        Hash h = func(s.c_str(), s.size());
+        auto dt = t.delta();
+        times.push_back(dt);
+        buffer[h].push_back(s);
+    }
+    std::cout << "Complete\n";
+
+    std::cout << "Processing hash colisions... ";
+    result.reserve(buffer.size());
+    for(const auto& pair : buffer)
+    {
+        if (pair.second.size() > 1)
+        {
+            collision_info_t info;
+            info.hash = pair.first;
+            for(const auto& s : pair.second)
+                info.words.push_back(s);
+            result.push_back(info);
+        }
+    }
+    std::cout << "Complete\n";
+    time_result = 0;
+    uint64_t sum = 0;
+    for (auto t : times)
+        sum += t;
+
+    std::cout << "time result: " << time_result  << '\n';
+
+    time_result = ((double)sum / (double)times.size());
+    std::cout << "time result: " << time_result  << '\n';
+    return result;
  }
 
  template<typename T>
@@ -93,51 +127,63 @@
  {
     using namespace pride;
     using std::cout;
+    using result_tuple = std::tuple<std::vector<collision_info_t>, std::string, double>;
 
     read_word_list();
     cout << "There are " << word_list.size() << " amount of words\n";
     cout << '\n';
 
-    auto crc32_result      = process<pride::hash32_t>(std::string("crc32"),      [](auto key, size_t len){ return pride::hash::crc32(key, len); });      cout << '\n';
-    auto fasthash32_result = process<pride::hash32_t>(std::string("fasthash32"), [](auto key, size_t len){ return pride::hash::fasthash32(key, len); }); cout << '\n';
-    auto fasthash64_result = process<pride::hash64_t>(std::string("fasthash64"), [](auto key, size_t len){ return pride::hash::fasthash64(key, len); }); cout << '\n';
-    auto fnv1a32_result    = process<pride::hash32_t>(std::string("fnv1a32"),    [](auto key, size_t len){ return pride::hash::fnv1a32(key, len); });    cout << '\n';
-    auto fnv1a64_result    = process<pride::hash64_t>(std::string("fnv1a64"),    [](auto key, size_t len){ return pride::hash::fnv1a64(key, len); });    cout << '\n';
-    auto mm332_result      = process<pride::hash32_t>(std::string("mm332"),      [](auto key, size_t len){ return pride::hash::mm332(key, len); });      cout << '\n';
-    auto mm364_result      = process<pride::hash64_t>(std::string("mm364"),      [](auto key, size_t len){ return pride::hash::mm364(key, len); });      cout << '\n';
-    auto xxhash32_result   = process<pride::hash32_t>(std::string("xxhash32"),   [](auto key, size_t len){ return pride::hash::xxhash32(key, len); });   cout << '\n';
-    auto xxhash64_result   = process<pride::hash64_t>(std::string("xxhash64"),   [](auto key, size_t len){ return pride::hash::xxhash64(key, len); });   cout << '\n';
+    result_tuple crc32;
+    result_tuple fasthash32;
+    result_tuple fasthash64;
+    result_tuple fnv1a32;
+    result_tuple fnv1a64;
+    result_tuple mm332;
+    result_tuple mm364;
+    result_tuple xxhash32;
+    result_tuple xxhash64;
+
+    std::get<0>(crc32)      = process<pride::hash32_t>(std::string("crc32"),      [](auto key, size_t len){ return pride::hash::crc32(key, len); },      std::get<2>(crc32)); cout << '\n';
+    std::get<0>(fasthash32) = process<pride::hash32_t>(std::string("fasthash32"), [](auto key, size_t len){ return pride::hash::fasthash32(key, len); }, std::get<2>(fasthash32)); cout << '\n';
+    std::get<0>(fasthash64) = process<pride::hash64_t>(std::string("fasthash64"), [](auto key, size_t len){ return pride::hash::fasthash64(key, len); }, std::get<2>(fasthash64)); cout << '\n';
+    std::get<0>(fnv1a32)    = process<pride::hash32_t>(std::string("fnv1a32"),    [](auto key, size_t len){ return pride::hash::fnv1a32(key, len); },    std::get<2>(fnv1a32)); cout << '\n';
+    std::get<0>(fnv1a64)    = process<pride::hash64_t>(std::string("fnv1a64"),    [](auto key, size_t len){ return pride::hash::fnv1a64(key, len); },    std::get<2>(fnv1a64)); cout << '\n';
+    std::get<0>(mm332)      = process<pride::hash32_t>(std::string("mm332"),      [](auto key, size_t len){ return pride::hash::mm332(key, len); },      std::get<2>(mm332)); cout << '\n';
+    std::get<0>(mm364)      = process<pride::hash64_t>(std::string("mm364"),      [](auto key, size_t len){ return pride::hash::mm364(key, len); },      std::get<2>(mm364)); cout << '\n';
+    std::get<0>(xxhash32)   = process<pride::hash32_t>(std::string("xxhash32"),   [](auto key, size_t len){ return pride::hash::xxhash32(key, len); },   std::get<2>(xxhash32)); cout << '\n';
+    std::get<0>(xxhash64)   = process<pride::hash64_t>(std::string("xxhash64"),   [](auto key, size_t len){ return pride::hash::xxhash64(key, len); },   std::get<2>(xxhash64)); cout << '\n';
 
     size_t precision = 3;
-    auto crc32_pst      = to_string_with_precision((static_cast<float>(crc32_result.size())      / static_cast<float>(word_list.size())) * 100, precision) + " %";
-    auto fasthash32_pst = to_string_with_precision((static_cast<float>(fasthash32_result.size()) / static_cast<float>(word_list.size())) * 100, precision) + " %";
-    auto fasthash64_pst = to_string_with_precision((static_cast<float>(fasthash64_result.size()) / static_cast<float>(word_list.size())) * 100, precision) + " %";
-    auto fnv1a32_pst    = to_string_with_precision((static_cast<float>(fnv1a32_result.size())    / static_cast<float>(word_list.size())) * 100, precision) + " %";
-    auto fnv1a64_pst    = to_string_with_precision((static_cast<float>(fnv1a64_result.size())    / static_cast<float>(word_list.size())) * 100, precision) + " %";
-    auto mm332_pst      = to_string_with_precision((static_cast<float>(mm332_result.size())      / static_cast<float>(word_list.size())) * 100, precision) + " %";
-    auto mm364_pst      = to_string_with_precision((static_cast<float>(mm364_result.size())      / static_cast<float>(word_list.size())) * 100, precision) + " %";
-    auto xxhash32_pst   = to_string_with_precision((static_cast<float>(xxhash32_result.size())   / static_cast<float>(word_list.size())) * 100, precision) + " %";
-    auto xxhash64_pst   = to_string_with_precision((static_cast<float>(xxhash64_result.size())   / static_cast<float>(word_list.size())) * 100, precision) + " %";
+    std::get<1>(crc32)      = to_string_with_precision((static_cast<float>(std::get<0>(crc32).size())      / static_cast<float>(word_list.size())) * 100, precision) + " %";
+    std::get<1>(fasthash32) = to_string_with_precision((static_cast<float>(std::get<0>(fasthash32).size()) / static_cast<float>(word_list.size())) * 100, precision) + " %";
+    std::get<1>(fasthash64) = to_string_with_precision((static_cast<float>(std::get<0>(fasthash64).size()) / static_cast<float>(word_list.size())) * 100, precision) + " %";
+    std::get<1>(fnv1a32)    = to_string_with_precision((static_cast<float>(std::get<0>(fnv1a32).size())    / static_cast<float>(word_list.size())) * 100, precision) + " %";
+    std::get<1>(fnv1a64)    = to_string_with_precision((static_cast<float>(std::get<0>(fnv1a64).size())    / static_cast<float>(word_list.size())) * 100, precision) + " %";
+    std::get<1>(mm332)      = to_string_with_precision((static_cast<float>(std::get<0>(mm332).size())      / static_cast<float>(word_list.size())) * 100, precision) + " %";
+    std::get<1>(mm364)      = to_string_with_precision((static_cast<float>(std::get<0>(mm364).size())      / static_cast<float>(word_list.size())) * 100, precision) + " %";
+    std::get<1>(xxhash32)   = to_string_with_precision((static_cast<float>(std::get<0>(xxhash32).size())   / static_cast<float>(word_list.size())) * 100, precision) + " %";
+    std::get<1>(xxhash64)   = to_string_with_precision((static_cast<float>(std::get<0>(xxhash64).size())   / static_cast<float>(word_list.size())) * 100, precision) + " %";
 
     size_t width = 18;
-    std::string bar(width * 3 + 4, '-');
+    size_t num_col = 4;
+    std::string bar(width * num_col + (num_col + 1), '-');
     std::string underheader(width, '-');
 
     #define setl() std::setw(width) << std::left
     #define setr() std::setw(width) << std::right
 
     cout << bar << '\n';
-    cout << '|' << setr() << "Hash Name"  << '|' << setl() << "Collistions"            << '|' << setr() << "Percentage"   << '|' << '\n';
-    cout << '|' << setr() << underheader  << '|' << setl() << underheader              << '|' << setr() << underheader    << '|' << '\n';
-    cout << '|' << setr() << "crc32"      << '|' << setl() << crc32_result.size()      << '|' << setr() << crc32_pst      << '|' << '\n';
-    cout << '|' << setr() << "fasthash32" << '|' << setl() << fasthash32_result.size() << '|' << setr() << fasthash32_pst << '|' << '\n';
-    cout << '|' << setr() << "fasthash64" << '|' << setl() << fasthash64_result.size() << '|' << setr() << fasthash64_pst << '|' << '\n';
-    cout << '|' << setr() << "fnv1a32"    << '|' << setl() << fnv1a32_result.size()    << '|' << setr() << fnv1a32_pst    << '|' << '\n';
-    cout << '|' << setr() << "fnv1a64"    << '|' << setl() << fnv1a64_result.size()    << '|' << setr() << fnv1a64_pst    << '|' << '\n';
-    cout << '|' << setr() << "mm332"      << '|' << setl() << mm332_result.size()      << '|' << setr() << mm332_pst      << '|' << '\n';
-    cout << '|' << setr() << "mm364"      << '|' << setl() << mm364_result.size()      << '|' << setr() << mm364_pst      << '|' << '\n';
-    cout << '|' << setr() << "xxhash32"   << '|' << setl() << xxhash32_result.size()   << '|' << setr() << xxhash32_pst   << '|' << '\n';
-    cout << '|' << setr() << "xxhash64"   << '|' << setl() << xxhash64_result.size()   << '|' << setr() << xxhash64_pst   << '|' << '\n';
+    cout << '|' << setr() << "Hash Name"  << '|' << setl() << "Collistions"                  << '|' << setr() << "Percentage"            << '|' << setr() << "Average time (ns)"     << '|' << '\n';
+    cout << '|' << setr() << underheader  << '|' << setl() << underheader                    << '|' << setr() << underheader             << '|' << setr() << underheader             << '|' << '\n';
+    cout << '|' << setr() << "crc32"      << '|' << setl() << std::get<0>(crc32).size()      << '|' << setr() << std::get<1>(crc32)      << '|' << setr() << std::get<2>(crc32)      << '|' << '\n';
+    cout << '|' << setr() << "fasthash32" << '|' << setl() << std::get<0>(fasthash32).size() << '|' << setr() << std::get<1>(fasthash32) << '|' << setr() << std::get<2>(fasthash32) << '|' << '\n';
+    cout << '|' << setr() << "fasthash64" << '|' << setl() << std::get<0>(fasthash64).size() << '|' << setr() << std::get<1>(fasthash64) << '|' << setr() << std::get<2>(fasthash64) << '|' << '\n';
+    cout << '|' << setr() << "fnv1a32"    << '|' << setl() << std::get<0>(fnv1a32).size()    << '|' << setr() << std::get<1>(fnv1a32)    << '|' << setr() << std::get<2>(fnv1a32)    << '|' << '\n';
+    cout << '|' << setr() << "fnv1a64"    << '|' << setl() << std::get<0>(fnv1a64).size()    << '|' << setr() << std::get<1>(fnv1a64)    << '|' << setr() << std::get<2>(fnv1a64)    << '|' << '\n';
+    cout << '|' << setr() << "mm332"      << '|' << setl() << std::get<0>(mm332).size()      << '|' << setr() << std::get<1>(mm332)      << '|' << setr() << std::get<2>(mm332)      << '|' << '\n';
+    cout << '|' << setr() << "mm364"      << '|' << setl() << std::get<0>(mm364).size()      << '|' << setr() << std::get<1>(mm364)      << '|' << setr() << std::get<2>(mm364)      << '|' << '\n';
+    cout << '|' << setr() << "xxhash32"   << '|' << setl() << std::get<0>(xxhash32).size()   << '|' << setr() << std::get<1>(xxhash32)   << '|' << setr() << std::get<2>(xxhash32)   << '|' << '\n';
+    cout << '|' << setr() << "xxhash64"   << '|' << setl() << std::get<0>(xxhash64).size()   << '|' << setr() << std::get<1>(xxhash64)   << '|' << setr() << std::get<2>(xxhash64)   << '|' << '\n';
     cout << bar << '\n';
 
     return 0;
