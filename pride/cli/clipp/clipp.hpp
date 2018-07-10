@@ -52,9 +52,7 @@
  * @brief primary namespace
  *
  *****************************************************************************/
-namespace pride::cli
-{
-namespace clipp {
+namespace pride::cli::clipp {
 
 
 
@@ -6405,7 +6403,6 @@ void print(OStream& os, const group& g, int level)
 
 
 } // namespace debug
-} //namespace clipp
-} // namesapce pride::cli::detail
+} //namespace pride::cli::clipp
 #endif
 

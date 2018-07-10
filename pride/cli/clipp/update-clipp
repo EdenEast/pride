@@ -1,9 +1,14 @@
 #!/bin/bash
 
+root_dir=$(dirname ${BASH_SOURCE[0]})
+
 clipp_header_url="https://raw.githubusercontent.com/muellan/clipp/master/include/clipp.h"
 clipp_readme_url="https://raw.githubusercontent.com/muellan/clipp/master/README.md"
 
-root_dir=$(dirname ${BASH_SOURCE[0]})
+clipp_header_path=${root_dir}/clipp.hpp
+clipp_readme_path=${root_dir}/readme.hpp
 
-curl -o ${root_dir}/clipp.hpp $clipp_header_url
-curl -o ${root_dir}/readme.md $clipp_readme_url
+curl -o $clipp_header_path $clipp_header_url
+curl -o $clipp_readme_path $clipp_readme_url
+
+sed -i -e 's/namespace clipp/namespace pride::cli::clipp/' $clipp_header_path
