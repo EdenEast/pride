@@ -1,7 +1,6 @@
 
 #pragma once
 
-#include "../../ct/string.hpp"
 #include <array>
 #include <cstdint>
 #include <limits>
