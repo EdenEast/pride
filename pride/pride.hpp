@@ -3,7 +3,6 @@
 
 #include "assert.hpp"
 #include "cli.hpp"
-#include "cmd.hpp"
 #include "config.hpp"
 #include "console.hpp"
 #include "ct.hpp"

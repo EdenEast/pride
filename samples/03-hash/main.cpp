@@ -94,21 +94,6 @@
     using namespace pride;
     using std::cout;
 
-    pride::cmd::cmd_t cmdline("hash", "Calculate hashes and their collisions for all english words");
-    cmdline
-        .show_positional_help()
-        .allow_unrecognised_options()
-        .add_options()
-        ("h,help", "Show this help", pride::cmd::value<bool>())
-        ("f,force", "force flush of output when printing");
-
-    auto result = cmdline.parse(argc, argv);
-    if (result.count("help"))
-    {
-        std::cout << cmdline.help() << std::endl;
-        return 0;
-    }
-
     read_word_list();
     cout << "There are " << word_list.size() << " amount of words\n";
     cout << '\n';
