@@ -14,12 +14,4 @@ namespace pride
 #else
     using hash_t = uint32_t;
 #endif
-
-    // not sure on this one
-    // template<typename T>
-    // struct seed_t
-    // {
-    //     seed(explicit T value) : value(value) {}
-    //     T value;
-    // };
 }

@@ -42,7 +42,7 @@ namespace pride::ct
         constexpr const char* begin() const noexcept { return str; }
         constexpr const char* end() const noexcept { return str + size; }
 
-        constexpr hash_t hash() const noexcept { return ::pride::ct::hash::xxhash(str, size); }
+        constexpr pride::hash_t hash() const noexcept { return ::pride::ct::fnv1a(str, size); }
 
         constexpr size_t find(const string& substring) const noexcept
         {
