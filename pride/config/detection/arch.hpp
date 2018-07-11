@@ -1,11 +1,11 @@
 
 #pragma once
 
-#if (defined(_WIN32) || defined(__i386__) || defined(i386) || defined(__x86__))
-    #define PRI_ARCH_32
-#elif (defined(_WIN64) || defined(__amd64) || defined(__amd64__) || defined(__x86_64) || \
+#if (defined(_WIN64) || defined(__amd64) || defined(__amd64__) || defined(__x86_64) || \
     defined(__x86_64__) || defined(_M_X64) || defined(__ia64__) || defined(_M_IA64))
     #define PRI_ARCH_64
+#elif (defined(_WIN32)|| defined(__i386__) || defined(i386) || defined(__x86__))
+    #define PRI_ARCH_32
 #else
     #define PRI_ARCH_UNKNOWN
 #endif
