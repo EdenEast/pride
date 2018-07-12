@@ -45,7 +45,7 @@ namespace pride::hash
         inline uint32_t compute<uint32_t>(const void* key, size_t len, uint32_t seed)
         {
             const uint8_t * data = (const uint8_t*)key;
-            const int nblocks = len / 4;
+            const int nblocks = static_cast<int>(len / 4);
             uint32_t h1 = seed;
 
             const uint32_t c1 = 0xcc9e2d51;

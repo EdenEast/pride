@@ -116,7 +116,7 @@ private:
  }
 
  template<typename T>
- std::string to_string_with_precision(const T a_value, const int n = 5)
+ std::string to_string_with_precision(const T a_value, const size_t n = 5)
  {
      std::ostringstream out;
      out << std::setprecision(n) << a_value;
