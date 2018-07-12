@@ -16,11 +16,11 @@ namespace pride
         using weak_ptr = std::weak_ptr<Derived>;
         using const_weak_ptr = std::weak_ptr<const Derived>;
 
-        ptr get() { return share_from_this(); }
-        const_ptr get() const { return shared_from_this(); }
+        ptr get() { return this->share_from_this(); }
+        const_ptr get() const { return this->shared_from_this(); }
 
-        weak_ptr get_weak() { return weak_from_this(); }
-        const_weak_ptr get_weak() const { return weak_from_this(); }
+        weak_ptr get_weak() { return this->weak_from_this(); }
+        const_weak_ptr get_weak() const { return this->weak_from_this(); }
 
         template<typename... Args>
         static ptr make_new(Args&&... args)
@@ -29,6 +29,6 @@ namespace pride
         }
 
     protected:
-        using allocator = std::_Ref_count_obj<Derived>;
+        // using allocator = std::_Ref_count_obj<Derived>;
     };
 }

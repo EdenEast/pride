@@ -12,10 +12,10 @@
  #include <utility>
  #include <vector>
 
-class timer_t
+class stopwatch_t
 {
 public:
-    timer_t() : _beg(_clock::now()) {}
+    stopwatch_t() : _beg(_clock::now()) {}
     void reset() { _beg = _clock::now(); }
     uint64_t delta() const {
         return std::chrono::duration_cast<std::chrono::nanoseconds>
@@ -60,7 +60,6 @@ private:
      }
 
      std::string line;
-     int count = 0;
      while(std::getline(ifs, line))
          word_list.push_back(line);
      ifs.close();
@@ -77,7 +76,7 @@ private:
 
     std::cout << "Generating " << name << " hash... ";
     times.reserve(word_list.size());
-    timer_t t;
+    stopwatch_t t;
 
     for (auto& s : word_list)
     {
