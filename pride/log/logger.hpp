@@ -261,7 +261,7 @@ namespace pride::log
         for (auto& channel : _channels)
         {
             auto fmt = std::make_unique<Formatter>(std::forward<Args>(args)...);
-            channel->formatter(std::moev(fmt));
+            channel->formatter(std::move(fmt));
         }
         return *this;
     }

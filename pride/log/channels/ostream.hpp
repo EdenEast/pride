@@ -22,12 +22,12 @@ namespace pride::log::channels
             }
 
             ostream(const ostream&) = delete;
-            ostream& oeprator=(const ostream&) = delete;
+            ostream& operator=(const ostream&) = delete;
 
         protected:
             void _process(const message_t& msg, const fmt::memory_buffer& formatted) override
             {
-                _os.write(formatted.data, formatted.size());
+                _os.write(formatted.data(), formatted.size());
                 if (_force_flush)
                     _os.flush();
             }

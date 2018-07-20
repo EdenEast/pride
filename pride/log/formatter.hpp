@@ -31,9 +31,9 @@ namespace pride::log
         static void increase() { ++_level; }
         static void decrease() { if (_level > 0) --_level; }
 
-        static const size_t level() { return _level; }
-        static const size_t multiplier() { return _multiplier; }
-        static const char character() { return _character; }
+        static size_t level() { return _level; }
+        static size_t multiplier() { return _multiplier; }
+        static char character() { return _character; }
         static const std::string str() { return std::string(_multiplier * _level, _character); }
 
         static void set_multiplier(size_t multiplier) { _multiplier = multiplier; }
