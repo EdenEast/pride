@@ -57,7 +57,7 @@ namespace pride::log
         void flush() final override;
 
     protected:
-        virtual void _process(const std::string& msg, const std::string& formatted) = 0;
+        virtual void _process(const message_t& msg, const fmt::memory_buffer& formatted) = 0;
         virtual void _flush() = 0;
 
         Mutex _mutex;
@@ -88,9 +88,10 @@ namespace pride::log
     template<typename Mutex>
     void base_channel<Mutex>::log(const message_t& msg)
     {
-        fmt::memory_buffer formatted;
         std::lock_guard<Mutex> lock(_mutex);
-        _process(msg), msg;
+        fmt::memory_buffer formatted;
+        _formatter->format(msg, formatted);
+        _process(msg, formatted);
     }
 
     template<typename Mutex>

@@ -8,7 +8,7 @@
 #include "log/message.hpp"
 #include "log/sevarity.hpp"
 
-#include "log/channels/console.hpp"
+#include "log/channels.hpp"
 
 namespace pride::log
 {

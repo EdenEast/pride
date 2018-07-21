@@ -95,4 +95,6 @@ namespace pride::log::channels
         Mutex _mutex;
         FILE* _file;
     };
+
+    using stdout_mt = stdout_console<std::mutex>;
 }
