@@ -75,13 +75,16 @@ namespace pride::log
         void flush();
         bool should_log(sevarity_t level) { return level >= _sevarity; }
 
+        template<typename Formatter, typename... Args>
+        logger_t& set_formatter(const Args&&... args);
+        logger_t& set_pattern(const std::string& pattern);
+
         // ─────────────────────────────────────────────────────────────────
 
         template<typename Channel, typename... Args>
         logger_t& add_channel(Args&&... args);
         logger_t& add_channel(const channel_t::ptr& channel);
 
-        // logger_t& add_channel(channel_t::ptr channel) { _channels.push_back(std::move(channel)); return *this; }
         logger_t& name(std::string name) { _name = std::move(name); return *this; }
         logger_t& sevarity(sevarity_t level) { _sevarity = level; return *this; }
         logger_t& flush_on(sevarity_t level) { _flush_on = level; return *this; }
@@ -105,8 +108,8 @@ namespace pride::log
         static std::unordered_map<std::string, logger_t::ptr> _loggers;
         std::string _name;
         std::vector<channel_t::ptr> _channels;
-        sevarity_t _sevarity;
-        sevarity_t _flush_on;
+        sevarity_t _sevarity{ sevarity_t::info };
+        sevarity_t _flush_on{ sevarity_t::off };
     };
 
     std::unordered_map<std::string, logger_t::ptr> logger_t::_loggers;
@@ -124,8 +127,6 @@ namespace pride::log
 
     inline logger_t::logger_t(std::string name)
     : _name(std::move(name))
-    , _sevarity(sevarity_t::info)
-    , _flush_on(sevarity_t::off)
     {
     }
 
@@ -251,6 +252,24 @@ namespace pride::log
     logger_t& logger_t::add_channel(const channel_t::ptr& channel)
     {
         _channels.push_back(channel);
+        return *this;
+    }
+
+    template<typename Formatter, typename... Args>
+    logger_t& logger_t::set_formatter(const Args&&... args)
+    {
+        for (auto& channel : _channels)
+        {
+            auto fmt = std::make_unique<Formatter>(std::forward<Args>(args)...);
+            channel->formatter(std::moev(fmt));
+        }
+        return *this;
+    }
+
+    logger_t& logger_t::set_pattern(const std::string& pattern)
+    {
+        for (auto& channel : _channels)
+            channel->pattern(pattern);
         return *this;
     }
 

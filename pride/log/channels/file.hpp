@@ -11,6 +11,7 @@ namespace pride::log::channels
     {
     public:
         explicit basic_file(const std::string& filename, bool truncate = false)
+        : base_channel<Mutex>()
         {
             _helper.open(filename, truncate);
         }
@@ -18,7 +19,7 @@ namespace pride::log::channels
     protected:
         void _process(const message_t& msg, const fmt::memory_buffer& formatted) override
         {
-            _helper.write(msg.raw);
+            _helper.write(formatted);
         }
 
         void _flush() override

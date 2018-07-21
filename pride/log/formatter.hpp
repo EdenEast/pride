@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "../config/detection/os.hpp"
 #include "fmt.hpp"
 #include "message.hpp"
 #include "detail/thread.hpp"
@@ -349,8 +350,7 @@ namespace pride::log
         public:
             void format(const message_t& msg, const std::tm& tm_time, fmt::memory_buffer& buffer)
             {
-                // @Todo:
-                // fmt::helper::pad6(msg.thread_id);
+                fmt::helper::pad6(msg.thread_id, buffer);
             }
         };
 
@@ -470,7 +470,8 @@ namespace pride::log
     class pattern_formatter_t : public formatter_t
     {
     public:
-        explicit pattern_formatter_t(const std::string& pattern)
+        explicit pattern_formatter_t(const std::string& pattern, std::string eol = eol())
+        : _eol(std::move(eol))
         {
             std::memset(&_cached_tm, 0, sizeof(_cached_tm));
             compile_pattern(pattern);
@@ -490,7 +491,7 @@ namespace pride::log
             for (auto& f : _formatters)
                 f->format(msg, _cached_tm, buffer);
 
-            fmt::helper::append_str("\n", buffer);
+            fmt::helper::append_str(_eol, buffer);
         }
 
     private:
@@ -512,7 +513,7 @@ namespace pride::log
             //     _formatters.emplace_back(new detail::message_counter_formatter_t()) ; break;
             case 'v': // message
                 _formatters.emplace_back(new detail::message_formatter_t()) ; break;
-            case '+': // message
+            case '+': // full decault message
                 _formatters.emplace_back(new detail::full_formatter_t()) ; break;
 
             case 'a': // abrev weekday names
@@ -606,6 +607,14 @@ namespace pride::log
             //return detail::local_time(std::chrono::system_clock::to_time_t(msg.time));
         }
 
+        static constexpr const char* eol()
+        {
+            if constexpr(pride::detection::current_operating_system() == pride::detection::operating_system_t::windows)
+                return "\r\n";
+            return "\n";
+        }
+
+        const std::string _eol;
         std::tm _cached_tm;
         std::chrono::seconds _last_log_seconds;
         std::vector<std::unique_ptr<detail::flag_formatter_t>> _formatters;
