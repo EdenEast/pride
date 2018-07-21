@@ -24,7 +24,7 @@ namespace pride::log
         namespace sevarity
         {
             static constexpr std::array<const char*, 7> long_names {{
-                "trace", "debug", "info", "warning", "error", "critical", "off"
+                "trace", "debug", "info", "warn", "error", "crit", "off"
             }};
 
             static constexpr std::array<const char*, 7> short_names {{
