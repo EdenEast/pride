@@ -29,21 +29,21 @@ inline std::tm localtime(std::time_t time) {
     dispatcher(std::time_t t): time_(t) {}
 
     bool run() {
-      using namespace fmt::internal;
+      using namespace pride::log::fmt::internal;
       return handle(localtime_r(&time_, &tm_));
     }
 
     bool handle(std::tm *tm) { return tm != FMT_NULL; }
 
     bool handle(internal::null<>) {
-      using namespace fmt::internal;
+      using namespace pride::log::fmt::internal;
       return fallback(localtime_s(&tm_, &time_));
     }
 
     bool fallback(int res) { return res == 0; }
 
     bool fallback(internal::null<>) {
-      using namespace fmt::internal;
+      using namespace pride::log::fmt::internal;
       std::tm *tm = std::localtime(&time_);
       if (tm) tm_ = *tm;
       return tm != FMT_NULL;
@@ -65,14 +65,14 @@ inline std::tm gmtime(std::time_t time) {
     dispatcher(std::time_t t): time_(t) {}
 
     bool run() {
-      using namespace fmt::internal;
+      using namespace pride::log::fmt::internal;
       return handle(gmtime_r(&time_, &tm_));
     }
 
     bool handle(std::tm *tm) { return tm != FMT_NULL; }
 
     bool handle(internal::null<>) {
-      using namespace fmt::internal;
+      using namespace pride::log::fmt::internal;
       return fallback(gmtime_s(&tm_, &time_));
     }
 

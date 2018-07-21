@@ -142,7 +142,7 @@ inline void vprint(std::basic_ostream<Char> &os,
 
   **Example**::
 
-    fmt::print(cerr, "Don't {}!", "panic");
+    pride::log::fmt::print(cerr, "Don't {}!", "panic");
   \endrst
  */
 template <typename... Args>

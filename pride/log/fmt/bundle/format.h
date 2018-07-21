@@ -100,7 +100,7 @@ inline void do_throw(const Exception &x) {
 }
 }
 FMT_END_NAMESPACE
-#   define FMT_THROW(x) fmt::internal::do_throw(x)
+#   define FMT_THROW(x) pride::log::fmt::internal::do_throw(x)
 #  else
 #   define FMT_THROW(x) throw x
 #  endif
@@ -199,7 +199,7 @@ inline uint32_t clz(uint32_t x) {
 # pragma warning(suppress: 6102)
   return 31 - r;
 }
-# define FMT_BUILTIN_CLZ(n) fmt::internal::clz(n)
+# define FMT_BUILTIN_CLZ(n) pride::log::fmt::internal::clz(n)
 
 # if defined(_WIN64) && !defined(__clang__)
 #  pragma intrinsic(_BitScanReverse64)
@@ -225,7 +225,7 @@ inline uint32_t clzll(uint64_t x) {
 # pragma warning(suppress: 6102)
   return 63 - r;
 }
-# define FMT_BUILTIN_CLZLL(n) fmt::internal::clzll(n)
+# define FMT_BUILTIN_CLZLL(n) pride::log::fmt::internal::clzll(n)
 }
 FMT_END_NAMESPACE
 #endif
@@ -376,15 +376,15 @@ namespace std {
 // https://gcc.gnu.org/bugzilla/show_bug.cgi?id=48891
 // and the same for isnan and signbit.
 template <>
-class numeric_limits<fmt::internal::dummy_int> :
+class numeric_limits<pride::log::fmt::internal::dummy_int> :
     public std::numeric_limits<int> {
  public:
   // Portable version of isinf.
   template <typename T>
   static bool isinfinity(T x) {
-    using namespace fmt::internal;
+    using namespace pride::log::fmt::internal;
     // The resolution "priority" is:
-    // isinf macro > std::isinf > ::isinf > fmt::internal::isinf
+    // isinf macro > std::isinf > ::isinf > pride::log::fmt::internal::isinf
     if (const_check(sizeof(isinf(x)) != sizeof(dummy_int)))
       return isinf(x) != 0;
     return !_finite(static_cast<double>(x));
@@ -393,16 +393,16 @@ class numeric_limits<fmt::internal::dummy_int> :
   // Portable version of isnan.
   template <typename T>
   static bool isnotanumber(T x) {
-    using namespace fmt::internal;
-    if (const_check(sizeof(isnan(x)) != sizeof(fmt::internal::dummy_int)))
+    using namespace pride::log::fmt::internal;
+    if (const_check(sizeof(isnan(x)) != sizeof(pride::log::fmt::internal::dummy_int)))
       return isnan(x) != 0;
     return _isnan(static_cast<double>(x)) != 0;
   }
 
   // Portable version of signbit.
   static bool isnegative(double x) {
-    using namespace fmt::internal;
-    if (const_check(sizeof(signbit(x)) != sizeof(fmt::internal::dummy_int)))
+    using namespace pride::log::fmt::internal;
+    if (const_check(sizeof(signbit(x)) != sizeof(pride::log::fmt::internal::dummy_int)))
       return signbit(x) != 0;
     if (x < 0) return true;
     if (!isnotanumber(x)) return false;
@@ -496,7 +496,7 @@ class locale;
 class locale_provider {
  public:
   virtual ~locale_provider() {}
-  virtual fmt::locale locale();
+  virtual pride::log::fmt::locale locale();
 };
 
 // The number of characters to store in the basic_memory_buffer object itself
@@ -520,7 +520,7 @@ enum { inline_buffer_size = 500 };
 
   **Example**::
 
-     fmt::memory_buffer out;
+     pride::log::fmt::memory_buffer out;
      format_to(out, "The answer is {}.", 42);
 
   This will write the following output to the ``out`` object:
@@ -577,7 +577,7 @@ class basic_memory_buffer: private Allocator, public internal::basic_buffer<T> {
  public:
   /**
     \rst
-    Constructs a :class:`fmt::basic_memory_buffer` object moving the content
+    Constructs a :class:`pride::log::fmt::basic_memory_buffer` object moving the content
     of the other object to it.
     \endrst
    */
@@ -626,7 +626,7 @@ typedef basic_memory_buffer<wchar_t> wmemory_buffer;
 /**
   \rst
   A fixed-size memory buffer. For a dynamically growing buffer use
-  :class:`fmt::basic_memory_buffer`.
+  :class:`pride::log::fmt::basic_memory_buffer`.
 
   Trying to increase the buffer size past the initial capacity will throw
   ``std::runtime_error``.
@@ -637,7 +637,7 @@ class basic_fixed_buffer : public internal::basic_buffer<Char> {
  public:
   /**
    \rst
-   Constructs a :class:`fmt::basic_fixed_buffer` object for *array* of the
+   Constructs a :class:`pride::log::fmt::basic_fixed_buffer` object for *array* of the
    given size.
    \endrst
    */
@@ -647,7 +647,7 @@ class basic_fixed_buffer : public internal::basic_buffer<Char> {
 
   /**
    \rst
-   Constructs a :class:`fmt::basic_fixed_buffer` object for *array* of the
+   Constructs a :class:`pride::log::fmt::basic_fixed_buffer` object for *array* of the
    size known at compile time.
    \endrst
    */
@@ -1179,8 +1179,8 @@ class utf16_to_utf8 {
   FMT_API int convert(wstring_view s);
 };
 
-FMT_API void format_windows_error(fmt::internal::buffer &out, int error_code,
-                                  fmt::string_view message) FMT_NOEXCEPT;
+FMT_API void format_windows_error(pride::log::fmt::internal::buffer &out, int error_code,
+                                  pride::log::fmt::string_view message) FMT_NOEXCEPT;
 #endif
 
 template <typename T = void>
@@ -2373,10 +2373,10 @@ class system_error : public std::runtime_error {
  public:
   /**
    \rst
-   Constructs a :class:`fmt::system_error` object with a description
-   formatted with `fmt::format_system_error`. *message* and additional
+   Constructs a :class:`pride::log::fmt::system_error` object with a description
+   formatted with `pride::log::fmt::format_system_error`. *message* and additional
    arguments passed into the constructor are formatted similarly to
-   `fmt::format`.
+   `pride::log::fmt::format`.
 
    **Example**::
 
@@ -2386,7 +2386,7 @@ class system_error : public std::runtime_error {
      const char *filename = "madeup";
      std::FILE *file = std::fopen(filename, "r");
      if (!file)
-       throw fmt::system_error(errno, "cannot open file '{}'", filename);
+       throw pride::log::fmt::system_error(errno, "cannot open file '{}'", filename);
    \endrst
   */
   template <typename... Args>
@@ -2415,7 +2415,7 @@ class system_error : public std::runtime_error {
   \endrst
  */
 FMT_API void format_system_error(internal::buffer &out, int error_code,
-                                 fmt::string_view message) FMT_NOEXCEPT;
+                                 pride::log::fmt::string_view message) FMT_NOEXCEPT;
 
 /**
   This template provides operations for formatting and writing data into a
@@ -3018,7 +3018,7 @@ class windows_error : public system_error {
  public:
   /**
    \rst
-   Constructs a :class:`fmt::windows_error` object with the description
+   Constructs a :class:`pride::log::fmt::windows_error` object with the description
    of the form
 
    .. parsed-literal::
@@ -3039,7 +3039,7 @@ class windows_error : public system_error {
      LPOFSTRUCT of = LPOFSTRUCT();
      HFILE file = OpenFile(filename, &of, OF_READ);
      if (file == HFILE_ERROR) {
-       throw fmt::windows_error(GetLastError(),
+       throw pride::log::fmt::windows_error(GetLastError(),
                                 "cannot open file '{}'", filename);
      }
    \endrst
@@ -3463,7 +3463,7 @@ auto join(const Range &range, wstring_view sep)
 
     #include <fmt/format.h>
 
-    std::string answer = fmt::to_string(42);
+    std::string answer = pride::log::fmt::to_string(42);
   \endrst
  */
 template <typename T>
@@ -3549,7 +3549,7 @@ inline OutputIt vformat_to(
  **Example**::
 
    std::vector<char> out;
-   fmt::format_to(std::back_inserter(out), "{}", 42);
+   pride::log::fmt::format_to(std::back_inserter(out), "{}", 42);
  \endrst
  */
 template <typename OutputIt, typename... Args>
@@ -3584,11 +3584,11 @@ struct format_to_n_result {
 };
 
 template <typename OutputIt>
-using format_to_n_context = typename fmt::format_context_t<
-  fmt::internal::truncating_iterator<OutputIt>>::type;
+using format_to_n_context = typename pride::log::fmt::format_context_t<
+  pride::log::fmt::internal::truncating_iterator<OutputIt>>::type;
 
 template <typename OutputIt>
-using format_to_n_args = fmt::basic_format_args<format_to_n_context<OutputIt>>;
+using format_to_n_args = pride::log::fmt::basic_format_args<format_to_n_context<OutputIt>>;
 
 template <typename OutputIt, typename ...Args>
 inline format_arg_store<format_to_n_context<OutputIt>, Args...>
@@ -3630,7 +3630,7 @@ inline format_to_n_result<OutputIt> format_to_n(
 inline std::string vformat(string_view format_str, format_args args) {
   memory_buffer buffer;
   vformat_to(buffer, format_str, args);
-  return fmt::to_string(buffer);
+  return pride::log::fmt::to_string(buffer);
 }
 
 inline std::wstring vformat(wstring_view format_str, wformat_args args) {
@@ -3835,7 +3835,7 @@ void vprint_rgb(rgb fd, rgb bg, string_view format, format_args args);
   Formats a string and prints it to stdout using ANSI escape sequences to
   specify foreground color 'fd'.
   Example:
-    fmt::print(fmt::color::red, "Elapsed time: {0:.2f} seconds", 1.23);
+    pride::log::fmt::print(fmt::color::red, "Elapsed time: {0:.2f} seconds", 1.23);
  */
 template <typename... Args>
 inline void print(rgb fd, string_view format_str, const Args & ... args) {
@@ -3846,7 +3846,7 @@ inline void print(rgb fd, string_view format_str, const Args & ... args) {
   Formats a string and prints it to stdout using ANSI escape sequences to
   specify foreground color 'fd' and background color 'bg'.
   Example:
-    fmt::print(fmt::color::red, fmt::color::black, "Elapsed time: {0:.2f} seconds", 1.23);
+    pride::log::fmt::print(fmt::color::red, fmt::color::black, "Elapsed time: {0:.2f} seconds", 1.23);
  */
 template <typename... Args>
 inline void print(rgb fd, rgb bg, string_view format_str, const Args & ... args) {
@@ -3906,11 +3906,11 @@ FMT_CONSTEXPR internal::udl_formatter<Char, CHARS...> operator""_format() {
 # else
 /**
   \rst
-  User-defined literal equivalent of :func:`fmt::format`.
+  User-defined literal equivalent of :func:`pride::log::fmt::format`.
 
   **Example**::
 
-    using namespace fmt::literals;
+    using namespace pride::log::fmt::literals;
     std::string message = "The answer is {}"_format(42);
   \endrst
  */
@@ -3922,12 +3922,12 @@ operator"" _format(const wchar_t *s, std::size_t) { return {s}; }
 
 /**
   \rst
-  User-defined literal equivalent of :func:`fmt::arg`.
+  User-defined literal equivalent of :func:`pride::log::fmt::arg`.
 
   **Example**::
 
-    using namespace fmt::literals;
-    fmt::print("Elapsed time: {s:.2f} seconds", "s"_a=1.23);
+    using namespace pride::log::fmt::literals;
+    pride::log::fmt::print("Elapsed time: {s:.2f} seconds", "s"_a=1.23);
   \endrst
  */
 inline internal::udl_arg<char>
@@ -3940,7 +3940,7 @@ FMT_END_NAMESPACE
 
 #define FMT_STRING(s) [] { \
     typedef typename std::decay<decltype(s)>::type pointer; \
-    struct S : fmt::format_string { \
+    struct S : pride::log::fmt::format_string { \
       static FMT_CONSTEXPR pointer data() { return s; } \
       static FMT_CONSTEXPR size_t size() { return sizeof(s); } \
     }; \

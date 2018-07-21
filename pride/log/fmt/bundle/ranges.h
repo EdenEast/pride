@@ -203,7 +203,7 @@ struct is_tuple_like {
 
 template <typename TupleT, typename Char>
 struct formatter<TupleT, Char, 
-    typename std::enable_if<fmt::is_tuple_like<TupleT>::value>::type> {
+    typename std::enable_if<pride::log::fmt::is_tuple_like<TupleT>::value>::type> {
 private:
   // C++11 generic lambda for format()
   template <typename FormatContext>
@@ -260,7 +260,7 @@ struct is_range {
 
 template <typename RangeT, typename Char>
 struct formatter<RangeT, Char,
-    typename std::enable_if<fmt::is_range<RangeT>::value>::type> {
+    typename std::enable_if<pride::log::fmt::is_range<RangeT>::value>::type> {
 
   formatting_range<Char> formatting;
 

@@ -3,11 +3,8 @@
 # takes in the file that will be worked on
 function replace_namesapce()
 {
-    # find all namespace fmt and reaplce them with pride::log::fmt
-    sed -i -e 's/bfmt::/pride::log::fmt/' $1
-
-    # find all fmt:: and replace them with pride::log::fmt
-    # sed -i -e 's/fmt::/pride::log::fmt::/' $1
+    sed -i -e 's/namespace fmt[^::]/namespace pride::log::fmt/' $1
+    sed -i -e 's/fmt::/pride::log::fmt::/' $1
 }
 
 function main()

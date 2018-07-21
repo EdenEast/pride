@@ -599,7 +599,7 @@ inline std::string vsprintf(string_view format, printf_args args) {
 
   **Example**::
 
-    std::string message = fmt::sprintf("The answer is %d", 42);
+    std::string message = pride::log::fmt::sprintf("The answer is %d", 42);
   \endrst
 */
 template <typename... Args>
@@ -637,7 +637,7 @@ inline int vfprintf(std::FILE *f, basic_string_view<Char> format,
 
   **Example**::
 
-    fmt::fprintf(stderr, "Don't %s!", "panic");
+    pride::log::fmt::fprintf(stderr, "Don't %s!", "panic");
   \endrst
  */
 template <typename... Args>
@@ -668,7 +668,7 @@ inline int vprintf(wstring_view format, wprintf_args args) {
 
   **Example**::
 
-    fmt::printf("Elapsed time: %.2f seconds", 1.23);
+    pride::log::fmt::printf("Elapsed time: %.2f seconds", 1.23);
   \endrst
  */
 template <typename... Args>
@@ -705,7 +705,7 @@ inline int vfprintf(std::wostream &os, wstring_view format_str,
 
   **Example**::
 
-    fmt::fprintf(cerr, "Don't %s!", "panic");
+    pride::log::fmt::fprintf(cerr, "Don't %s!", "panic");
   \endrst
  */
 template <typename... Args>

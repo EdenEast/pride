@@ -213,7 +213,7 @@ public:
   FMT_API int (fileno)() const;
 
   void vprint(string_view format_str, format_args args) {
-    fmt::vprint(file_, format_str, args);
+    pride::log::fmt::vprint(file_, format_str, args);
   }
 
   template <typename... Args>
@@ -224,7 +224,7 @@ public:
 
 // A file. Closed file is represented by a file object with descriptor -1.
 // Methods that are not declared with FMT_NOEXCEPT may throw
-// fmt::system_error in case of failure. Note that some errors such as
+// pride::log::fmt::system_error in case of failure. Note that some errors such as
 // closing the file multiple times will cause a crash on Windows rather
 // than an exception. You can get standard behavior by overriding the
 // invalid parameter handler with _set_invalid_parameter_handler.
@@ -409,8 +409,8 @@ FMT_END_NAMESPACE
 #if !FMT_USE_RVALUE_REFERENCES
 namespace std {
 // For compatibility with C++98.
-inline fmt::buffered_file &move(fmt::buffered_file &f) { return f; }
-inline fmt::file &move(fmt::file &f) { return f; }
+inline pride::log::fmt::buffered_file &move(fmt::buffered_file &f) { return f; }
+inline pride::log::fmt::file &move(fmt::file &f) { return f; }
 }
 #endif
 

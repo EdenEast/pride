@@ -56,11 +56,11 @@
 
 // Dummy implementations of strerror_r and strerror_s called if corresponding
 // system functions are not available.
-inline fmt::internal::null<> strerror_r(int, char *, ...) {
-  return fmt::internal::null<>();
+inline pride::log::fmt::internal::null<> strerror_r(int, char *, ...) {
+  return pride::log::fmt::internal::null<>();
 }
-inline fmt::internal::null<> strerror_s(char *, std::size_t, ...) {
-  return fmt::internal::null<>();
+inline pride::log::fmt::internal::null<> strerror_s(char *, std::size_t, ...) {
+  return pride::log::fmt::internal::null<>();
 }
 
 FMT_BEGIN_NAMESPACE
@@ -468,13 +468,13 @@ FMT_FUNC void internal::error_handler::on_error(const char *message) {
 }
 
 FMT_FUNC void report_system_error(
-    int error_code, fmt::string_view message) FMT_NOEXCEPT {
+    int error_code, pride::log::fmt::string_view message) FMT_NOEXCEPT {
   report_error(format_system_error, error_code, message);
 }
 
 #if FMT_USE_WINDOWS_H
 FMT_FUNC void report_windows_error(
-    int error_code, fmt::string_view message) FMT_NOEXCEPT {
+    int error_code, pride::log::fmt::string_view message) FMT_NOEXCEPT {
   report_error(internal::format_windows_error, error_code, message);
 }
 #endif
@@ -553,7 +553,7 @@ FMT_FUNC void vprint_rgb(rgb fd, rgb bg, string_view format, format_args args) {
 }
 #endif
 
-FMT_FUNC locale locale_provider::locale() { return fmt::locale(); }
+FMT_FUNC locale locale_provider::locale() { return pride::log::fmt::locale(); }
 
 FMT_END_NAMESPACE
 
