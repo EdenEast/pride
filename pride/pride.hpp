@@ -7,5 +7,6 @@
 #include "console.hpp"
 #include "ct.hpp"
 #include "hash.hpp"
+#include "log.hpp"
 #include "preprocessor.hpp"
 #include "utility.hpp"
