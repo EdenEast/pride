@@ -3,6 +3,8 @@
 
 #include "../utility/shareable.hpp"
 #include "fmt.hpp"
+#include "formatter.hpp"
+#include "message.hpp"
 #include "sevarity.hpp"
 #include <initializer_list>
 #include <mutex>
@@ -11,16 +13,16 @@
 
 namespace pride::log
 {
-    class channel_t
+    class channel_t : public shareable<channel_t>
     {
     public:
-        using ptr = std::shared_ptr<channel_t>;
+        // using ptr = std::shared_ptr<channel_t>;
         using init_list = std::initializer_list<channel_t>;
 
         channel_t() {}
         virtual ~channel_t() = default;
 
-        virtual void log(const std::string& msg) = 0;
+        virtual void log(const message_t& msg) = 0;
         virtual void flush() = 0;
 
         bool should_log(sevarity_t level) const;
@@ -31,9 +33,13 @@ namespace pride::log
         channel_t& sevarity(sevarity_t sevarity) { _sevarity = sevarity; return *this; }
         sevarity_t sevarity() const { return _sevarity; }
 
-    private:
+        channel_t& formatter(std::unique_ptr<formatter_t> format) { _formatter = std::move(format); return *this; }
+        channel_t& pattern(const std::string& pattern) { _formatter = std::unique_ptr<formatter_t>(new pattern_formatter_t(pattern)); return *this; }
+
+    protected:
         sevarity_t _sevarity{sevarity_t::trace};
         bool _use_sevarity{false};
+        std::unique_ptr<formatter_t> _formatter;
     };
 
     template<typename Mutex>
@@ -45,7 +51,7 @@ namespace pride::log
         base_channel(const base_channel&) = delete;
         base_channel& operator=(const base_channel&) = delete;
 
-        void log(const std::string& msg) final override;
+        void log(const message_t& msg) final override;
         void flush() final override;
 
     protected:
@@ -78,11 +84,13 @@ namespace pride::log
     // ────────────────────────────────────────────────────────────────────────────────
 
     template<typename Mutex>
-    void base_channel<Mutex>::log(const std::string& msg)
+    void base_channel<Mutex>::log(const message_t& msg)
     {
+        fmt::memory_buffer formatted;
         std::lock_guard<Mutex> lock(_mutex);
         _process(msg), msg;
     }
+
     template<typename Mutex>
     void base_channel<Mutex>::flush()
     {
