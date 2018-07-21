@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# takes in the file that will be worked on
+function replace_namesapce()
+{
+    sed -i -e 's/namespace fmt[^::]/namespace pride::log::fmt/' $1
+    sed -i -e 's/fmt::/pride::log::fmt::/' $1
+}
+
+function main()
+{
+    root_dir=$(dirname ${BASH_SOURCE[0]})
+
+    fmt_repo_url="https://github.com/fmtlib/fmt"
+
+    git clone $fmt_repo_url ${root_dir}/temp_fmt
+
+    rm -rf ${root_dir}/bundle/*
+    cp ${root_dir}/temp_fmt/include/fmt/*.h ${root_dir}/bundle
+
+    for file in ${root_dir}/bundle/*.h ; do
+        replace_namesapce $file
+    done
+
+    rm -rf ${root_dir}/temp_fmt
+}
+
+main "$@"
