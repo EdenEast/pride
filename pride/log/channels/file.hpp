@@ -2,36 +2,41 @@
 #pragma once
 
 #include "../channel.hpp"
+#include "../detail/null.hpp"
 #include "../../os/file.hpp"
+#include <mutex>
 
 namespace pride::log::channels
 {
-    template<typename Mutex>
-    class basic_file : public base_channel<Mutex>
+    namespace detail
     {
-    public:
-        explicit basic_file(const std::string& filename, bool truncate = false)
-        : base_channel<Mutex>()
+        template<typename Mutex>
+        class basic_file : public base_channel<Mutex>
         {
-            _helper.open(filename, truncate);
-        }
+        public:
+            explicit basic_file(const std::string& filename, bool truncate = false)
+            : base_channel<Mutex>()
+            {
+                _helper.open(filename, truncate);
+            }
 
-    protected:
-        void _process(const message_t& msg, const fmt::memory_buffer& formatted) override
-        {
-            _helper.write(formatted);
-        }
+        protected:
+            void _process(const message_t& msg, const fmt::memory_buffer& formatted) override
+            {
+                _helper.write(formatted);
+            }
 
-        void _flush() override
-        {
-            _helper.flush();
-        }
+            void _flush() override
+            {
+                _helper.flush();
+            }
 
 
-    private:
-        os::file_t _helper;
-    };
+        private:
+            os::file_t _helper;
+        };
+    }
 
-    using basic_file_mt = basic_file<std::mutex>;
-    // using basic_file_channel_st = basic_file<>;
+    using basic_file_mt = detail::basic_file<std::mutex>;
+    using basic_file_st = detail::basic_file<log::detail::null_mutex>;
 }

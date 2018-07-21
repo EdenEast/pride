@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "../detail/null.hpp"
 #include "../channel.hpp"
 #include "../message.hpp"
 #include "../fmt.hpp"
@@ -27,74 +28,78 @@ namespace pride::log::channels
                 return stderr;
             }
         };
+
+        template<typename Mutex>
+        class stdout_console : public channel_t
+        {
+        public:
+            stdout_console()
+            : channel_t()
+            , _file(stdout_stream::stream())
+            {
+            }
+
+            ~stdout_console() = default;
+            stdout_console(const stdout_console&) = delete;
+            stdout_console& operator=(const stdout_console&) = delete;
+
+            void log(const message_t& msg) override
+            {
+                fmt::memory_buffer format;
+                _formatter->format(msg, format);
+                std::lock_guard<Mutex> lock(_mutex);
+                fwrite(format.data(), sizeof(char), format.size(), _file);
+                fflush(stdout_stream::stream());
+            }
+
+            void flush() override
+            {
+                std::lock_guard<Mutex> lock(_mutex);
+                fflush(stdout_stream::stream());
+            }
+
+        private:
+            Mutex _mutex;
+            FILE* _file;
+        };
+
+        template<typename Mutex>
+        class stderr_console : public channel_t
+        {
+        public:
+            stderr_console()
+            : _file(stderr_stream::stream())
+            {
+            }
+
+            ~stderr_console() = default;
+            stderr_console(const stderr_console&) = delete;
+            stderr_console& operator=(const stderr_console&) = delete;
+
+            void log(const message_t& msg) override
+            {
+                fmt::memory_buffer format;
+                _formatter->format(msg, format);
+                std::lock_guard<Mutex> lock(_mutex);
+                fwrite(format.data(), sizeof(char), format.size(), _file);
+                fflush(stdout_stream::stream());
+            }
+
+            void flush() override
+            {
+                std::lock_guard<Mutex> lock(_mutex);
+                fflush(stdout_stream::stream());
+            }
+
+        private:
+            Mutex _mutex;
+            FILE* _file;
+        };
     } // namespace detail
 
-    template<typename Mutex>
-    class stdout_console : public channel_t
-    {
-    public:
-        stdout_console()
-        : channel_t()
-        , _file(detail::stdout_stream::stream())
-        {
-        }
+    using stdout_mt = detail::stdout_console<std::mutex>;
+    using stdout_st = detail::stdout_console<log::detail::null_mutex>;
 
-        ~stdout_console() = default;
-        stdout_console(const stdout_console&) = delete;
-        stdout_console& operator=(const stdout_console&) = delete;
-
-        void log(const message_t& msg) override
-        {
-            fmt::memory_buffer format;
-            _formatter->format(msg, format);
-            std::lock_guard<Mutex> lock(_mutex);
-            fwrite(format.data(), sizeof(char), format.size(), _file);
-            fflush(detail::stdout_stream::stream());
-        }
-
-        void flush() override
-        {
-            std::lock_guard<Mutex> lock(_mutex);
-            fflush(detail::stdout_stream::stream());
-        }
-
-    private:
-        Mutex _mutex;
-        FILE* _file;
-    };
-
-    template<typename Mutex>
-    class stderr_console : public channel_t
-    {
-    public:
-        stderr_console()
-        : _file(detail::stderr_stream::stream())
-        {
-        }
-
-        ~stderr_console() = default;
-        stderr_console(const stderr_console&) = delete;
-        stderr_console& operator=(const stderr_console&) = delete;
-
-        void log(const message_t& msg) override
-        {
-            fmt::memory_buffer format;
-            _formatter->format(msg, format);
-            std::lock_guard<Mutex> lock(_mutex);
-            fwrite(format.data(), sizeof(char), format.size(), _file);
-            fflush(detail::stdout_stream::stream());
-        }
-
-        void flush() override
-        {
-            std::lock_guard<Mutex> lock(_mutex);
-            fflush(detail::stdout_stream::stream());
-        }
-
-    private:
-        Mutex _mutex;
-        FILE* _file;
-    };
-
-    using stdout_mt = stdout_console<std::mutex>;
+    using stderr_mt = detail::stderr_console<std::mutex>;
+    using stderr_st = detail::stderr_console<log::detail::null_mutex>;
 }
