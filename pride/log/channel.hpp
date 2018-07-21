@@ -19,7 +19,9 @@ namespace pride::log
         // using ptr = std::shared_ptr<channel_t>;
         using init_list = std::initializer_list<channel_t>;
 
-        channel_t() {}
+        channel_t()
+        : _formatter(std::unique_ptr<formatter_t>(new pattern_formatter_t("%+")))
+        {}
         virtual ~channel_t() = default;
 
         virtual void log(const message_t& msg) = 0;

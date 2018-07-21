@@ -3,6 +3,7 @@
 
 #include "sevarity.hpp"
 #include "fmt.hpp"
+#include <chrono>
 #include <string>
 
 namespace pride::log
@@ -17,6 +18,8 @@ namespace pride::log
 
         const std::string* names{nullptr};
         sevarity_t sevarity;
+        std::chrono::system_clock::time_point time;
+        size_t thread_id;
         fmt::memory_buffer raw;
     };
 
@@ -24,5 +27,6 @@ namespace pride::log
     : names(names)
     , sevarity(level)
     {
+        // @Todo: thread_id and time
     }
 }
