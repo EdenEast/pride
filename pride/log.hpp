@@ -2,6 +2,7 @@
 #pragma once
 
 #include "log/channel.hpp"
+#include "log/fmt.hpp"
 #include "log/sevarity.hpp"
 
 // - There is a way to get the default logger which could be a global or singleton
