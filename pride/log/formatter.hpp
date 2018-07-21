@@ -22,6 +22,33 @@ namespace pride::log
         virtual void format(const message_t& msg, fmt::memory_buffer& buffer) = 0;
     };
 
+    class indent_t
+    {
+    public:
+        indent_t() { ++_level; }
+        ~indent_t() { if (_level > 0) --_level; }
+
+        static void increase() { ++_level; }
+        static void decrease() { if (_level > 0) --_level; }
+
+        static const size_t level() { return _level; }
+        static const size_t multiplier() { return _multiplier; }
+        static const char character() { return _character; }
+        static const std::string str() { return std::string(_multiplier * _level, _character); }
+
+        static void set_multiplier(size_t multiplier) { _multiplier = multiplier; }
+        static void set_character(char c) { _character = c; }
+
+    private:
+        static thread_local size_t _level;
+        static thread_local size_t _multiplier;
+        static thread_local char _character;
+    };
+
+    thread_local size_t indent_t::_level = 0;
+    thread_local size_t indent_t::_multiplier = 2;
+    thread_local char indent_t::_character = ' ';
+
     namespace detail
     {
         class flag_formatter_t
@@ -60,6 +87,14 @@ namespace pride::log
             void format(const message_t& msg, const std::tm& tm_time, fmt::memory_buffer& buffer)
             {
                 fmt::helper::append_str(detail::to_short_name(msg.sevarity), buffer);
+            }
+        };
+
+        class indent_formatter_t : public flag_formatter_t
+        {
+            void format(const message_t& msg, const std::tm& tm_time, fmt::memory_buffer& buffer)
+            {
+                fmt::helper::append_str(indent_t::str(), buffer);
             }
         };
 
@@ -509,6 +544,8 @@ namespace pride::log
                 _formatters.emplace_back(new detail::thread_id_formatter_t()) ; break;
             case 'P': // process id
                 _formatters.emplace_back(new detail::pid_formatter_t()) ; break;
+            case 'i': // indent
+                _formatters.emplace_back(new detail::indent_formatter_t()) ; break;
             // case 'i': // message counter
             //     _formatters.emplace_back(new detail::message_counter_formatter_t()) ; break;
             case 'v': // message
