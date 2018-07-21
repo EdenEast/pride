@@ -3,6 +3,8 @@
 
 #include "fmt.hpp"
 #include "message.hpp"
+#include "detail/thread.hpp"
+#include "detail/time.hpp"
 #include <chrono>
 #include <ctime>
 #include <memory>
@@ -481,7 +483,7 @@ namespace pride::log
             auto seconds = std::chrono::duration_cast<std::chrono::seconds>(msg.time.time_since_epoch());
             if (seconds != _last_log_seconds)
             {
-                // _cached_tm = get_time(msg);
+                _cached_tm = get_time(msg);
                 _last_log_seconds = seconds;
             }
 
@@ -492,10 +494,6 @@ namespace pride::log
         }
 
     private:
-        // std::tm get_time(const message& msg)
-        // {
-        // }
-
         void handle_flag(char flag)
         {
             switch (flag)
@@ -597,8 +595,15 @@ namespace pride::log
                     user_chars->add_ch(*it);
                 }
             }
+
             if (user_chars)
                 _formatters.push_back(std::move(user_chars));
+        }
+
+        std::tm get_time(const message_t& msg)
+        {
+            return detail::local_time(std::chrono::system_clock::to_time_t(msg.time));
+            //return detail::local_time(std::chrono::system_clock::to_time_t(msg.time));
         }
 
         std::tm _cached_tm;

@@ -2,6 +2,8 @@
 #pragma once
 
 #include "sevarity.hpp"
+#include "detail/thread.hpp"
+#include "detail/time.hpp"
 #include "fmt.hpp"
 #include <chrono>
 #include <string>
@@ -27,6 +29,7 @@ namespace pride::log
     : names(names)
     , sevarity(level)
     {
-        // @Todo: thread_id and time
+        time = detail::now();
+        thread_id = detail::thread_id();
     }
 }
