@@ -7,7 +7,7 @@
 
 namespace pride::ct
 {
-    namespace detail::fnv1a
+    namespace internal::fnv1a
     {
         // See http://www.isthe.com/chongo/tech/comp/fnv/#FNV-param
         template<typename Hash>
@@ -53,13 +53,13 @@ namespace pride::ct
     template<typename Char, size_t N>
     constexpr hash_t fnv1a(const Char(&input)[N])
     {
-        return detail::fnv1a::fnv1a<hash_t>(input, N - 1);
+        return internal::fnv1a::fnv1a<hash_t>(input, N - 1);
     }
 
     template<typename Char>
     constexpr hash_t fnv1a(const Char* input, size_t len)
     {
-        return detail::fnv1a::fnv1a<hash_t>(input, len);
+        return internal::fnv1a::fnv1a<hash_t>(input, len);
     }
 
     // ─── HASH 32 ────────────────────────────────────────────────────────────────────
@@ -67,13 +67,13 @@ namespace pride::ct
     template<typename Char, size_t N>
     constexpr hash32_t fnv1a32(const Char(&input)[N])
     {
-        return detail::fnv1a::fnv1a<hash32_t>(input, N - 1);
+        return internal::fnv1a::fnv1a<hash32_t>(input, N - 1);
     }
 
     template<typename Char>
     constexpr hash32_t fnv1a32(const Char* input, size_t len)
     {
-        return detail::fnv1a::fnv1a<hash32_t>(input, len);
+        return internal::fnv1a::fnv1a<hash32_t>(input, len);
     }
 
     // ─── HASH 64 ────────────────────────────────────────────────────────────────────
@@ -81,13 +81,13 @@ namespace pride::ct
     template<typename Char, size_t N>
     constexpr hash64_t fnv1a64(const Char(&input)[N])
     {
-        return detail::fnv1a::fnv1a<hash64_t>(input, N - 1);
+        return internal::fnv1a::fnv1a<hash64_t>(input, N - 1);
     }
 
     template<typename Char>
     constexpr hash64_t fnv1a64(const Char* input, size_t len)
     {
-        return detail::fnv1a::fnv1a<hash64_t>(input, len);
+        return internal::fnv1a::fnv1a<hash64_t>(input, len);
     }
 } // namespace pride::ct
 
@@ -95,36 +95,36 @@ namespace pride::ct
 
 constexpr pride::hash_t operator "" _fnv1a(const char* ptr, const size_t len)
 {
-    return ::pride::ct::detail::fnv1a::fnv1a<pride::hash_t>(ptr, len);
+    return ::pride::ct::internal::fnv1a::fnv1a<pride::hash_t>(ptr, len);
 }
 
 constexpr pride::hash_t operator "" _fnv1a(const wchar_t* ptr, const size_t len)
 {
-    return ::pride::ct::detail::fnv1a::fnv1a<pride::hash_t>(ptr, len);
+    return ::pride::ct::internal::fnv1a::fnv1a<pride::hash_t>(ptr, len);
 }
 
 // ─── HASH 32 ────────────────────────────────────────────────────────────────────
 
 constexpr pride::hash32_t operator "" _fnv1a32(const char* ptr, const size_t len)
 {
-    return ::pride::ct::detail::fnv1a::fnv1a<pride::hash32_t>(ptr, len);
+    return ::pride::ct::internal::fnv1a::fnv1a<pride::hash32_t>(ptr, len);
 }
 
 constexpr pride::hash32_t operator "" _fnv1a32(const wchar_t* ptr, const size_t len)
 {
-    return ::pride::ct::detail::fnv1a::fnv1a<pride::hash32_t>(ptr, len);
+    return ::pride::ct::internal::fnv1a::fnv1a<pride::hash32_t>(ptr, len);
 }
 
 // ─── HASH 64 ────────────────────────────────────────────────────────────────────
 
 constexpr pride::hash64_t operator "" _fnv1a64(const char* ptr, const size_t len)
 {
-    return ::pride::ct::detail::fnv1a::fnv1a<pride::hash64_t>(ptr, len);
+    return ::pride::ct::internal::fnv1a::fnv1a<pride::hash64_t>(ptr, len);
 }
 
 constexpr pride::hash64_t operator "" _fnv1a64(const wchar_t* ptr, const size_t len)
 {
-    return ::pride::ct::detail::fnv1a::fnv1a<pride::hash64_t>(ptr, len);
+    return ::pride::ct::internal::fnv1a::fnv1a<pride::hash64_t>(ptr, len);
 }
 
 // ────────────────────────────────────────────────────────────────────────────────

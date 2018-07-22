@@ -1,7 +1,7 @@
 
 #pragma once
 
-namespace pride::log::detail
+namespace pride::log::internal
 {
     struct null_mutex
     {

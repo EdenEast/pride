@@ -121,7 +121,7 @@ namespace pride::ct
         size_t size;
     };
 
-    namespace detail
+    namespace internal
     {
         template<typename Char>
         inline static constexpr size_t strlen(const Char* const str)
@@ -139,7 +139,7 @@ namespace pride::ct
 
     inline constexpr size_t strlen(const char* const str)
     {
-        return detail::strlen(str);
+        return internal::strlen(str);
     }
 
     template<size_t N>
@@ -150,7 +150,7 @@ namespace pride::ct
 
     inline constexpr size_t strlen(const wchar_t* const str)
     {
-        return detail::strlen(str);
+        return internal::strlen(str);
     }
 
     inline constexpr size_t strlen(std::nullptr_t)

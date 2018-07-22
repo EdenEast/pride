@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "../detail/null.hpp"
+#include "../internal/null.hpp"
 #include "../channel.hpp"
 #include "../message.hpp"
 #include "../fmt.hpp"
@@ -10,7 +10,7 @@
 
 namespace pride::log::channels
 {
-    namespace detail
+    namespace internal
     {
         // used to seperate FILE* stdout and stdout : public channel_t
         struct stdout_stream
@@ -95,11 +95,11 @@ namespace pride::log::channels
             Mutex _mutex;
             FILE* _file;
         };
-    } // namespace detail
+    } // namespace internal
 
-    using stdout_mt = detail::stdout_console<std::mutex>;
-    using stdout_st = detail::stdout_console<log::detail::null_mutex>;
+    using stdout_mt = internal::stdout_console<std::mutex>;
+    using stdout_st = internal::stdout_console<log::internal::null_mutex>;
 
-    using stderr_mt = detail::stderr_console<std::mutex>;
-    using stderr_st = detail::stderr_console<log::detail::null_mutex>;
+    using stderr_mt = internal::stderr_console<std::mutex>;
+    using stderr_st = internal::stderr_console<log::internal::null_mutex>;
 }

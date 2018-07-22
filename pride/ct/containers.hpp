@@ -78,7 +78,7 @@ namespace pride { namespace ct
     // --------------------------------------------------------------------------------------------
     // Pack, spliting, appending and prepending
 
-    namespace detail
+    namespace internal
     {
         template<typename Left, std::size_t Index, typename Right>
         struct split;
@@ -119,7 +119,7 @@ namespace pride { namespace ct
     }
 
     template<std::size_t Index, typename... Ts>
-    using pack_split = detail::split<list<>, Index, list<Ts...>>;
+    using pack_split = internal::split<list<>, Index, list<Ts...>>;
 
     template<std::size_t Index, typename... Ts>
     using pack_split_left_t = typename pack_split<Index, Ts...>::left;
@@ -148,7 +148,7 @@ namespace pride { namespace ct
     template<std::size_t Index, template<typename...> class Seq, typename... Ts>
     struct split<Index, Seq<Ts...>>
     {
-        using splitter = detail::split<Seq<>, Index, Seq<Ts...>>;
+        using splitter = internal::split<Seq<>, Index, Seq<Ts...>>;
 
         using before = typename splitter::before;
         using left  = typename splitter::left;
@@ -224,7 +224,7 @@ namespace pride { namespace ct
     // --------------------------------------------------------------------------------------------
     // Merge sort
 
-    namespace detail
+    namespace internal
     {
         template<typename Result, typename Lhs, typename Rhs, typename Compare>
         struct merge;
@@ -278,12 +278,12 @@ namespace pride { namespace ct
     }
 
     template<typename Lhs, typename Rhs, typename Compare = less>
-    using merge = detail::merge<functor_t<Lhs>, Lhs, Rhs, Compare>;
+    using merge = internal::merge<functor_t<Lhs>, Lhs, Rhs, Compare>;
 
     template<typename Lhs, typename Rhs, typename Compare = less>
     using merge_t = type_t<merge<Lhs, Rhs, Compare>>;
 
-    namespace detail
+    namespace internal
     {
         namespace mergesort
         {
@@ -332,7 +332,7 @@ namespace pride { namespace ct
     }
 
     template<typename List, typename Compare = less>
-    using sort = detail::mergesort::mergesort<List, Compare>;
+    using sort = internal::mergesort::mergesort<List, Compare>;
 
     template<typename List, typename Compare = less>
     using sort_t = type_t<sort<List, Compare>>;
@@ -359,7 +359,7 @@ namespace pride { namespace ct
     template<typename... Ts>
     struct inherit<list<Ts...>> : Ts... {};
 
-    namespace detail
+    namespace internal
     {
         template<typename Ts>
         struct aggregate;
@@ -389,7 +389,7 @@ namespace pride { namespace ct
     }
 
     template<typename... Ts>
-    using aggregate = ::pride::ct::detail::aggregate<::pride::ct::list<Ts...>>;
+    using aggregate = ::pride::ct::internal::aggregate<::pride::ct::list<Ts...>>;
 
     template<typename...>
     struct map;
@@ -437,7 +437,7 @@ namespace pride { namespace ct
         using type = Seq<apply_t<Function, Ts>...>;
     };
 
-    namespace detail
+    namespace internal
     {
         template<typename Predicate, typename FilteredSeq, typename Seq>
         struct filter;
@@ -531,11 +531,11 @@ namespace pride { namespace ct
     using foldr_t = type_t<foldr<Function, Seed, Seq>>;
 
     template<typename Predicate, typename Seq>
-    using filter = detail::filter<Predicate, apply_functor<Seq>, Seq>;
+    using filter = internal::filter<Predicate, apply_functor<Seq>, Seq>;
     template<typename Predicate, typename Seq>
     using filter_t = type_t<filter<Predicate, Seq>>;
     template<typename Predicate, typename... Seq>
-    using pack_filter = detail::filter<Predicate, list<>, list<Seq...>>;
+    using pack_filter = internal::filter<Predicate, list<>, list<Seq...>>;
     template<typename Predicate, typename... Seq>
     using pack_filter_t = type_t<pack_filter<Predicate, Seq...>>;
 
@@ -562,7 +562,7 @@ namespace pride { namespace ct
     template<typename... Seqs>
     using join_t = type_t<join<Seqs...>>;
 
-    namespace detail
+    namespace internal
     {
         template<template<typename...> class Seq, std::size_t N>
         struct make_index_sequence
@@ -599,7 +599,7 @@ namespace pride { namespace ct
     }
 
     template<std::size_t N, template<typename...> class Seq = list>
-    using make_index_sequence = type_t<detail::make_index_sequence<Seq, N>>;
+    using make_index_sequence = type_t<internal::make_index_sequence<Seq, N>>;
     template<typename... Ts>
     using make_index_sequence_for = make_index_sequence<sizeof...(Ts)>;
     template<typename Seq>
@@ -615,7 +615,7 @@ namespace pride { namespace ct
     template<typename Seq>
     using make_index_sequence_from_sequence = pride::ct::functor_t<pride::ct::list<>, pride::ct::to_index_sequence_t<Seq>>;
 
-    namespace detail
+    namespace internal
     {
         template<typename Function, typename... Ts, std::size_t... Indices>
         void foreach(pride::ct::list<Ts...>, pride::ct::index_sequence<Indices...>, Function function)
@@ -627,6 +627,6 @@ namespace pride { namespace ct
     template<typename Sequence, typename Function>
     void foreach(Function function)
     {
-        pride::ct::detail::foreach(pride::ct::apply_functor<pride::ct::list<>, Sequence>(), pride::ct::make_index_sequence_from_sequence<Sequence>(), function);
+        pride::ct::internal::foreach(pride::ct::apply_functor<pride::ct::list<>, Sequence>(), pride::ct::make_index_sequence_from_sequence<Sequence>(), function);
     }
 }}

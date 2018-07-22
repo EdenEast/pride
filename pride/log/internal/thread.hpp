@@ -14,7 +14,7 @@
     #include <unistd.h>
 #endif
 
-namespace pride::log::detail
+namespace pride::log::internal
 {
     inline size_t _thread_id()
     {

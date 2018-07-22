@@ -3,13 +3,13 @@
 
 #include "../../config/detection/os.hpp"
 #include "../../config/include/windows.hpp"
-#include "../detail/null.hpp"
+#include "../internal/null.hpp"
 #include "../channel.hpp"
 #include <mutex>
 
 namespace pride::log::channels
 {
-    namespace detail
+    namespace internal
     {
         template<typename Mutex>
         class msvc : base_channel<Mutex>
@@ -31,6 +31,6 @@ namespace pride::log::channels
         };
     }
 
-    using msvc_mt = detail::msvc<std::mutex>;
-    using msvc_st = detail::msvc<log::detail::null_mutex>;
+    using msvc_mt = internal::msvc<std::mutex>;
+    using msvc_st = internal::msvc<log::internal::null_mutex>;
 }

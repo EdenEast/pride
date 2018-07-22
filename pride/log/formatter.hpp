@@ -4,8 +4,8 @@
 #include "../config/detection/os.hpp"
 #include "fmt.hpp"
 #include "message.hpp"
-#include "detail/thread.hpp"
-#include "detail/time.hpp"
+#include "internal/thread.hpp"
+#include "internal/time.hpp"
 #include <chrono>
 #include <ctime>
 #include <memory>
@@ -49,7 +49,7 @@ namespace pride::log
     thread_local size_t indent_t::_multiplier = 2;
     thread_local char indent_t::_character = ' ';
 
-    namespace detail
+    namespace internal
     {
         class flag_formatter_t
         {
@@ -76,8 +76,8 @@ namespace pride::log
         public:
             void format(const message_t& msg, const std::tm& tm_time, fmt::memory_buffer& buffer)
             {
-                fmt::helper::append_str(detail::to_long_name(msg.sevarity), buffer);
-                //fmt::helper::append_str(pride::log::detail::sevarity::to_long_name(msg.sevarity), buffer);
+                fmt::helper::append_str(internal::to_long_name(msg.sevarity), buffer);
+                //fmt::helper::append_str(pride::log::internal::sevarity::to_long_name(msg.sevarity), buffer);
             }
         };
 
@@ -86,7 +86,7 @@ namespace pride::log
         public:
             void format(const message_t& msg, const std::tm& tm_time, fmt::memory_buffer& buffer)
             {
-                fmt::helper::append_str(detail::to_short_name(msg.sevarity), buffer);
+                fmt::helper::append_str(internal::to_short_name(msg.sevarity), buffer);
             }
         };
 
@@ -488,7 +488,7 @@ namespace pride::log
                 fmt::helper::append_buffer(_cached_miliseconds, buffer);
 
                 buffer.push_back('[');
-                fmt::helper::append_str(detail::to_long_name(msg.sevarity), buffer);
+                fmt::helper::append_str(internal::to_long_name(msg.sevarity), buffer);
                 buffer.push_back(']');
                 buffer.push_back(' ');
                 fmt::helper::append_buffer(msg.raw, buffer);
@@ -500,7 +500,7 @@ namespace pride::log
             fmt::basic_memory_buffer<char, 128> _cached_datetime;
             fmt::basic_memory_buffer<char, 8> _cached_miliseconds;
         };
-    } // namespace detail
+    } // namespace internal
 
     class pattern_formatter_t : public formatter_t
     {
@@ -535,77 +535,77 @@ namespace pride::log
             switch (flag)
             {
             case 'n': // logger name
-                _formatters.emplace_back(new detail::name_formatter_t()); break;
+                _formatters.emplace_back(new internal::name_formatter_t()); break;
             case 'l': // long level name
-                _formatters.emplace_back(new detail::level_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::level_formatter_t()) ; break;
             case 'L': // short level name
-                _formatters.emplace_back(new detail::short_level_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::short_level_formatter_t()) ; break;
             case 't': // thread id
-                _formatters.emplace_back(new detail::thread_id_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::thread_id_formatter_t()) ; break;
             case 'P': // process id
-                _formatters.emplace_back(new detail::pid_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::pid_formatter_t()) ; break;
             case 'i': // indent
-                _formatters.emplace_back(new detail::indent_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::indent_formatter_t()) ; break;
             // case 'i': // message counter
-            //     _formatters.emplace_back(new detail::message_counter_formatter_t()) ; break;
+            //     _formatters.emplace_back(new internal::message_counter_formatter_t()) ; break;
             case 'v': // message
-                _formatters.emplace_back(new detail::message_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::message_formatter_t()) ; break;
             case '+': // full decault message
-                _formatters.emplace_back(new detail::full_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::full_formatter_t()) ; break;
 
             case 'a': // abrev weekday names
-                _formatters.emplace_back(new detail::short_weekday_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::short_weekday_formatter_t()) ; break;
             case 'A': // full weekday names
-                _formatters.emplace_back(new detail::long_weekday_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::long_weekday_formatter_t()) ; break;
             case 'b': // abrev month name
-                _formatters.emplace_back(new detail::short_month_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::short_month_formatter_t()) ; break;
             case 'B': // full month name
-                _formatters.emplace_back(new detail::short_month_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::short_month_formatter_t()) ; break;
 
             case 'c': // date and time (Mon Jun 17 12:14:32 2018)
-                _formatters.emplace_back(new detail::date_time_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::date_time_formatter_t()) ; break;
             case 'C': // year in 2 digits (18)
-                _formatters.emplace_back(new detail::year_2_digit_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::year_2_digit_formatter_t()) ; break;
             case 'Y': // year 4 digits (2018)
-                _formatters.emplace_back(new detail::year_4_digit_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::year_4_digit_formatter_t()) ; break;
             case 'D': // short date MM/DD/YY date eq %m/%d/%y 09/14/18
-                _formatters.emplace_back(new detail::short_date_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::short_date_formatter_t()) ; break;
             case 'm': // month in number 1-12
-                _formatters.emplace_back(new detail::number_month_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::number_month_formatter_t()) ; break;
             case 'd': // day in number 1-31
-                _formatters.emplace_back(new detail::number_day_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::number_day_formatter_t()) ; break;
 
             case 'H': // hours in 24 hour format 1-24
-                _formatters.emplace_back(new detail::military_time_hours_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::military_time_hours_formatter_t()) ; break;
             case 'I': // hours in a 12 hour format 1-12
-                _formatters.emplace_back(new detail::twelve_hour_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::twelve_hour_formatter_t()) ; break;
             case 'M': // minutes 0-59
-                _formatters.emplace_back(new detail::minute_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::minute_formatter_t()) ; break;
             case 'S': // seconds 0-59
-                _formatters.emplace_back(new detail::second_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::second_formatter_t()) ; break;
             case 'e': // miliseconds 000 - 999
-                _formatters.emplace_back(new detail::milisecond_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::milisecond_formatter_t()) ; break;
             case 'f': // microseconds 000000 - 999999
-                _formatters.emplace_back(new detail::microsecond_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::microsecond_formatter_t()) ; break;
             case 'F': // nanoseconds 000000 - 999999
-                _formatters.emplace_back(new detail::nanosecond_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::nanosecond_formatter_t()) ; break;
             case 'E': // seconds since epoch
-                _formatters.emplace_back(new detail::seconds_since_epoch_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::seconds_since_epoch_formatter_t()) ; break;
 
             case 'p': // seconds since epoch
-                _formatters.emplace_back(new detail::ampm_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::ampm_formatter_t()) ; break;
             case 'r': // 12 hour clock 03:24:02 am
-                _formatters.emplace_back(new detail::twelve_hour_time_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::twelve_hour_time_formatter_t()) ; break;
             case 'R': // 24 hour clock 23:53 eq %H:%M
-                _formatters.emplace_back(new detail::twenty_four_hour_time_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::twenty_four_hour_time_formatter_t()) ; break;
             case 'T': // iso 8601 time format (HH:MM:SS) eq %H:%M:%S
-                _formatters.emplace_back(new detail::iso_8601_time_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::iso_8601_time_formatter_t()) ; break;
             case 'z': // iso 8601 offset from UTC in time zone
-                _formatters.emplace_back(new detail::iso_8601_time_from_utc_formatter_t()) ; break;
+                _formatters.emplace_back(new internal::iso_8601_time_from_utc_formatter_t()) ; break;
 
             default:
-                _formatters.emplace_back(new detail::single_char_formatter_t('%'));
-                _formatters.emplace_back(new detail::single_char_formatter_t(flag));
+                _formatters.emplace_back(new internal::single_char_formatter_t('%'));
+                _formatters.emplace_back(new internal::single_char_formatter_t(flag));
                 break;
             };
         }
@@ -613,7 +613,7 @@ namespace pride::log
         void compile_pattern(const std::string pattern)
         {
             auto end = pattern.end();
-            std::unique_ptr<detail::aggregate_formatter_t> user_chars;
+            std::unique_ptr<internal::aggregate_formatter_t> user_chars;
             for (auto it = pattern.begin(); it != end; ++it)
             {
                 if (*it == '%')
@@ -629,7 +629,7 @@ namespace pride::log
                 else
                 {
                     if (!user_chars)
-                        user_chars = std::unique_ptr<detail::aggregate_formatter_t>(new detail::aggregate_formatter_t());
+                        user_chars = std::unique_ptr<internal::aggregate_formatter_t>(new internal::aggregate_formatter_t());
                     user_chars->add_ch(*it);
                 }
             }
@@ -640,8 +640,8 @@ namespace pride::log
 
         std::tm get_time(const message_t& msg)
         {
-            return detail::local_time(std::chrono::system_clock::to_time_t(msg.time));
-            //return detail::local_time(std::chrono::system_clock::to_time_t(msg.time));
+            return internal::local_time(std::chrono::system_clock::to_time_t(msg.time));
+            //return internal::local_time(std::chrono::system_clock::to_time_t(msg.time));
         }
 
         static constexpr const char* eol()
@@ -654,6 +654,6 @@ namespace pride::log
         const std::string _eol;
         std::tm _cached_tm;
         std::chrono::seconds _last_log_seconds;
-        std::vector<std::unique_ptr<detail::flag_formatter_t>> _formatters;
+        std::vector<std::unique_ptr<internal::flag_formatter_t>> _formatters;
     };
 }

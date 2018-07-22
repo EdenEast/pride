@@ -2,13 +2,13 @@
 #pragma once
 
 #include "../channel.hpp"
-#include "../detail/null.hpp"
+#include "../internal/null.hpp"
 #include "../../os/file.hpp"
 #include <mutex>
 
 namespace pride::log::channels
 {
-    namespace detail
+    namespace internal
     {
         template<typename Mutex>
         class basic_file : public base_channel<Mutex>
@@ -37,6 +37,6 @@ namespace pride::log::channels
         };
     }
 
-    using basic_file_mt = detail::basic_file<std::mutex>;
-    using basic_file_st = detail::basic_file<log::detail::null_mutex>;
+    using basic_file_mt = internal::basic_file<std::mutex>;
+    using basic_file_st = internal::basic_file<log::internal::null_mutex>;
 }

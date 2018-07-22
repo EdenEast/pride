@@ -100,7 +100,7 @@ namespace pride { namespace ct
         };
     };
 
-    namespace detail
+    namespace internal
     {
         struct and_
         {
@@ -158,22 +158,22 @@ namespace pride { namespace ct
     }
 
     template<typename Lhs, typename Rhs>
-    using and_t = apply_t<detail::and_, Lhs, Rhs>;
+    using and_t = apply_t<internal::and_, Lhs, Rhs>;
 
     template<typename Lhs, typename Rhs>
-    using or_t = apply_t<detail::or_, Lhs, Rhs>;
+    using or_t = apply_t<internal::or_, Lhs, Rhs>;
 
     template<typename Lhs, typename Rhs>
-    using add_t = apply_t<detail::add_, Lhs, Rhs>;
+    using add_t = apply_t<internal::add_, Lhs, Rhs>;
 
     template<typename Lhs, typename Rhs>
-    using sub_t = apply_t<detail::sub_, Lhs, Rhs>;
+    using sub_t = apply_t<internal::sub_, Lhs, Rhs>;
 
     template<typename Lhs, typename Rhs>
-    using mul_t = apply_t<detail::mul_, Lhs, Rhs>;
+    using mul_t = apply_t<internal::mul_, Lhs, Rhs>;
 
     template<typename Lhs, typename Rhs>
-    using div_t = apply_t<detail::div_, Lhs, Rhs>;
+    using div_t = apply_t<internal::div_, Lhs, Rhs>;
 
 
     struct greater

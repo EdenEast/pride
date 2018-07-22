@@ -17,7 +17,7 @@
 
 namespace pride::hash
 {
-    namespace detail::xxhash
+    namespace internal::xxhash
     {
         static inline uint32_t swap32(uint32_t x)
         {
@@ -254,24 +254,24 @@ namespace pride::hash
         {
             return compute<Hash>(reinterpret_cast<const void*>(data), len, seed);
         }
-    } // namespace detail::xxhash
+    } // namespace internal::xxhash
 
     template<typename T>
-    hash_t xxhash(const T* data, size_t len, hash_t seed = detail::xxhash::constant<hash_t>::seed)
+    hash_t xxhash(const T* data, size_t len, hash_t seed = internal::xxhash::constant<hash_t>::seed)
     {
-        return detail::xxhash::xxhash<hash_t>(data, len, seed);
+        return internal::xxhash::xxhash<hash_t>(data, len, seed);
     }
 
     template<typename T>
-    hash32_t xxhash32(const T* data, size_t len, hash32_t seed = detail::xxhash::constant<hash32_t>::seed)
+    hash32_t xxhash32(const T* data, size_t len, hash32_t seed = internal::xxhash::constant<hash32_t>::seed)
     {
-        return detail::xxhash::xxhash<hash32_t>(data, len, seed);
+        return internal::xxhash::xxhash<hash32_t>(data, len, seed);
     }
 
     template<typename T>
-    hash64_t xxhash64(const T* data, size_t len, hash64_t seed = detail::xxhash::constant<hash64_t>::seed)
+    hash64_t xxhash64(const T* data, size_t len, hash64_t seed = internal::xxhash::constant<hash64_t>::seed)
     {
-        return detail::xxhash::xxhash<hash64_t>(data, len, seed);
+        return internal::xxhash::xxhash<hash64_t>(data, len, seed);
     }
 } // namespace pride::hash
 

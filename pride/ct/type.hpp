@@ -20,7 +20,7 @@
 
 namespace pride::ct
 {
-    namespace detail
+    namespace internal
     {
         template<typename Type, size_t... Idxs>
         constexpr std::array<char, sizeof...(Idxs) + 1> make_id_array(std::index_sequence<Idxs...>&&) { return {{Type::str[Idxs]..., '\0'}}; }
@@ -59,25 +59,25 @@ namespace pride::ct
         // };
 
         template<typename T>
-        struct tholder { static constexpr auto name = detail::make_id_array<detail::tid<T>>(); };
+        struct tholder { static constexpr auto name = internal::make_id_array<internal::tid<T>>(); };
         // template<auto V>
-        // struct vholder { static constexpr auto name = detail::make_id_array<detail::vid<V>>(); };
+        // struct vholder { static constexpr auto name = internal::make_id_array<internal::vid<V>>(); };
     }
 
     template<typename T>
-    static constexpr string type_name = { detail::tholder<T>::name.data(), detail::tholder<T>::name.size() - 1 }; // detail::tid<T>::type_name();
+    static constexpr string type_name = { internal::tholder<T>::name.data(), internal::tholder<T>::name.size() - 1 }; // internal::tid<T>::type_name();
 
     // template<auto V>
-    // static constexpr string value_name = { detail::vholder<V>::name.data(), detail::vholder<V>::name.size() - 1 }; // detail::vid<V>::type_name();
+    // static constexpr string value_name = { internal::vholder<V>::name.data(), internal::vholder<V>::name.size() - 1 }; // internal::vid<V>::type_name();
 
     template<typename T>
     static constexpr string decay_type_name = type_name<std::decay_t<T>>;
 
     template<typename T>
-    static constexpr hash_t type_hash = { pride::ct::fnv1a(detail::tholder<T>::name.data(), detail::tholder<T>::name.size() - 1) }; // detail::tid<T>::hash;
+    static constexpr hash_t type_hash = { pride::ct::fnv1a(internal::tholder<T>::name.data(), internal::tholder<T>::name.size() - 1) }; // internal::tid<T>::hash;
 
     // template<auto V>
-    // static constexpr hash_t value_hash = { hash::fnv1a(detail::vholder<V>::name.data(),detail::vholder<V>::name.size() - 1) }; // detail::tid<T>::hash;
+    // static constexpr hash_t value_hash = { hash::fnv1a(internal::vholder<V>::name.data(),internal::vholder<V>::name.size() - 1) }; // internal::tid<T>::hash;
 
     template<typename T>
     static constexpr hash_t decay_type_hash = type_hash<std::decay_t<T>>;

@@ -2,14 +2,14 @@
 #pragma once
 
 #include "../channel.hpp"
-#include "../detail/null.hpp"
+#include "../internal/null.hpp"
 
 #include <mutex>
 #include <ostream>
 
 namespace pride::log::channels
 {
-    namespace detail
+    namespace internal
     {
         template<typename Mutex>
         class ostream : public base_channel<Mutex>
@@ -43,6 +43,6 @@ namespace pride::log::channels
         };
     }
 
-    using ostream_mt = detail::ostream<std::mutex>;
-    using ostream_st = detail::ostream<log::detail::null_mutex>;
+    using ostream_mt = internal::ostream<std::mutex>;
+    using ostream_st = internal::ostream<log::internal::null_mutex>;
 }

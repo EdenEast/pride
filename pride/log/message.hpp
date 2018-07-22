@@ -2,8 +2,8 @@
 #pragma once
 
 #include "sevarity.hpp"
-#include "detail/thread.hpp"
-#include "detail/time.hpp"
+#include "internal/thread.hpp"
+#include "internal/time.hpp"
 #include "fmt.hpp"
 #include <chrono>
 #include <string>
@@ -29,7 +29,7 @@ namespace pride::log
     : names(names)
     , sevarity(level)
     {
-        time = detail::now();
-        thread_id = detail::thread_id();
+        time = internal::now();
+        thread_id = internal::thread_id();
     }
 }

@@ -7,7 +7,7 @@
 
 namespace pride::hash
 {
-    namespace detail::crc
+    namespace internal::crc
     {
         constexpr uint32_t crc_table[256] = {
             0x00000000L, 0x77073096L, 0xee0e612cL, 0x990951baL, 0x076dc419L,
@@ -100,11 +100,11 @@ namespace pride::hash
         {
             return compute<Hash>(reinterpret_cast<const void*>(data), len, seed);
         }
-    } // namespace detail::crc
+    } // namespace internal::crc
 
     template<typename T>
-    hash32_t crc32(const T* data, size_t len, hash32_t seed = detail::crc::constant<uint32_t>::seed)
+    hash32_t crc32(const T* data, size_t len, hash32_t seed = internal::crc::constant<uint32_t>::seed)
     {
-        return detail::crc::crc<hash32_t>(data, len, seed);
+        return internal::crc::crc<hash32_t>(data, len, seed);
     }
 } // namespace pride::hash

@@ -3,7 +3,7 @@
 
 #include "expression.hpp"
 
-namespace pride { namespace assert { namespace detail
+namespace pride { namespace assert { namespace internal
 {
     struct violation_info_t
     {
@@ -14,14 +14,14 @@ namespace pride { namespace assert { namespace detail
             , int line
             , const char* function
             , const char* expr_str
-            , detail::bool_expression_t expr
+            , internal::bool_expression_t expr
         ) noexcept;
 
         int line_number;
         const char* file_name;
         const char* function_name;
         const char* commit;
-        detail::bool_expression_t expression;
+        internal::bool_expression_t expression;
     };
 
     inline violation_info_t::violation_info_t() noexcept
@@ -47,7 +47,7 @@ namespace pride { namespace assert { namespace detail
         int line,
         const char* function,
         const char* expr_str,
-        detail::bool_expression_t expr
+        internal::bool_expression_t expr
     ) noexcept
     : line_number(line)
     , file_name(file)

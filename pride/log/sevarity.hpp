@@ -19,7 +19,7 @@ namespace pride::log
         off      = 6
     };
 
-    namespace detail
+    namespace internal
     {
         namespace sevarity
         {

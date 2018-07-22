@@ -12,7 +12,7 @@ namespace pride { namespace ct
         //
         // ─── GET TYPE INDEX AND HAS VALUE ───────────────────────────────────────────────
         //
-        namespace detail
+        namespace internal
         {
             // return the type at a given index
             template<size_t Index, typename... Types>
@@ -45,25 +45,25 @@ namespace pride { namespace ct
             struct type_index_list<List<Types...>, Type> : public type_index<0, Type, Types...> {};
 
             template<typename List, typename Type>
-            struct has_type : public std::conditional<(detail::type_index_list<List, Type>::index != -1), std::true_type, std::false_type> {};
-        } // namespace detail
+            struct has_type : public std::conditional<(internal::type_index_list<List, Type>::index != -1), std::true_type, std::false_type> {};
+        } // namespace internal
 
         // return the type at a given index. static_assert will be tripped if out of range
         template<typename List, size_t Index>
-        using get_type = typename detail::type_at_index_list<List, Index>::type;
+        using get_type = typename internal::type_at_index_list<List, Index>::type;
 
         // return the index of a given type in the list. -1 if the value is not found
         template<typename List, typename Type>
-        static constexpr long index_of = detail::type_index_list<List, Type>::index;
+        static constexpr long index_of = internal::type_index_list<List, Type>::index;
 
         // return bool to check if type is in list
         template<typename List, typename Type>
-        static constexpr bool has_type = (detail::type_index_list<List, Type>::index != -1);
+        static constexpr bool has_type = (internal::type_index_list<List, Type>::index != -1);
 
         //
         // ─── APPEND AND PREPEND ─────────────────────────────────────────────────────────
         //
-        namespace detail
+        namespace internal
         {
             template<typename List, typename... Y>
             struct prepend {};
@@ -78,11 +78,11 @@ namespace pride { namespace ct
 
         // prepend variadic types to the list
         template<typename List, typename... T>
-        using prepend = typename detail::prepend<List, T...>::type;
+        using prepend = typename internal::prepend<List, T...>::type;
 
         // append variadic types to the list
         template<typename List, typename... T>
-        using append = typename detail::append<List, T...>::type;
+        using append = typename internal::append<List, T...>::type;
 
         template<bool Cond, typename List, typename... Y>
         using append_if = typename std::conditional<Cond, append<List, Y...>, List>::type;
@@ -124,7 +124,7 @@ namespace pride { namespace ct
         //
         // ─── SIZE AND IS_SAME ───────────────────────────────────────────────────────────
         //
-        namespace detail
+        namespace internal
         {
             template<typename List>
             struct size {};
@@ -139,16 +139,16 @@ namespace pride { namespace ct
 
         // the number of template arguments in the list
         template<typename List>
-        static constexpr size_t size = detail::size<List>::count;
+        static constexpr size_t size = internal::size<List>::count;
 
         // return true if both list are the same base type
         template<typename List1, typename List2>
-        static constexpr bool is_same_base = detail::is_same_base<List1, List2>::value;
+        static constexpr bool is_same_base = internal::is_same_base<List1, List2>::value;
 
         //
         // ─── REMOVE ─────────────────────────────────────────────────────────────────────
         //
-        namespace detail
+        namespace internal
         {
             template<typename List, long Index, typename... Types>
             struct remove { using type = List; };
@@ -185,24 +185,24 @@ namespace pride { namespace ct
 
         // remove a type at a given index
         template<typename List, size_t Index>
-        using remove = typename detail::remove_entry<List, Index>::type;
+        using remove = typename internal::remove_entry<List, Index>::type;
 
         // remove a given type
         template<typename List, typename ToRemove>
-        using remove_type = typename detail::remove_type<ToRemove>::template list_op<List>::type;
+        using remove_type = typename internal::remove_type<ToRemove>::template list_op<List>::type;
 
         // remove elements if condition passes
         template<typename List, template<typename Elem> typename Pred>
-        using remove_if = typename detail::remove_if_entry<List, Pred, true>::type;
+        using remove_if = typename internal::remove_if_entry<List, Pred, true>::type;
 
         // return a list containing only elements where the filter is true
         template<typename List, template<typename Elem> typename Pred>
-        using filter = typename detail::remove_if_entry<List, Pred, false>::type;
+        using filter = typename internal::remove_if_entry<List, Pred, false>::type;
 
         //
         // ─── MAKE UNIQUE ─────────────────────────────────────────────────
         //
-        namespace detail
+        namespace internal
         {
             template<typename List, typename... Types>
             struct make_unique { using type = List; };
@@ -215,12 +215,12 @@ namespace pride { namespace ct
         }
 
         template<typename List>
-        using make_unique = typename detail::make_unique_list<List>::type;
+        using make_unique = typename internal::make_unique_list<List>::type;
 
         //
         // ─── FOREACH ────────────────────────────────────────────────────────────────────
         //
-        namespace detail
+        namespace internal
         {
             template<typename List, template<typename X> typename Pred>
             struct for_each {};
@@ -230,12 +230,12 @@ namespace pride { namespace ct
 
         // apply predicate to every type in the list
         template<typename List, template<typename Elem> typename Pred>
-        using for_each = typename detail::for_each<List, Pred>::type;
+        using for_each = typename internal::for_each<List, Pred>::type;
 
         //
         // ─── REVERSE ────────────────────────────────────────────────────────────────────
         //
-        namespace detail
+        namespace internal
         {
             template<typename List, typename... Types>
             struct reverse { using type = List; };
@@ -249,7 +249,7 @@ namespace pride { namespace ct
         }
 
         template<typename List>
-        using reverse = typename detail::reverse_list<List>::type;
+        using reverse = typename internal::reverse_list<List>::type;
     }
 
     template<typename... Types>

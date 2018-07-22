@@ -4,7 +4,7 @@
 #include <iostream>
 #include <memory>
 
-namespace pride { namespace assert { namespace detail
+namespace pride { namespace assert { namespace internal
 {
     struct stringifier_t
     {

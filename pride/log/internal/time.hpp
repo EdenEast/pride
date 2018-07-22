@@ -8,7 +8,7 @@
 #include <string>
 #include <thread>
 
-namespace pride::log::detail
+namespace pride::log::internal
 {
     inline std::chrono::system_clock::time_point now()
     {

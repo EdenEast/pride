@@ -6,7 +6,7 @@
 
 namespace pride::hash
 {
-    namespace detail::fasthash
+    namespace internal::fasthash
     {
         template<typename Hash>
         struct constant;
@@ -76,20 +76,20 @@ namespace pride::hash
     }
 
     template<typename T>
-    hash_t fasthash(const T* data, size_t len, hash_t seed = detail::fasthash::constant<hash_t>::seed)
+    hash_t fasthash(const T* data, size_t len, hash_t seed = internal::fasthash::constant<hash_t>::seed)
     {
-        return detail::fasthash::fasthash<hash_t>(data, len, seed);
+        return internal::fasthash::fasthash<hash_t>(data, len, seed);
     }
 
     template<typename T>
-    hash32_t fasthash32(const T* data, size_t len, hash32_t seed = detail::fasthash::constant<hash32_t>::seed)
+    hash32_t fasthash32(const T* data, size_t len, hash32_t seed = internal::fasthash::constant<hash32_t>::seed)
     {
-        return detail::fasthash::fasthash<hash32_t>(data, len, seed);
+        return internal::fasthash::fasthash<hash32_t>(data, len, seed);
     }
 
     template<typename T>
-    hash64_t fasthash64(const T* data, size_t len, hash64_t seed = detail::fasthash::constant<hash64_t>::seed)
+    hash64_t fasthash64(const T* data, size_t len, hash64_t seed = internal::fasthash::constant<hash64_t>::seed)
     {
-        return detail::fasthash::fasthash<hash64_t>(data, len, seed);
-    } // namespace detail::fasthash
+        return internal::fasthash::fasthash<hash64_t>(data, len, seed);
+    } // namespace internal::fasthash
 } // namespace pride::hash

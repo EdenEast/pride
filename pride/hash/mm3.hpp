@@ -6,7 +6,7 @@
 
 namespace pride::hash
 {
-    namespace detail::mm3
+    namespace internal::mm3
     {
         template<typename T>
         struct constant {};
@@ -138,23 +138,23 @@ namespace pride::hash
         {
             return compute<Hash>(reinterpret_cast<const void*>(data), len, seed);
         }
-    } // namespace detail::mm3
+    } // namespace internal::mm3
 
     template<typename T>
-    hash_t mm3(const T* data, size_t len, hash_t seed = detail::mm3::constant<hash_t>::seed)
+    hash_t mm3(const T* data, size_t len, hash_t seed = internal::mm3::constant<hash_t>::seed)
     {
-        return detail::mm3::mm3<hash_t>(data, len, seed);
+        return internal::mm3::mm3<hash_t>(data, len, seed);
     }
 
     template<typename T>
-    hash32_t mm332(const T* data, size_t len, hash32_t seed = detail::mm3::constant<hash32_t>::seed)
+    hash32_t mm332(const T* data, size_t len, hash32_t seed = internal::mm3::constant<hash32_t>::seed)
     {
-        return detail::mm3::mm3<hash32_t>(data, len, seed);
+        return internal::mm3::mm3<hash32_t>(data, len, seed);
     }
 
     template<typename T>
-    hash64_t mm364(const T* data, size_t len, hash64_t seed = detail::mm3::constant<hash64_t>::seed)
+    hash64_t mm364(const T* data, size_t len, hash64_t seed = internal::mm3::constant<hash64_t>::seed)
     {
-        return detail::mm3::mm3<hash64_t>(data, len, seed);
+        return internal::mm3::mm3<hash64_t>(data, len, seed);
     }
 } // namespace pride::hash
