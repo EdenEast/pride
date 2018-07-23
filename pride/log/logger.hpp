@@ -105,18 +105,16 @@ namespace pride::log
         virtual void _proecss(const message_t& msg);
         virtual void _flush();
 
-        static std::unordered_map<std::string, logger_t::ptr> _loggers;
+        inline static std::unordered_map<std::string, logger_t::ptr> _loggers;
         std::string _name;
         std::vector<channel_t::ptr> _channels;
         sevarity_t _sevarity{ sevarity_t::info };
         sevarity_t _flush_on{ sevarity_t::off };
     };
 
-    std::unordered_map<std::string, logger_t::ptr> logger_t::_loggers;
-
     // ────────────────────────────────────────────────────────────────────────────────
 
-    logger_t::ptr logger_t::create(std::string name)
+    inline logger_t::ptr logger_t::create(std::string name)
     {
         auto instance = logger_t::make_new(std::move(name));
         _loggers.insert({name, instance});
@@ -144,7 +142,7 @@ namespace pride::log
         _proecss(message);
     }
 
-    void logger_t::log(sevarity_t level, const char *msg)
+    inline void logger_t::log(sevarity_t level, const char *msg)
     {
         if (!should_log(level))
             return;
@@ -249,7 +247,7 @@ namespace pride::log
         return *this;
     }
 
-    logger_t& logger_t::add_channel(const channel_t::ptr& channel)
+    inline logger_t& logger_t::add_channel(const channel_t::ptr& channel)
     {
         _channels.push_back(channel);
         return *this;
@@ -266,7 +264,7 @@ namespace pride::log
         return *this;
     }
 
-    logger_t& logger_t::set_pattern(const std::string& pattern)
+    inline logger_t& logger_t::set_pattern(const std::string& pattern)
     {
         for (auto& channel : _channels)
             channel->pattern(pattern);
@@ -275,7 +273,7 @@ namespace pride::log
 
     // ────────────────────────────────────────────────────────────────────────────────
 
-    void logger_t::_proecss(const message_t& msg)
+    inline void logger_t::_proecss(const message_t& msg)
     {
         for (auto& channel : _channels)
         {
@@ -290,7 +288,7 @@ namespace pride::log
         }
     }
 
-    void logger_t::_flush()
+    inline void logger_t::_flush()
     {
         for (auto& channel : _channels)
             channel->flush();

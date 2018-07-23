@@ -67,18 +67,18 @@ namespace pride::log
     // ─── IMPLEMENTATION ─────────────────────────────────────────────────────────────
     //
 
-    bool channel_t::use_sevarity() const
+    inline bool channel_t::use_sevarity() const
     {
         return _use_sevarity;
     }
 
-    channel_t& channel_t::use_sevarity(bool value)
+    inline channel_t& channel_t::use_sevarity(bool value)
     {
         _use_sevarity = value;
         return *this;
     }
 
-    bool channel_t::should_log(sevarity_t level) const
+    inline bool channel_t::should_log(sevarity_t level) const
     {
         return level >= _sevarity;
     }

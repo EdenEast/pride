@@ -40,15 +40,11 @@ namespace pride::log
         static void set_character(char c) { _character = c; }
 
     private:
-        static thread_local size_t _level;
-        static thread_local size_t _multiplier;
-        static thread_local char _character;
+        inline static thread_local size_t _level = 0;
+        inline static thread_local size_t _multiplier = 2;
+        inline static thread_local char _character = ' ';
     };
-
-    thread_local size_t indent_t::_level = 0;
-    thread_local size_t indent_t::_multiplier = 2;
-    thread_local char indent_t::_character = ' ';
-
+    
     namespace internal
     {
         class flag_formatter_t

@@ -25,7 +25,7 @@ namespace pride::log
         fmt::memory_buffer raw;
     };
 
-    message_t::message_t(const std::string* names, sevarity_t level)
+    inline message_t::message_t(const std::string* names, sevarity_t level)
     : names(names)
     , sevarity(level)
     {
