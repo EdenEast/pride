@@ -2,17 +2,15 @@ option(CATCH_USE_VALGRIND "Perform SelfTests with Valgrind" OFF)
 option(CATCH_BUILD_EXAMPLES "Build documentation examples" OFF)
 option(CATCH_ENABLE_COVERAGE "Generate coverage for codecov.io" OFF)
 option(CATCH_ENABLE_WERROR "Enable all warnings as errors" ON)
-add_external_git_repo(
+sf_add_external_git_repo(
   URL "https://github.com/cruizemissile/catch2.git"
   TAG master
   PREFIX "external/catch"
 )
 
-file(GLOB_RECURSE test_files
-  *.h *.hpp *.cpp
+sf_create_executable(
+  tests                                 # name of the test executable
+  DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" # directory where scaffold will look for all the files
+  DEPENDS Catch ${PRIDE_LIB}            # the external libraries that this executable depends on
+  FOLDER Tests                          # In an IDE this target will be under the folder "Tests"
 )
-add_executable(tests "${test_files}")
-target_include_directories(tests PUBLIC "${CMAKE_CURRENT_LIST_DIR}")
-target_link_libraries(tests Catch ${PRIDE_LIB})
-target_source_group(tests)
-target_set_folder(tests "Tests")

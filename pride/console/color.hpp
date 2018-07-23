@@ -211,9 +211,9 @@ namespace pride { namespace console
         inline WORD sgr_2_attr(const sgr_t& state) noexcept
         {
             WORD att = 0;
-            if (state.conceal) 
+            if (state.conceal)
             {
-                if (state.inverse) 
+                if (state.inverse)
                 {
                     att = (state.fg_color << 4) | state.fg_color;
                     if (state.bold)
@@ -294,7 +294,7 @@ namespace pride { namespace console
         const control_t control = internal::control_mode();
         switch (control)
         {
-        case control_t::automatic: 
+        case control_t::automatic:
             return has_color_support() && is_terminal(os.rdbuf()) ?
                 internal::set_color(os, value) : os;
         case control_t::force:
