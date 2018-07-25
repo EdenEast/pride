@@ -14,3 +14,7 @@ sf_create_executable(
   DEPENDS Catch ${PRIDE_LIB}            # the external libraries that this executable depends on
   FOLDER Tests                          # In an IDE this target will be under the folder "Tests"
 )
+
+sf_enable_unity_build(
+  tests
+)
