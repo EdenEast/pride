@@ -198,8 +198,8 @@ namespace pride
 
         // Logical Operators
         bool operator!() const { return !static_cast<bool>(hi | lo); }
-        bool operator&&(const uint128_t& rhs) const { return static_cast<bool>(*this && rhs); }
-        bool operator||(const uint128_t& rhs) const{ return static_cast<bool>(*this || rhs); }
+        bool operator&&(const uint128_t& rhs) const { return static_cast<bool>(static_cast<bool>(*this) && rhs); }
+        bool operator||(const uint128_t& rhs) const{ return static_cast<bool>(static_cast<bool>(*this) || rhs); }
 
         template <typename T, typename = std::enable_if_t <std::is_integral<T>::value>>
         bool operator&&(const T& rhs)

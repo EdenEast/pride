@@ -365,7 +365,7 @@ TEST_CASE("uint128_t")
 
         SECTION("Not operator")
         {
-            REQUIRE(!uint128_t(0xffffffff) ==  0);
+            REQUIRE(static_cast<int>(!uint128_t(0xffffffff)) ==  0);
         }
 
         SECTION("Greater than operator")
