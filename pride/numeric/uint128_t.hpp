@@ -2,7 +2,7 @@
 #pragma once
 
 #include <cstdint>
-#include <iostream>
+#include <ostream>
 #include <stdexcept>
 #include <string>
 #include <type_traits>
@@ -31,6 +31,7 @@ namespace pride
         uint64_t hi = 0;
         uint64_t lo = 0;
 
+        // Constructors
         uint128_t() = default;
         uint128_t(const uint128_t& rhs) = default;
         uint128_t(uint128_t&& rhs)
@@ -715,7 +716,7 @@ namespace pride
         return uint128_t((first32 << 32) | second32, (third32 << 32) | fourth32);
     }
 
-    inline std::pair <uint128_t, uint128_t> uint128_t::divmod(const uint128_t& lhs, const uint128_t& rhs) const
+    inline std::pair<uint128_t, uint128_t> uint128_t::divmod(const uint128_t& lhs, const uint128_t& rhs) const
     {
         static const uint128_t zero = static_cast<uint128_t>(0);
         static const uint128_t one = static_cast<uint128_t>(1);
@@ -724,16 +725,16 @@ namespace pride
             throw std::domain_error("Error: division or modulus by 0");
 
         if (rhs == one)
-            return std::pair<uint128_t, uint128_t>(rhs, zero);
-        if (lhs == rhs)
-            return std::pair<uint128_t, uint128_t>(one, zero);
-        if (lhs == zero || lhs < rhs)
-            return std::pair<uint128_t, uint128_t>(zero, lhs);
+            return std::pair <uint128_t, uint128_t> (lhs, zero);
+        else if (lhs == rhs)
+            return std::pair <uint128_t, uint128_t> (one, zero);
+        else if ((lhs == zero) || (lhs < rhs))
+            return std::pair <uint128_t, uint128_t> (zero, lhs);
 
-        std::pair<uint128_t, uint128_t> pair(one, zero);
-        for (uint8_t x = lhs.bits(); x > 0; --x)
+        std::pair <uint128_t, uint128_t> pair(zero, zero);
+        for(uint8_t x = lhs.bits(); x > 0; x--)
         {
-            pair.first <<= one;
+            pair.first  <<= one;
             pair.second <<= one;
 
             if ((lhs >> (x - 1U)) & 1)
