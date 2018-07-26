@@ -249,7 +249,7 @@ namespace pride
 
         bool operator<(const uint128_t& rhs) const
         {
-            return hi == rhs.hi ? lo > rhs.lo : hi > rhs.hi;
+            return hi == rhs.hi ? lo < rhs.lo : hi < rhs.hi;
         }
 
         template <typename T, typename = std::enable_if_t <std::is_integral<T>::value>>
