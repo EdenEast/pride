@@ -6,11 +6,14 @@ sf_add_external_git_repo(
   URL "https://github.com/cruizemissile/catch2.git"
   TAG master
   PREFIX "external/catch"
+  OPTIONAL
 )
 
-sf_create_executable(
-  tests                                 # name of the test executable
-  DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" # directory where scaffold will look for all the files
-  DEPENDS Catch ${PRIDE_LIB}            # the external libraries that this executable depends on
-  FOLDER Tests                          # In an IDE this target will be under the folder "Tests"
-)
+if (NOT sf_git_error_code)
+  sf_create_executable(
+    tests                                 # name of the test executable
+    DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" # directory where scaffold will look for all the files
+    DEPENDS Catch ${PRIDE_LIB}            # the external libraries that this executable depends on
+    FOLDER Tests                          # In an IDE this target will be under the folder "Tests"
+  )
+endif()
