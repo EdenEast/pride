@@ -16,8 +16,8 @@ namespace pride::ct
         template<>
         struct constant<uint32_t>
         {
-            static constexpr uint32_t prime = 16777619u;
-            static constexpr uint32_t offset = 2166136261u;
+            static constexpr uint32_t prime = 16777619ull;
+            static constexpr uint32_t offset = 2166136261ull;
         };
 
         template<>
@@ -27,16 +27,42 @@ namespace pride::ct
             static constexpr uint64_t offset = 14695981039346656037ull;
         };
 
-        template<typename Hash, typename Char>
-        constexpr Hash compute(const Char* key, size_t len)
+        template<typename Char>
+        constexpr hash32_t compute32(const Char* key, hash32_t h = constant<hash32_t>::offset)
         {
-            auto h = constant<Hash>::offset;
-            for (size_t i = 0; i < len; ++i)
-            {
-                h ^= static_cast<uint8_t>(key[i]);
-                h *= constant<Hash>::prime;
-            }
-            return static_cast<Hash>(h);
+            return !*key ? h : compute32(key + 1, static_cast<hash32_t>(1ULL * (h ^ *key) * constant<hash32_t>::prime));
+        }
+
+        constexpr uint64_t lo(uint64_t x) { return x & uint32_t(-1); };
+        constexpr uint64_t hi(uint64_t x) { return x >> 32; };
+
+        // https://stackoverflow.com/a/37659510
+        constexpr uint64_t mulu64( uint64_t a, uint64_t b )
+        {
+            return 0
+                + (lo( a )*lo( b ) & uint32_t(-1))
+                +   (
+                        (
+                            (
+                                (
+                                    (
+                                        hi( lo( a )*lo( b ) ) +
+                                        lo( a )*hi( b )
+                                    )
+                                    & uint32_t(-1)
+                                )
+                                + hi( a )*lo( b )
+                            )
+                            & uint32_t(-1)
+                        )
+                        << 32
+                    );
+        }
+
+        template<typename Char>
+        constexpr hash64_t compute64(const Char* key, hash64_t h = constant<hash64_t>::offset)
+        {
+           return !*key ? h : compute64(key + 1, mulu64(h ^ *key, constant<hash64_t>::prime));
         }
 
         template<typename Hash, typename Char>
@@ -44,7 +70,10 @@ namespace pride::ct
         {
             static_assert(std::is_same<Char, char>() || std::is_same<Char, wchar_t>(), "Input type is not supported");
             static_assert(std::is_same<Hash, hash64_t>() || std::is_same<Hash, hash32_t>(), "Hash type is not supported");
-            return compute<Hash>(input, len);
+            if constexpr(std::is_same<Hash, hash64_t>::value)
+                return compute64(input);
+            else
+                return compute32(input);
         }
     }
 
