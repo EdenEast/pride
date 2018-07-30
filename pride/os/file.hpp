@@ -13,11 +13,11 @@
 #include <tuple>
 #include <experimental/filesystem>
 
-#if !defined(PRI_EOL)
-#if defined(PRI_OS_WINDOWS)
-#define PRI_EOL "\r\n"
+#if !defined(PRIDE_EOL)
+#if defined(PRIDE_OS_WINDOWS)
+#define PRIDE_EOL "\r\n"
 #else
-#define PRI_EOL "\n"
+#define PRIDE_EOL "\n"
 #endif
 #endif
 
@@ -32,10 +32,10 @@ namespace pride::os
     //             // failed
     //         }
 
-    //     #if defined(PRI_OS_WINDOWS)
+    //     #if defined(PRIDE_OS_WINDOWS)
     //         int fd = _fileno(f);
 
-    //     #if defined(PRI_ARCH_64)
+    //     #if defined(PRIDE_ARCH_64)
     //         struct _stat64 st
     //         if (_fstat64(fd, &st) == 0)
     //             return st.st_size;
@@ -53,7 +53,7 @@ namespace pride::os
     class file_t
     {
     public:
-        static constexpr const char* default_eol = PRI_EOL;
+        static constexpr const char* default_eol = PRIDE_EOL;
         explicit file_t() = default;
         file_t(const file_t&) = delete;
         file_t& operator=(const file_t&) = delete;
@@ -70,7 +70,7 @@ namespace pride::os
             auto mode = truncate ? "wb" : "ab";
             _name = std::move(name);
 
-#if defined (PRI_OS_WINDOWS)
+#if defined (PRIDE_OS_WINDOWS)
             fopen_s(&_file, _name.c_str(), mode);
 #else
             _file = std::fopen(name.c_str(), mode);

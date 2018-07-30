@@ -4,7 +4,7 @@
 #include "../config.hpp"
 namespace pride
 {
-#if defined(PRI_COMPILER_CLANG) || defined(PRI_COMPILER_GCC)
+#if defined(PRIDE_COMPILER_CLANG) || defined(PRIDE_COMPILER_GCC)
     inline constexpr auto likely(bool x) noexcept -> bool
     {
         return __builtin_expect(x, true);

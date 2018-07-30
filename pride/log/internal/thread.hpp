@@ -6,7 +6,7 @@
 
 #include <thread>
 
-#if defined(PRI_OS_WINDOWS)
+#if defined(PRIDE_OS_WINDOWS)
     #include <io.h>
     #include <process.h>
 #else
@@ -18,11 +18,11 @@ namespace pride::log::internal
 {
     inline size_t _thread_id()
     {
-#if defined(PRI_OS_WINDOWS)
+#if defined(PRIDE_OS_WINDOWS)
         return static_cast<size_t>(::GetCurrentThreadId());
-#elif defined(PRI_OS_ANDROID)
+#elif defined(PRIDE_OS_ANDROID)
         return static_cast<size_t>(syscall(__NR_gettid));
-#elif defined(PRI_OS_MACOSX)
+#elif defined(PRIDE_OS_MACOSX)
         uint64_t tid;
         pthread_threadid_np(nullptr, &tid);
         return static_cast<size_t>(tid);

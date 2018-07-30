@@ -20,7 +20,7 @@ namespace pride::log::channels
         protected:
             void _process(const message_t& msg, const fmt::memory_buffer& formatted) override
             {
-#if defined(PRI_OS_WINDOWS)
+#if defined(PRIDE_OS_WINDOWS)
                 OutputDebugStringA(fmt::to_string(formatted).c_str());
 #endif
             }

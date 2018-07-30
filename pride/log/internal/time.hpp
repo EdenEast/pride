@@ -18,7 +18,7 @@ namespace pride::log::internal
     inline std::tm local_time(const std::time_t& tt)
     {
         std::tm tm;
-#if defined(PRI_OS_WINDOWS)
+#if defined(PRIDE_OS_WINDOWS)
         localtime_s(&tm, &tt);
 #else
         localtime_r(&tt, &tm);
@@ -35,7 +35,7 @@ namespace pride::log::internal
     inline std::tm gm_time(const std::time_t& tt)
     {
         std::tm tm;
-#if defined(PRI_OS_WINDOWS)
+#if defined(PRIDE_OS_WINDOWS)
         gmtime_s(&tm, &tt);
 #else
         gmtime_r(&tt, &tm);

@@ -158,7 +158,7 @@ constexpr pride::hash64_t operator "" _fnv1a64(const wchar_t* ptr, const size_t 
 
 // ────────────────────────────────────────────────────────────────────────────────
 
-#if defined(PRI_USE_CT_TEST)
+#if defined(PRIDE_USE_CT_TEST)
     static_assert(pride::ct::fnv1a("This should") != pride::ct::fnv1a("not match"));
     static_assert(pride::ct::fnv1a("This should") != "not match"_fnv1a);
     static_assert(pride::ct::fnv1a("This should match") == "This should match"_fnv1a);

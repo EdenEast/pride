@@ -2,13 +2,13 @@
 #pragma once
 
 #if defined(__clang__)
-    #define PRI_COMPILER_CLANG
+    #define PRIDE_COMPILER_CLANG
 #elif defined(__GNUC__)
-    #define PRI_COMPILER_GCC
+    #define PRIDE_COMPILER_GCC
 #elif defined(_MSC_VER)
-    #define PRI_COMPILER_MSVC
+    #define PRIDE_COMPILER_MSVC
 #else
-    #define PRI_COMPILER_UNKNOWN
+    #define PRIDE_COMPILER_UNKNOWN
 #endif
 
 namespace pride { namespace detection
@@ -23,11 +23,11 @@ namespace pride { namespace detection
 
     inline constexpr auto current_compiler() noexcept -> compiler_t
     {
-    #if defined(PRI_COMPILER_CLANG)
+    #if defined(PRIDE_COMPILER_CLANG)
         return compiler_t::clang;
-    #elif defined(PRI_COMPILER_GCC)
+    #elif defined(PRIDE_COMPILER_GCC)
         return compiler_t::gcc;
-    #elif defined(PRI_COMPILER_MSVC)
+    #elif defined(PRIDE_COMPILER_MSVC)
         return compiler_t::msvc;
     #else
         return compiler_t::unknown;

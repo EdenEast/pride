@@ -94,7 +94,7 @@ namespace pride::hash
 
             while (data != end)
             {
-            #if defined(PRI_BIG_ENDIAN)
+            #if defined(PRIDE_BIG_ENDIAN)
                 uint64_t k = *data++;
                 char *p = (char *)&k;
                 char c;

@@ -256,7 +256,7 @@ namespace pride { namespace ct
     class type_list;
 }}
 
-#if defined(PRI_USE_CT_TEST)
+#if defined(PRIDE_USE_CT_TEST)
 namespace pride::ct
 {
     static_assert(std::is_same_v<list::get_type<type_list<int, double, float>, 2>, float>, "list::get_type: failed");

@@ -2,11 +2,11 @@
 #pragma once
 
 #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIA__
-    #define PRI_LITTLE_ENDIAN
+    #define PRIDE_LITTLE_ENDIAN
 #elif defined(__BYTE_ORDER__)
-    #define PRI_BIG_ENDIAN
+    #define PRIDE_BIG_ENDIAN
 #else
-    #define PRI_ENDIAN_UNKNOWN
+    #define PRIDE_ENDIAN_UNKNOWN
 #endif
 
 namespace pride { namespace detection
@@ -20,9 +20,9 @@ namespace pride { namespace detection
 
     constexpr auto get_endian() -> endian_t
     {
-    #if defined(PRI_LITTLE_ENDIAN)
+    #if defined(PRIDE_LITTLE_ENDIAN)
         return endian_t::little;
-    #elif defined(PRI_BIG_ENDIAN)
+    #elif defined(PRIDE_BIG_ENDIAN)
         return endian_t::big;
     #else
         return endian_t::unknown;

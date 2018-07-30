@@ -39,4 +39,4 @@ namespace pride { namespace ct
     constexpr T static_value<T, Value>::value;
 }}
 
-#define PRI_STATIC_VALUE(x) ::pride::ct::static_value<decltype(x), x>
+#define PRIDE_STATIC_VALUE(x) ::pride::ct::static_value<decltype(x), x>

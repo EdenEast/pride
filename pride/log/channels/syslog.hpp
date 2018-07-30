@@ -7,13 +7,13 @@
 #include <array>
 #include <string>
 
-#if !defined(PRI_OS_WINDOWS)
+#if !defined(PRIDE_OS_WINDOWS)
 #include <syslog.h>
 #endif
 
 namespace pride::log::channels
 {
-#if !defined(PRI_OS_WINDOWS)
+#if !defined(PRIDE_OS_WINDOWS)
     class syslog_t : public channel_t
     {
     public:

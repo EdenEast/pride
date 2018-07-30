@@ -7,7 +7,7 @@
 #include <cstdint>
 #include <cstddef>
 
-#if defined(PRI_COMPILER_MSVC)
+#if defined(PRIDE_COMPILER_MSVC)
 #   define rotl32(x, r) _rotl(x, r)
 #   define rotl64(x, r) _rotl64(x, r)
 #else

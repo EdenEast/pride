@@ -110,7 +110,7 @@ namespace pride { namespace console
             return value;
         }
 
-#if defined(PRI_OS_WINDOWS)
+#if defined(PRIDE_OS_WINDOWS)
         struct sgr_t
         {
             BYTE fg_color;

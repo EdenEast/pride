@@ -3,7 +3,7 @@
 
 #include "../detection/os.hpp"
 
-#if defined(PRI_OS_WINDOWS)
+#if defined(PRIDE_OS_WINDOWS)
 #ifndef NOMINMAX
 #define NOMINMAX //prevent windows redefining min/max
 #endif

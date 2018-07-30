@@ -5,7 +5,7 @@
 #include "hash.hpp"
 #include <iostream>
 
-#if defined (PRI_COMPILER_MSVC)
+#if defined (PRIDE_COMPILER_MSVC)
     #pragma warning( push )
     #pragma warning( disable : 4146)
     #pragma warning( disable : 4307)
@@ -159,6 +159,6 @@ namespace pride::ct
     }
 } // namespace pride::ct
 
-#if defined (PRI_COMPILER_MSVC)
+#if defined (PRIDE_COMPILER_MSVC)
     #pragma warning( pop )
 #endif

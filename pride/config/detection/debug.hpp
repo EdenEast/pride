@@ -2,14 +2,14 @@
 #pragma once
 
 #if !defined(NDEBUG)
-    #define PRI_DEBUG
+    #define PRIDE_DEBUG
 #endif
 
 namespace pride { namespace detection
 {
     inline constexpr auto debug() noexcept -> bool
     {
-    #if defined(PRI_DEBUG)
+    #if defined(PRIDE_DEBUG)
         return true;
     #else
         return false;

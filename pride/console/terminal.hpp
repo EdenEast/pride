@@ -10,14 +10,14 @@
 #include <iostream>
 #include <memory>
 
-#if defined(PRI_OS_MACOSX) || defined(PRI_OS_LINUX)
+#if defined(PRIDE_OS_MACOSX) || defined(PRIDE_OS_LINUX)
 #include <unistd.h>
-#elif defined(PRI_OS_WINDOWS)
+#elif defined(PRIDE_OS_WINDOWS)
 #include <io.h>
 #include "../config/include/windows.hpp"
 #endif
 
-#if defined(PRI_OS_WINDOWS)
+#if defined(PRIDE_OS_WINDOWS)
     // Only defined in windows 10 onwards, redefining in lower windows since it
     // doesn't gets used in lower versions
     // https://docs.microsoft.com/en-us/windows/console/getconsolemode
@@ -30,7 +30,7 @@ namespace pride { namespace console
 {
     namespace internal
     {
-#if defined(PRI_OS_WINDOWS)
+#if defined(PRIDE_OS_WINDOWS)
         bool is_msys_pty(int fd) noexcept;
         HANDLE get_console_handle(const std::streambuf* stream) noexcept;
         bool set_win_term_ansi_colors(const std::streambuf* stream) noexcept;
@@ -47,7 +47,7 @@ namespace pride { namespace console
 
     inline bool has_color_support()
     {
-#if defined(PRI_OS_WINDOWS)
+#if defined(PRIDE_OS_WINDOWS)
         // All windows versions support colors though native console functions
         return true;
 #else
@@ -71,7 +71,7 @@ namespace pride { namespace console
 
     inline bool is_terminal(const std::streambuf* os_buffer)
     {
-#if defined(PRI_OS_MACOSX) || defined(PRI_OS_LINUX)
+#if defined(PRIDE_OS_MACOSX) || defined(PRIDE_OS_LINUX)
         if (os_buffer == std::cout.rdbuf())
         {
             static const bool cout_term = isatty(fileno(stdout)) != 0;
@@ -82,7 +82,7 @@ namespace pride { namespace console
             static const bool cerr_term = isatty(fileno(stderr)) != 0;
             return cerr_term;
         }
-#elif defined (PRI_OS_WINDOWS)
+#elif defined (PRIDE_OS_WINDOWS)
         if (os_buffer == std::cout.rdbuf())
         {
             static const bool cout_term =
@@ -100,7 +100,7 @@ namespace pride { namespace console
     }
 
 
-#if defined(PRI_OS_WINDOWS)
+#if defined(PRIDE_OS_WINDOWS)
     namespace internal
     {
         inline bool is_msys_pty(int fd) noexcept

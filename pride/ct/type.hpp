@@ -7,15 +7,15 @@
 #include <array>
 #include <utility>
 
-#if defined(PRI_COMPILER_MSVC)
-    #define PRI_PRETTY_FUNCTION __FUNCSIG__
-    #define PRI_FIND(s) s.crop(s.find("::tid<") + 6, pride::ct::strlen(">::type_name(void) noexcept"))
+#if defined(PRIDE_COMPILER_MSVC)
+    #define PRIDE_PRETTY_FUNCTION __FUNCSIG__
+    #define PRIDE_FIND(s) s.crop(s.find("::tid<") + 6, pride::ct::strlen(">::type_name(void) noexcept"))
 
     #pragma warning( push )
     #pragma warning( disable : 4307)
 #else
-    #define PRI_PRETTY_FUNCTION __PRETTY_FUNCTION__
-    #define PRI_FIND(s) s.crop(s.find("= ") + 2, pride::ct::strlen("]"))
+    #define PRIDE_PRETTY_FUNCTION __PRETTY_FUNCTION__
+    #define PRIDE_FIND(s) s.crop(s.find("= ") + 2, pride::ct::strlen("]"))
 #endif
 
 namespace pride::ct
@@ -33,8 +33,8 @@ namespace pride::ct
         {
             static constexpr string type_name() noexcept
             {
-                constexpr string s = { PRI_PRETTY_FUNCTION };
-                constexpr string t = PRI_FIND(s);
+                constexpr string s = { PRIDE_PRETTY_FUNCTION };
+                constexpr string t = PRIDE_FIND(s);
                 return t;
             };
 
@@ -48,8 +48,8 @@ namespace pride::ct
         // {
         //     static constexpr string type_name() noexcept
         //     {
-        //         constexpr string s = { PRI_PRETTY_FUNCTION };
-        //         constexpr string t = PRI_FIND(s);
+        //         constexpr string s = { PRIDE_PRETTY_FUNCTION };
+        //         constexpr string t = PRIDE_FIND(s);
         //         return t;
         //     }
 
@@ -83,15 +83,15 @@ namespace pride::ct
     static constexpr hash_t decay_type_hash = type_hash<std::decay_t<T>>;
 }
 
-#undef PRI_PRETTY_FUNCTION
-#undef PRI_FIND
+#undef PRIDE_PRETTY_FUNCTION
+#undef PRIDE_FIND
 
-#if defined(PRI_USE_CT_TEST)
+#if defined(PRIDE_USE_CT_TEST)
     static_assert(pride::ct::type_name<int> == pride::ct::string{"int"});
     static_assert(pride::ct::type_name<float> == pride::ct::string{"float"});
     static_assert(pride::ct::decay_type_name<const int&> == pride::ct::type_name<int>);
 #endif
 
-#if defined(PRI_COMPILER_MSVC)
+#if defined(PRIDE_COMPILER_MSVC)
     #pragma warning( pop )
 #endif

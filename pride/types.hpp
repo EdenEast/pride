@@ -31,7 +31,7 @@ using u16 = unsigned short; // 65,535
 using s32 = signed int;     // -2,147,483,648 | 2,147,483,647
 using u32 = unsigned int;   // 4,294,967,295
 
-#if defined( PRI_COMPILER_MSVC )
+#if defined( PRIDE_COMPILER_MSVC )
 using s64 = signed __int64;     // -9,223,372,036,854,775,808 | 9,223,372,036,854,775,807
 using u64 = unsigned __int64;   // 18,446,744,073,709,551,615
 #else
@@ -64,10 +64,10 @@ using f64 = double;
 // This makes sure that depending on the platform target that we are working on
     // the size will reflect the platform target. This makes sure that if we need
     // size of something that we will be using the size of the platform target.
-#if defined(PRI_ARCH_64)
+#if defined(PRIDE_ARCH_64)
     using usize = u64;
     using ssize = s64;
-#elif defined(PRI_ARCH_32)
+#elif defined(PRIDE_ARCH_32)
     using usize = u32;
     using ssize = s32;
 #else

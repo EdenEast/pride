@@ -24,4 +24,4 @@ namespace pride
     }
 }
 
-#define defer auto PRI_PP_ANOYN_VARIABLE(IMPL_DEFER_) = ::pride::internal::scope_guard_marker() + [&]()
+#define defer auto PRIDE_PP_ANOYN_VARIABLE(IMPL_DEFER_) = ::pride::internal::scope_guard_marker() + [&]()

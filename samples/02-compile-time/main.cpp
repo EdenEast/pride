@@ -1,4 +1,4 @@
-#define PRI_USE_CT_TEST
+#define PRIDE_USE_CT_TEST
 #include <pride/ct.hpp>
 #include <iostream>
 
