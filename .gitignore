@@ -60,5 +60,5 @@ build-clang/
 # Testing external dependencies
 #
 external/catch/
-external/celero/
 external/benchmark/
+external/astyle
