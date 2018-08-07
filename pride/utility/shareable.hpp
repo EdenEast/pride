@@ -33,4 +33,15 @@ namespace pride
         // using allocator = std::_Ref_count_obj<Derived>;
         // using allocator = std::_Ref_count_obj<Derived>;
     };
+
+    template<typename Type, typename... Args>
+    std::shared_ptr<Type> make_shared(Args&&... args)
+    {
+        struct helper : public Type
+        {
+            helper(Args&&... args) : Type(std::forward<Args>(args)...) {}
+        };
+
+        return std::make_shared<helper>(std::forward<Args>(args)...);
+    }
 }
