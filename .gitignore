@@ -62,3 +62,4 @@ build-clang/
 external/catch/
 external/benchmark/
 external/astyle
+external/cppcheck
