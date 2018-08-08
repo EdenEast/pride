@@ -10,7 +10,8 @@ option(PRIDE_ENABLE_SAMPLES "Enable building and testing samples for pride" ${PR
 option(PRIDE_ENABLE_TESTING "Enable building and testing test for pride" ${PRIDE_MASTER_PROJECT})
 
 option(ENABLE_ASTYLE "Enable formatting with astyle" OFF)
-option(ENABLE_CLANGFORMAT "Enable formatting with clang-format" ON)
+option(ENABLE_CLANGFORMAT "Enable formatting with clang-format" OFF)
+option(ENABLE_CLANGTIDY "Enable static analisys with cppcheck" OFF)
 option(ENABLE_CPPCHECK "Enable static analisys with cppcheck" OFF)
 
 add_subdirectory(pride)
@@ -39,6 +40,12 @@ if(ENABLE_CLANGFORMAT)
   include(clangformat)
   sf_clangformat_add_target(${PRIDE_LIB})
   sf_clangformat_create_command()
+endif()
+
+if(ENABLE_CLANGTIDY)
+  include(clangtidy)
+  sf_clangtidy_add_target(${PRIDE_LIB})
+  sf_clangtidy_create_command()
 endif()
 
 if(ENABLE_CPPCHECK)
