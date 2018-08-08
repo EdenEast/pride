@@ -9,8 +9,8 @@ option(PRIDE_ENABLE_BENCHMARKS "Enable building and testing benchmarks for pride
 option(PRIDE_ENABLE_SAMPLES "Enable building and testing samples for pride" ${PRIDE_MASTER_PROJECT})
 option(PRIDE_ENABLE_TESTING "Enable building and testing test for pride" ${PRIDE_MASTER_PROJECT})
 
-option(ENABLE_ASTYLE "Enable formatting with astyle" ${PRIDE_MASTER_PROJECT})
-option(ENABLE_CPPCHECK "Enable static analisys with cppcheck" ${PRIDE_MASTER_PROJECT})
+option(ENABLE_ASTYLE "Enable formatting with astyle" OFF)
+option(ENABLE_CPPCHECK "Enable static analisys with cppcheck" OFF)
 
 add_subdirectory(pride)
 
