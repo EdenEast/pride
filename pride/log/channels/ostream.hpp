@@ -9,40 +9,40 @@
 
 namespace pride::log::channels
 {
-    namespace internal
+namespace internal
+{
+    template<typename Mutex>
+    class ostream : public base_channel<Mutex>
     {
-        template<typename Mutex>
-        class ostream : public base_channel<Mutex>
-        {
-        public:
-            explicit ostream(std::ostream& os, bool force_flush = false)
+    public:
+        explicit ostream(std::ostream& os, bool force_flush = false)
             : _os(os)
             , _force_flush(force_flush)
-            {
-            }
+        {
+        }
 
-            ostream(const ostream&) = delete;
-            ostream& operator=(const ostream&) = delete;
+        ostream(const ostream&) = delete;
+        ostream& operator=(const ostream&) = delete;
 
-        protected:
-            void _process(const message_t& msg, const fmt::memory_buffer& formatted) override
-            {
-                _os.write(formatted.data(), formatted.size());
-                if (_force_flush)
-                    _os.flush();
-            }
-
-            void _flush() override
-            {
+    protected:
+        void _process(const message_t& msg, const fmt::memory_buffer& formatted) override
+        {
+            _os.write(formatted.data(), formatted.size());
+            if (_force_flush)
                 _os.flush();
-            }
+        }
 
-        private:
-            std::ostream _os;
-            bool _force_flush;
-        };
-    }
+        void _flush() override
+        {
+            _os.flush();
+        }
 
-    using ostream_mt = internal::ostream<std::mutex>;
-    using ostream_st = internal::ostream<log::internal::null_mutex>;
-}
+    private:
+        std::ostream _os;
+        bool _force_flush;
+    };
+} // namespace internal
+
+using ostream_mt = internal::ostream<std::mutex>;
+using ostream_st = internal::ostream<log::internal::null_mutex>;
+} // namespace pride::log::channels

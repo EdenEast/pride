@@ -22,18 +22,18 @@
 // Note: If you want to know the size of the int just use the formula
 // below. This is just incase you wanted to know or just forgot.
 // u +(2^n)-1 | s -(2^n-1) | s +(2^n-1)-1
-using s8 = signed char;     // -128 | 127
-using u8 = unsigned char;   // 255
+using s8 = signed char;   // -128 | 127
+using u8 = unsigned char; // 255
 
 using s16 = signed short;   // -32,768 | 32,767
 using u16 = unsigned short; // 65,535
 
-using s32 = signed int;     // -2,147,483,648 | 2,147,483,647
-using u32 = unsigned int;   // 4,294,967,295
+using s32 = signed int;   // -2,147,483,648 | 2,147,483,647
+using u32 = unsigned int; // 4,294,967,295
 
-#if defined( PRIDE_COMPILER_MSVC )
-using s64 = signed __int64;     // -9,223,372,036,854,775,808 | 9,223,372,036,854,775,807
-using u64 = unsigned __int64;   // 18,446,744,073,709,551,615
+#if defined(PRIDE_COMPILER_MSVC)
+using s64 = signed __int64;   // -9,223,372,036,854,775,808 | 9,223,372,036,854,775,807
+using u64 = unsigned __int64; // 18,446,744,073,709,551,615
 #else
 using s64 = signed long long;   // -9,223,372,036,854,775,808 | 9,223,372,036,854,775,807
 using u64 = unsigned long long; // 18,446,744,073,709,551,615
@@ -62,14 +62,14 @@ using f64 = double;
 #define U64_MAX ((u64)-1)
 
 // This makes sure that depending on the platform target that we are working on
-    // the size will reflect the platform target. This makes sure that if we need
-    // size of something that we will be using the size of the platform target.
+// the size will reflect the platform target. This makes sure that if we need
+// size of something that we will be using the size of the platform target.
 #if defined(PRIDE_ARCH_64)
-    using usize = u64;
-    using ssize = s64;
+using usize = u64;
+using ssize = s64;
 #elif defined(PRIDE_ARCH_32)
-    using usize = u32;
-    using ssize = s32;
+using usize = u32;
+using ssize = s32;
 #else
-#error Unknown bit size
+#    error Unknown bit size
 #endif

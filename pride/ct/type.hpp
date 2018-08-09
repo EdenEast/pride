@@ -2,96 +2,99 @@
 #pragma once
 
 #include "../config/detection/compiler.hpp"
-#include "string.hpp"
 #include "hash.hpp"
+#include "string.hpp"
 #include <array>
 #include <utility>
 
 #if defined(PRIDE_COMPILER_MSVC)
-    #define PRIDE_PRETTY_FUNCTION __FUNCSIG__
-    #define PRIDE_FIND(s) s.crop(s.find("::tid<") + 6, pride::ct::strlen(">::type_name(void) noexcept"))
+#    define PRIDE_PRETTY_FUNCTION __FUNCSIG__
+#    define PRIDE_FIND(s) s.crop(s.find("::tid<") + 6, pride::ct::strlen(">::type_name(void) noexcept"))
 
-    #pragma warning( push )
-    #pragma warning( disable : 4307)
+#    pragma warning(push)
+#    pragma warning(disable : 4307)
 #else
-    #define PRIDE_PRETTY_FUNCTION __PRETTY_FUNCTION__
-    #define PRIDE_FIND(s) s.crop(s.find("= ") + 2, pride::ct::strlen("]"))
+#    define PRIDE_PRETTY_FUNCTION __PRETTY_FUNCTION__
+#    define PRIDE_FIND(s) s.crop(s.find("= ") + 2, pride::ct::strlen("]"))
 #endif
 
 namespace pride::ct
 {
-    namespace internal
+namespace internal
+{
+    template<typename Type, size_t... Idxs>
+    constexpr std::array<char, sizeof...(Idxs) + 1> make_id_array(std::index_sequence<Idxs...>&&) { return { { Type::str[Idxs]..., '\0' } }; }
+
+    template<typename Type, size_t Count = Type::size>
+    constexpr auto make_id_array() { return make_id_array<Type>(std::make_index_sequence<Count>()); }
+
+    template<typename Type>
+    struct tid
     {
-        template<typename Type, size_t... Idxs>
-        constexpr std::array<char, sizeof...(Idxs) + 1> make_id_array(std::index_sequence<Idxs...>&&) { return {{Type::str[Idxs]..., '\0'}}; }
-
-        template<typename Type, size_t Count = Type::size>
-        constexpr auto make_id_array() { return make_id_array<Type>(std::make_index_sequence<Count>()); }
-
-        template<typename Type>
-        struct tid
+        static constexpr string type_name() noexcept
         {
-            static constexpr string type_name() noexcept
-            {
-                constexpr string s = { PRIDE_PRETTY_FUNCTION };
-                constexpr string t = PRIDE_FIND(s);
-                return t;
-            };
-
-            static constexpr const char* str = type_name().str;
-            static constexpr size_t size = type_name().size;
-            static constexpr hash_t hash = type_name().hash();
+            constexpr string s = { PRIDE_PRETTY_FUNCTION };
+            constexpr string t = PRIDE_FIND(s);
+            return t;
         };
 
-        // template<auto Value>
-        // struct vid
-        // {
-        //     static constexpr string type_name() noexcept
-        //     {
-        //         constexpr string s = { PRIDE_PRETTY_FUNCTION };
-        //         constexpr string t = PRIDE_FIND(s);
-        //         return t;
-        //     }
+        static constexpr const char* str = type_name().str;
+        static constexpr size_t size = type_name().size;
+        static constexpr hash_t hash = type_name().hash();
+    };
 
-        //     static constexpr const char* str = type_name().str;
-        //     static constexpr size_t size = type_name().size;
-        //     static constexpr hash_t hash = type_name().hash();
-        // };
+    // template<auto Value>
+    // struct vid
+    // {
+    //     static constexpr string type_name() noexcept
+    //     {
+    //         constexpr string s = { PRIDE_PRETTY_FUNCTION };
+    //         constexpr string t = PRIDE_FIND(s);
+    //         return t;
+    //     }
 
-        template<typename T>
-        struct tholder { static constexpr auto name = internal::make_id_array<internal::tid<T>>(); };
-        // template<auto V>
-        // struct vholder { static constexpr auto name = internal::make_id_array<internal::vid<V>>(); };
-    }
+    //     static constexpr const char* str = type_name().str;
+    //     static constexpr size_t size = type_name().size;
+    //     static constexpr hash_t hash = type_name().hash();
+    // };
 
     template<typename T>
-    static constexpr string type_name = { internal::tholder<T>::name.data(), internal::tholder<T>::name.size() - 1 }; // internal::tid<T>::type_name();
-
+    struct tholder
+    {
+        static constexpr auto name = internal::make_id_array<internal::tid<T>>();
+    };
     // template<auto V>
-    // static constexpr string value_name = { internal::vholder<V>::name.data(), internal::vholder<V>::name.size() - 1 }; // internal::vid<V>::type_name();
+    // struct vholder { static constexpr auto name = internal::make_id_array<internal::vid<V>>(); };
+} // namespace internal
 
-    template<typename T>
-    static constexpr string decay_type_name = type_name<std::decay_t<T>>;
+template<typename T>
+static constexpr string type_name = { internal::tholder<T>::name.data(), internal::tholder<T>::name.size() - 1 }; // internal::tid<T>::type_name();
 
-    template<typename T>
-    static constexpr hash_t type_hash = { pride::ct::fnv1a(internal::tholder<T>::name.data(), internal::tholder<T>::name.size() - 1) }; // internal::tid<T>::hash;
+// template<auto V>
+// static constexpr string value_name = { internal::vholder<V>::name.data(), internal::vholder<V>::name.size() - 1 }; // internal::vid<V>::type_name();
 
-    // template<auto V>
-    // static constexpr hash_t value_hash = { hash::fnv1a(internal::vholder<V>::name.data(),internal::vholder<V>::name.size() - 1) }; // internal::tid<T>::hash;
+template<typename T>
+static constexpr string decay_type_name = type_name<std::decay_t<T>>;
 
-    template<typename T>
-    static constexpr hash_t decay_type_hash = type_hash<std::decay_t<T>>;
+template<typename T>
+static constexpr hash_t type_hash = { pride::ct::fnv1a(internal::tholder<T>::name.data(), internal::tholder<T>::name.size() - 1) }; // internal::tid<T>::hash;
+
+// template<auto V>
+// static constexpr hash_t value_hash = { hash::fnv1a(internal::vholder<V>::name.data(),internal::vholder<V>::name.size() - 1) }; // internal::tid<T>::hash;
+
+template<typename T>
+static constexpr hash_t decay_type_hash = type_hash<std::decay_t<T>>;
 } // namespace pride::ct
 
 #undef PRIDE_PRETTY_FUNCTION
 #undef PRIDE_FIND
 
 #if defined(PRIDE_USE_CT_TEST)
-    static_assert(pride::ct::type_name<int> == pride::ct::string{"int"});
-    static_assert(pride::ct::type_name<float> == pride::ct::string{"float"});
-    static_assert(pride::ct::decay_type_name<const int&> == pride::ct::type_name<int>);
+static_assert(pride::ct::type_name<int> == pride::ct::string{ "int" });
+static_assert(pride::ct::type_name<float> == pride::ct::string{ "float" });
+static_assert(pride::ct::decay_type_name<const int&> == pride::ct::type_name<int>);
 #endif
 
 #if defined(PRIDE_COMPILER_MSVC)
-    #pragma warning( pop )
+#    pragma warning(pop)
 #endif

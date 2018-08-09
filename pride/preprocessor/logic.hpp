@@ -29,7 +29,6 @@
 #define PRIDE_PP_IMPL_BITXOR_10 1
 #define PRIDE_PP_IMPL_BITXOR_11 0
 
-
 #define PRIDE_PP_BITNOT(mx) \
     PRIDE_PP_CAT_2(PRIDE_PP_IMPL_BITNOT_, PRIDE_PP_DEFER(mx))
 
@@ -59,7 +58,10 @@
 
 #define PRIDE_PP_IMPL_IF_0(mTrue, mFalse) mFalse
 #define PRIDE_PP_IMPL_IF_1(mTrue, mFalse) mTrue
-#define PRIDE_PP_IF(cond, mTrue, mFalse) \
-    PRIDE_PP_CAT_2(PRIDE_PP_IMPL_IF_, PRIDE_PP_BOOL(cond))(mTrue, mFalse)
+#define PRIDE_PP_IF(cond, mTrue, mFalse)                   \
+    PRIDE_PP_CAT_2(PRIDE_PP_IMPL_IF_, PRIDE_PP_BOOL(cond)) \
+    (mTrue, mFalse)
 
-#define PRIDE_PP_COMMA_IF(cond) PRIDE_PP_IF(cond, PRIDE_PP_COMMA, PRIDE_PP_EMPTY)()
+#define PRIDE_PP_COMMA_IF(cond)                       \
+    PRIDE_PP_IF(cond, PRIDE_PP_COMMA, PRIDE_PP_EMPTY) \
+    ()

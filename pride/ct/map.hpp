@@ -5,5 +5,4 @@
 
 namespace pride::ct
 {
-
 } // namespace pride::ct
