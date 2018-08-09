@@ -13,6 +13,7 @@ option(ENABLE_ASTYLE "Enable formatting with astyle" OFF)
 option(ENABLE_CLANGFORMAT "Enable formatting with clang-format" OFF)
 option(ENABLE_CLANGTIDY "Enable static analisys with cppcheck" OFF)
 option(ENABLE_CPPCHECK "Enable static analisys with cppcheck" OFF)
+option(ENABLE_CODECOV "Enable code coverage reports with codecov" OFF)
 
 add_subdirectory(pride)
 
@@ -52,4 +53,8 @@ if(ENABLE_CPPCHECK)
   include(cppcheck)
   sf_cppcheck_add_target(${PRIDE_LIB})
   sf_cppcheck_create_command()
+endif()
+
+if(ENABLE_CODECOV)
+  include(codecov)
 endif()
