@@ -31,16 +31,16 @@ BraceWrapping:
   BeforeCatch:           true
   BeforeElse:            true
   IndentBraces:          false
-#  SplitEmptyFunction:    false
-#  SplitEmptyRecord:      false
-#  SplitEmptyNamespace:   false
+  SplitEmptyFunction:    false
+  SplitEmptyRecord:      false
+  SplitEmptyNamespace:   false
 BreakBeforeBinaryOperators: All
 BreakBeforeBraces: Custom
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializersBeforeComma: true # BeforeComma
 ColumnLimit:     0
 CommentPragmas:  '^ IWYU pragma:'  # this needs work
-# CompactNamespaces: true
+CompactNamespaces: true
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
 ConstructorInitializerIndentWidth: 4
 ContinuationIndentWidth: 4
@@ -57,7 +57,7 @@ IncludeCategories:
   - Regex:           '.*'
     Priority:        1
 IndentCaseLabels: false
-# IndentPPDirectives: AfterHash
+IndentPPDirectives: AfterHash
 IndentWidth:     4
 IndentWrappedFunctionNames: true
 KeepEmptyLinesAtTheStartOfBlocks: false
@@ -77,7 +77,7 @@ PenaltyReturnTypeOnItsOwnLine: 60
 SortIncludes:    true
 PointerAlignment: Left
 SpaceAfterCStyleCast: false
-# SpaceAfterTemplateKeyword: false
+SpaceAfterTemplateKeyword: false
 SpaceBeforeAssignmentOperators: true
 # SpaceBeforeCpp11BracedList: true
 # SpaceBeforeCtorInitializerColon: true
