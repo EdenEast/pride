@@ -9,7 +9,7 @@ sf_add_external_git_repo(
   OPTIONAL
 )
 
-if (NOT sf_git_error_code)
+if(EXISTS ${CMAKE_SOURCE_DIR}/external/catch/.git)
   sf_create_executable(
     tests                                 # name of the test executable
     DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" # directory where scaffold will look for all the files

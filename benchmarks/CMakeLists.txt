@@ -10,7 +10,7 @@ sf_add_external_git_repo(
   OPTIONAL
 )
 
-if(NOT sf_git_error_code)
+if(EXISTS ${CMAKE_SOURCE_DIR}/external/benchmark/.git)
   sf_target_set_folder(benchmark "Benchmarks/Google")
   sf_target_set_folder(benchmark_main "Benchmarks/Google")
 
