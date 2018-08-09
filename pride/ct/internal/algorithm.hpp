@@ -4,7 +4,7 @@
 #include <cstddef>
 #include <cstdint>
 
-namespace pride { namespace ct { namespace internal
+namespace pride::ct::internal
 {
     template<typename T, std::size_t N>
     constexpr const T* begin(const T(&array)[N])
@@ -37,4 +37,4 @@ namespace pride { namespace ct { namespace internal
     {
         return lhs <= rhs ? lhs : rhs;
     }
-}}}
+} // namespace pride::ct::internal

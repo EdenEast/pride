@@ -7,7 +7,7 @@
 #include <iterator>
 #include <type_traits>
 
-namespace pride { namespace assert { namespace internal
+namespace pride::assert::internal
 {
     template<typename Type>
     class expression_lhs;
@@ -327,4 +327,4 @@ namespace pride { namespace assert { namespace internal
 
         return os << console::fg_t::reset;
     }
-}}}
+} // namespace pride::assert::internal

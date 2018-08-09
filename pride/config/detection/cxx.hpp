@@ -13,7 +13,7 @@
     #define PRIDE_CXX_UNKNOWN
 #endif
 
-namespace pride { namespace detection
+namespace pride::detection
 {
     enum class cxx_version_t
     {
@@ -43,4 +43,4 @@ namespace pride { namespace detection
     {
         return get_cxx_version() >= version;
     }
-}}
+} // namespace pride::detection

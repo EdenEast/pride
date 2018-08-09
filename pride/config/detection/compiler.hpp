@@ -11,7 +11,7 @@
     #define PRIDE_COMPILER_UNKNOWN
 #endif
 
-namespace pride { namespace detection
+namespace pride::detection
 {
     enum class compiler_t
     {
@@ -33,4 +33,4 @@ namespace pride { namespace detection
         return compiler_t::unknown;
     #endif
     }
-}}
+} // namespace pride::detection

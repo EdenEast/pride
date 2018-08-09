@@ -1,7 +1,7 @@
 
 #pragma once
 
-namespace pride { namespace ct
+namespace pride::ct
 {
     template<typename One, typename Two>
     struct pair_t
@@ -9,4 +9,4 @@ namespace pride { namespace ct
         using first  = One;
         using second = Two;
     };
-}}
+} // namespace pride::ct

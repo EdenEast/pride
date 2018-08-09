@@ -3,7 +3,7 @@
 
 #include <type_traits>
 
-namespace pride { namespace ct
+namespace pride::ct
 {
 
-}}
+} // namespace pride::ct

@@ -7,7 +7,7 @@
     #define PRIDE_RTTI_DISABLED
 #endif
 
-namespace pride { namespace detection
+namespace pride::detection
 {
     inline constexpr auto rtti() noexcept -> bool
     {
@@ -17,4 +17,4 @@ namespace pride { namespace detection
         return false;
     #endif
     }
-}}
+} // namespace pride::detection

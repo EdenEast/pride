@@ -9,7 +9,7 @@
     #define PRIDE_STDLIB_UNKNOWN
 #endif
 
-namespace pride { namespace detection
+namespace pride::detection
 {
     enum class stdlib_t
     {
@@ -28,4 +28,4 @@ namespace pride { namespace detection
         return stdlib_t::unknown;
     #endif
     }
-}}
+} // namespace pride::detection

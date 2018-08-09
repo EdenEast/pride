@@ -81,7 +81,7 @@ namespace pride::ct
 
     template<typename T>
     static constexpr hash_t decay_type_hash = type_hash<std::decay_t<T>>;
-}
+} // namespace pride::ct
 
 #undef PRIDE_PRETTY_FUNCTION
 #undef PRIDE_FIND

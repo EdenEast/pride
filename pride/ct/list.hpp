@@ -5,7 +5,7 @@
 #include <type_traits>
 #include <tuple>
 
-namespace pride { namespace ct
+namespace pride::ct
 {
     namespace list
     {
@@ -254,7 +254,7 @@ namespace pride { namespace ct
 
     template<typename... Types>
     class type_list;
-}}
+} // namespace pride::ct
 
 #if defined(PRIDE_USE_CT_TEST)
 namespace pride::ct

@@ -3,7 +3,7 @@
 
 #include "meta.hpp"
 
-namespace pride { namespace ct
+namespace pride::ct
 {
     // --------------------------------------------------------------------------------------------
     // List definition
@@ -629,4 +629,4 @@ namespace pride { namespace ct
     {
         pride::ct::internal::foreach(pride::ct::apply_functor<pride::ct::list<>, Sequence>(), pride::ct::make_index_sequence_from_sequence<Sequence>(), function);
     }
-}}
+} // namespace pride::ct

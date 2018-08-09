@@ -4,7 +4,7 @@
 #include <cstddef>
 #include <type_traits>
 
-namespace pride { namespace ct
+namespace pride::ct
 {
     template<typename T>
     using decay_t = typename std::decay<T>::type;
@@ -211,4 +211,4 @@ namespace pride { namespace ct
             using type = std::integral_constant<bool, (Lhs::value <= Rhs::value)>;
         };
     };
-}}
+} // namespace pride::ct

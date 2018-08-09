@@ -9,7 +9,7 @@
     #define PRIDE_ENDIAN_UNKNOWN
 #endif
 
-namespace pride { namespace detection
+namespace pride::detection
 {
     enum class endian_t
     {
@@ -38,4 +38,4 @@ namespace pride { namespace detection
     {
         return get_endian() == endian_t::big;
     }
-}}
+} // namespace pride::detection

@@ -1,7 +1,7 @@
 
 #pragma once
 
-namespace pride { namespace ct
+namespace pride::ct
 {
     template<typename T, T Value>
     struct static_value
@@ -37,6 +37,6 @@ namespace pride { namespace ct
 
     template<typename T, T Value>
     constexpr T static_value<T, Value>::value;
-}}
+} // namespace pride::ct
 
 #define PRIDE_STATIC_VALUE(x) ::pride::ct::static_value<decltype(x), x>

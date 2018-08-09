@@ -5,7 +5,7 @@
     #define PRIDE_DEBUG
 #endif
 
-namespace pride { namespace detection
+namespace pride::detection
 {
     inline constexpr auto debug() noexcept -> bool
     {
@@ -15,4 +15,4 @@ namespace pride { namespace detection
         return false;
     #endif
     }
-}}
+} // namespace pride::detection

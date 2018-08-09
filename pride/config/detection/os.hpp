@@ -17,7 +17,7 @@
     #define PRIDE_OS_UNKNOWN
 #endif
 
-namespace pride { namespace detection
+namespace pride::detection
 {
     enum class operating_system_t
     {
@@ -58,5 +58,4 @@ namespace pride { namespace detection
     {
         return current_operating_system() == operating_system_t::macosx;
     }
-}}
-
+} // namespace pride::detection

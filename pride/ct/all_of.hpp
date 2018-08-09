@@ -3,7 +3,7 @@
 
 #include <type_traits>
 
-namespace pride { namespace ct
+namespace pride::ct
 {
     template<bool... b>
     struct all_of;
@@ -16,4 +16,4 @@ namespace pride { namespace ct
 
     template<>
     struct all_of<> : std::true_type {};
-}}
+} // namespace pride::ct

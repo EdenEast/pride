@@ -10,7 +10,7 @@
     #define PRIDE_ARCH_UNKNOWN
 #endif
 
-namespace pride { namespace detection
+namespace pride::detection
 {
     enum class architecture_t
     {
@@ -29,4 +29,4 @@ namespace pride { namespace detection
         return architecture_t::unknown;
     #endif
     }
-}}
+} // namespace pride::detection

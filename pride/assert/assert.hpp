@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <sstream>
 
-namespace pride { namespace assert
+namespace pride::assert
 {
     inline std::ostream& assert_fail_default_log(std::ostream& os, const internal::violation_info_t& info) noexcept
     {
@@ -38,7 +38,7 @@ namespace pride { namespace assert
         assert_fail_default_log(os, info);
         return os.str();
     }
-    
+
     class assert_message_t : public std::invalid_argument
     {
     public:
@@ -81,4 +81,4 @@ namespace pride { namespace assert
     {
         assert_failed_default(internal::violation_info_t(file, line, function, expr_str, std::move(expr)));
     }
-}}
+} // namespace pride::assert

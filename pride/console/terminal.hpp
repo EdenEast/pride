@@ -26,7 +26,7 @@
     #endif
 #endif
 
-namespace pride { namespace console
+namespace pride::console
 {
     namespace internal
     {
@@ -196,4 +196,4 @@ namespace pride { namespace console
         }
     }
 #endif
-}}
+} // namespace pride::console

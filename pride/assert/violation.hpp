@@ -3,7 +3,7 @@
 
 #include "expression.hpp"
 
-namespace pride { namespace assert { namespace internal
+namespace pride::assert::internal
 {
     struct violation_info_t
     {
@@ -56,4 +56,4 @@ namespace pride { namespace assert { namespace internal
     , expression(std::move(expr))
     {
     }
-}}}
+} // namespace pride::assert::internal

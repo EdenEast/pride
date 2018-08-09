@@ -5,7 +5,7 @@
 #include <atomic>
 #include <iostream>
 
-namespace pride { namespace console
+namespace pride::console
 {
     enum class style_t
     {
@@ -312,4 +312,4 @@ namespace pride { namespace console
     {
         internal::win_term_mode() = mode;
     }
-}}
+} // namespace pride::console
