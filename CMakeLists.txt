@@ -51,3 +51,5 @@ endif()
 if(ENABLE_CODECOV)
   include(codecov)
 endif()
+
+message("compiler id: ${CMAKE_CXX_COMPILER_ID}")

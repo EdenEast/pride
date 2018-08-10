@@ -5424,7 +5424,6 @@ private:
     tri required_ = tri::either;
     tri blocking_ = tri::either;
     tri repeatable_ = tri::either;
-    tri exclusive_ = tri::either;
     tri hasDoc_ = tri::yes;
 };
 

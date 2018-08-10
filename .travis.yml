@@ -89,15 +89,23 @@ matrix:
           - clang-6.0
           - clang-format-6.0
     script:
-      - cmake -DENABLE_CLANG_FORMAT=ON -DCMAKE_CXX_COMPILER="clang-6.0" ..
-      - make format
-      - |
-        if [[ -n $(git diff) ]]; then
-          echo "You must run make format before submitting a pull request"
-          echo ""
-          git diff
-          exit -1
-        fi
+      - where clang-format
+      - ls /bin/ | grep clang-format
+      - ls /usr/bin/ | grep clang-format
+      - ls /usr/local/bin | grep clang-format
+      - clang-format --version
+      - clang-format-6.0 --version
+      - where clang-format
+      - where clang-format-6.0
+      # - cmake -DENABLE_CLANG_FORMAT=ON -DCMAKE_CXX_COMPILER="clang-6.0" ..
+      # - make format
+      # - |
+      #   if [[ -n $(git diff) ]]; then
+      #     echo "You must run make format before submitting a pull request"
+      #     echo ""
+      #     git diff
+      #     exit -1
+      #   fi
 
 
   #
@@ -149,22 +157,22 @@ matrix:
   #
   # Codecov
   #
-  - os: linux
-    env:
-      - TEST="Codecov"
-    addons:
-      apt:
-        sources:
-          - ubuntu-toolchain-r-test
-        packages:
-          - gcc-8
-          - g++-8
-    script:
-      - cmake -ENABLE_CODECOV=ON -DCMAKE_CXX_COMPILER="g++-8" ..
-      - make
-      - make tests
-      - cd ..
-      - bash <(curl -s https://codecov.io/bash)
+  # - os: linux
+  #   env:
+  #     - TEST="Codecov"
+  #   addons:
+  #     apt:
+  #       sources:
+  #         - ubuntu-toolchain-r-test
+  #       packages:
+  #         - gcc-8
+  #         - g++-8
+  #   script:
+  #     - cmake -ENABLE_CODECOV=ON -DCMAKE_CXX_COMPILER="g++-8" ..
+  #     - make
+  #     - make tests
+  #     - cd ..
+  #     - bash <(curl -s https://codecov.io/bash)
 
   #
   # G++ 8

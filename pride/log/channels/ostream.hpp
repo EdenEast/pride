@@ -38,7 +38,7 @@ namespace internal
         }
 
     private:
-        std::ostream _os;
+        std::ostream& _os;
         bool _force_flush;
     };
 } // namespace internal

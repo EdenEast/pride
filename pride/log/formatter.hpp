@@ -502,7 +502,7 @@ namespace internal
 class pattern_formatter_t : public formatter_t
 {
 public:
-    explicit pattern_formatter_t(const std::string& pattern, std::string eol = eol())
+    explicit pattern_formatter_t(const std::string& pattern, std::string eol = _defualt_eol)
         : _eol(std::move(eol))
     {
         std::memset(&_cached_tm, 0, sizeof(_cached_tm));
@@ -672,12 +672,11 @@ private:
         //return internal::local_time(std::chrono::system_clock::to_time_t(msg.time));
     }
 
-    static constexpr const char* eol()
-    {
-        if constexpr (pride::detection::current_operating_system() == pride::detection::operating_system_t::windows)
-            return "\r\n";
-        return "\n";
-    }
+#if defined(PRIDE_OS_WINDOWS)
+    static constexpr const char* _defualt_eol = "\r\n";
+#else
+    static constexpr const char* _defualt_eol = "\n";
+#endif
 
     const std::string _eol;
     std::tm _cached_tm;
