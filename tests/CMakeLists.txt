@@ -11,9 +11,12 @@ sf_add_external_git_repo(
 
 if(EXISTS ${CMAKE_SOURCE_DIR}/external/catch/.git)
   sf_create_executable(
-    test                                  # name of the test executable
+    tests                                 # name of the test executable
     DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" # directory where scaffold will look for all the files
     DEPENDS Catch ${PRIDE_LIB}            # the external libraries that this executable depends on
     FOLDER Tests                          # In an IDE this target will be under the folder "Tests"
   )
+
+  enable_testing()
+  add_test(NAME unittests COMMAND tests)
 endif()

@@ -89,7 +89,7 @@ matrix:
           - clang-6.0
           - clang-format-6.0
     script:
-      - cmake -DENABLE_CLANG_TIDY=ON -DCMAKE_CXX_COMPILER="clang-6.0" ..
+      - cmake -DENABLE_CLANG_FORMAT=ON -DCMAKE_CXX_COMPILER="clang-6.0" ..
       - make format
       - |
         if [[ -n $(git diff) ]]; then
@@ -162,7 +162,7 @@ matrix:
     script:
       - cmake -ENABLE_CODECOV=ON -DCMAKE_CXX_COMPILER="g++-8" ..
       - make
-      - make test
+      - make tests
       - cd ..
       - bash <(curl -s https://codecov.io/bash)
 
@@ -182,7 +182,7 @@ matrix:
     script:
       - cmake -DCMAKE_CXX_COMPILER="g++-8" ..
       - make
-      - make test
+      - make tests
 
   #
   # Clang 5.0
@@ -202,7 +202,7 @@ matrix:
     script:
       - cmake -DCMAKE_C_COMPILER=clang-5.0 -DCMAKE_CXX_COMPILER=clang++-5.0 ..
       - make
-      - make test
+      - make tests
 
   #
   # Clang 6.0
@@ -222,7 +222,7 @@ matrix:
     script:
       - cmake -DCMAKE_C_COMPILER=clang-6.0 -DCMAKE_CXX_COMPILER=clang++-6.0 ..
       - make
-      - make test
+      - make tests
 
   #
   # XCode 8.3
@@ -234,4 +234,4 @@ matrix:
   #   script:
   #     - cmake ..
   #     - make
-  #     - make test
+  #     - make tests
