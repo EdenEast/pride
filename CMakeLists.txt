@@ -5,10 +5,10 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/external/scaffold")
 include(scaffold)
 
 sf_check_master_project(PRIDE_MASTER_PROJECT)
-option(PRIDE_ENABLE_BENCHMARKS "Enable building and testing benchmarks for pride" ${PRIDE_MASTER_PROJECT})
-option(PRIDE_ENABLE_SAMPLES "Enable building and testing samples for pride" ${PRIDE_MASTER_PROJECT})
-option(PRIDE_ENABLE_TESTING "Enable building and testing test for pride" ${PRIDE_MASTER_PROJECT})
+option(ENABLE_SAMPLES "Enable building and testing samples for pride" ${PRIDE_MASTER_PROJECT})
+option(ENABLE_TESTING "Enable building and testing test for pride" ${PRIDE_MASTER_PROJECT})
 
+option(ENABLE_BENCHMARKS "Enable building and testing benchmarks for pride" OFF)
 option(ENABLE_CLANG_FORMAT "Enable formatting with clang-format" OFF)
 option(ENABLE_CLANG_TIDY "Enable static analisys with cppcheck" OFF)
 option(ENABLE_CPPCHECK "Enable static analisys with cppcheck" OFF)
@@ -16,15 +16,15 @@ option(ENABLE_CODECOV "Enable code coverage reports with codecov" OFF)
 
 add_subdirectory(pride)
 
-if (PRIDE_ENABLE_BENCHMARKS AND NOT NO_TESTS)
+if (ENABLE_BENCHMARKS)
   add_subdirectory(benchmarks)
 endif()
 
-if (PRIDE_ENABLE_SAMPLES)
+if (ENABLE_SAMPLES)
   add_subdirectory(samples)
 endif()
 
-if (PRIDE_ENABLE_TESTING AND NOT NO_TESTS)
+if (ENABLE_TESTING AND NOT NO_TESTS)
   add_subdirectory(tests)
 endif()
 
