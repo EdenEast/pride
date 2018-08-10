@@ -4,7 +4,6 @@
 #
 language: cpp
 dist: trusty
-sudo: true
 
 #
 # Build Dependencies
@@ -89,12 +88,14 @@ matrix:
         packages:
           - clang-format-6.0
     script:
-      - mkdir -p latest-clang-format-symlink
-      - ln -s /usr/bin/clang-format-6.0 latest-clang-format-symlink/clang-format
-      - export PATH=$PWD/latest-clang-format-symlink:$PATH
-      - which clang-format
-      - clang-format --version
-      - cmake -DENABLE_CLANG_FORMAT=ON -DCMAKE_CXX_COMPILER="clang-6.0" ..
+      - |
+        mkdir -p latest-clang-format-symlink
+        ln -s /usr/bin/clang-format-6.0 latest-clang-format-symlink/clang-format
+        ln -s /usr/bin/clang-6.0 latest-clang-format-symlink/clang
+        export PATH=$PWD/latest-clang-format-symlink:$PATH
+        which clang-format
+        clang-format --version
+      - cmake -DENABLE_CLANG_FORMAT=ON -DCMAKE_CXX_COMPILER="clang" ..
       - make format
       - |
         if [[ -n $(git diff) ]]; then
@@ -120,7 +121,7 @@ matrix:
           - clang-6.0
           - clang-tidy-6.0
     script:
-      - cmake -DENABLE_CLANG_TIDY=ON -DCMAKE_CXX_COMPILER="clang-6.0" ..
+      - cmake -DENABLE_CLANG_TIDY=ON -DNO_TESTS=ON -DCMAKE_CXX_COMPILER="clang-6.0" ..
       - make tidy > output.txt
       - |
         if [[ -n $(grep "warning: " output.txt) ]] || [[ -n $(grep "error: " output.txt) ]]; then
