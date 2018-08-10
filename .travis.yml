@@ -89,14 +89,11 @@ matrix:
           - clang-6.0
           - clang-format-6.0
     script:
-      - where clang-format
-      - ls /bin/ | grep clang-format
-      - ls /usr/bin/ | grep clang-format
-      - ls /usr/local/bin | grep clang-format
+      - which clang-format
       - clang-format --version
       - clang-format-6.0 --version
-      - where clang-format
-      - where clang-format-6.0
+      - which clang-format
+      - which clang-format-6.0
       # - cmake -DENABLE_CLANG_FORMAT=ON -DCMAKE_CXX_COMPILER="clang-6.0" ..
       # - make format
       # - |
