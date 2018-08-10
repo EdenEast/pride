@@ -48,7 +48,7 @@ namespace internal::xxhash
     };
 
     using const32 = constant<uint32_t>;
-    using const64 = constant<uint32_t>;
+    using const64 = constant<uint64_t>;
 
     inline uint32_t read32(const void* ptr)
     {
@@ -73,28 +73,28 @@ namespace internal::xxhash
         if (len >= 16)
         {
             const uint8_t* const limit = end - 16;
-            uint32_t v1 = seed + constant<uint32_t>::primes[0] + constant<uint32_t>::primes[1];
-            uint32_t v2 = seed + constant<uint32_t>::primes[1];
+            uint32_t v1 = seed + const32::primes[0] + const32::primes[1];
+            uint32_t v2 = seed + const32::primes[1];
             uint32_t v3 = seed + 0;
-            uint32_t v4 = seed - constant<uint32_t>::primes[0];
+            uint32_t v4 = seed - const32::primes[0];
 
             do
             {
-                v1 += read32(p) * constant<uint32_t>::primes[1];
+                v1 += read32(p) * const32::primes[1];
                 v1 = rotl32(v1, 13);
-                v1 *= constant<uint32_t>::primes[0];
+                v1 *= const32::primes[0];
                 p += 4;
-                v2 += read32(p) * constant<uint32_t>::primes[1];
+                v2 += read32(p) * const32::primes[1];
                 v2 = rotl32(v2, 13);
-                v2 *= constant<uint32_t>::primes[0];
+                v2 *= const32::primes[0];
                 p += 4;
-                v3 += read32(p) * constant<uint32_t>::primes[1];
+                v3 += read32(p) * const32::primes[1];
                 v3 = rotl32(v3, 13);
-                v3 *= constant<uint32_t>::primes[0];
+                v3 *= const32::primes[0];
                 p += 4;
-                v4 += read32(p) * constant<uint32_t>::primes[1];
+                v4 += read32(p) * const32::primes[1];
                 v4 = rotl32(v4, 13);
-                v4 *= constant<uint32_t>::primes[0];
+                v4 *= const32::primes[0];
                 p += 4;
             } while (p <= limit);
 
@@ -102,29 +102,29 @@ namespace internal::xxhash
         }
         else
         {
-            h32 = seed + constant<uint32_t>::primes[4];
+            h32 = seed + const32::primes[4];
         }
 
         h32 += (uint32_t)len;
 
         while (p + 4 <= end)
         {
-            h32 += read32(p) * constant<uint32_t>::primes[2];
-            h32 = rotl32(h32, 17) * constant<uint32_t>::primes[3];
+            h32 += read32(p) * const32::primes[2];
+            h32 = rotl32(h32, 17) * const32::primes[3];
             p += 4;
         }
 
         while (p < end)
         {
-            h32 += (*p) * constant<uint32_t>::primes[4];
-            h32 = rotl32(h32, 11) * constant<uint32_t>::primes[0];
+            h32 += (*p) * const32::primes[4];
+            h32 = rotl32(h32, 11) * const32::primes[0];
             p++;
         }
 
         h32 ^= h32 >> 15;
-        h32 *= constant<uint32_t>::primes[1];
+        h32 *= const32::primes[1];
         h32 ^= h32 >> 13;
-        h32 *= constant<uint32_t>::primes[2];
+        h32 *= const32::primes[2];
         h32 ^= h32 >> 16;
 
         return h32;
