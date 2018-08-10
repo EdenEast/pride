@@ -75,6 +75,32 @@ matrix:
         fi
 
   #
+  # Clang Format
+  #
+  - os: linux
+    env:
+      - TEST="Clang Format"
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - llvm-toolchain-trusty-6.0
+        packages:
+          - clang-6.0
+          - clang-format-6.0
+    script:
+      - cmake -DENABLE_CLANG_TIDY=ON -DCMAKE_CXX_COMPILER="clang-6.0" ..
+      - make format
+      - |
+        if [[ -n $(git diff) ]]; then
+          echo "You must run make format before submitting a pull request"
+          echo ""
+          git diff
+          exit -1
+        fi
+
+
+  #
   # Clang Tidy
   #
   - os: linux
@@ -89,8 +115,7 @@ matrix:
           - clang-6.0
           - clang-tidy-6.0
     script:
-      - cmake -DENABLE_CLANG_ TIDY=ON -DCMAKE_CXX_COMPILER="clang-6.0" ..
-      - make
+      - cmake -DENABLE_CLANG_TIDY=ON -DCMAKE_CXX_COMPILER="clang-6.0" ..
       - make tidy > output.txt
       - |
         if [[ -n $(grep "warning: " output.txt) ]] || [[ -n $(grep "error: " output.txt) ]]; then
@@ -113,10 +138,10 @@ matrix:
         sources:
           - ubuntu-toolchain-r-test
         packages:
-          - gcc-7
-          - g++-7
+          - gcc-8
+          - g++-8
     script:
-      - cmake -DENABLE_CPPCHECK=ON -DCMAKE_CXX_COMPILER="g++-7" ..
+      - cmake -DENABLE_CPPCHECK=ON -DCMAKE_CXX_COMPILER="g++-8" ..
       - make
       - make install
       - make check
@@ -132,32 +157,14 @@ matrix:
         sources:
           - ubuntu-toolchain-r-test
         packages:
-          - gcc-7
-          - g++-7
+          - gcc-8
+          - g++-8
     script:
-      - cmake -ENABLE_CODECOV=ON -DCMAKE_CXX_COMPILER="g++-7" ..
+      - cmake -ENABLE_CODECOV=ON -DCMAKE_CXX_COMPILER="g++-8" ..
       - make
       - make test
       - cd ..
       - bash <(curl -s https://codecov.io/bash)
-
-  #
-  # G++ 7
-  #
-  - os: linux
-    env:
-      - TEST="G++ 7"
-    addons:
-      apt:
-        sources:
-          - ubuntu-toolchain-r-test
-        packages:
-          - gcc-7
-          - g++-7
-    script:
-      - cmake -DCMAKE_CXX_COMPILER="g++-7" ..
-      - make
-      - make test
 
   #
   # G++ 8
