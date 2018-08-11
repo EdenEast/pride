@@ -147,7 +147,7 @@ matrix:
           - gcc-8
           - g++-8
     script:
-      - cmake -DENABLE_CPPCHECK=ON -DCMAKE_CXX_COMPILER="g++-8" ..
+      - cmake -DENABLE_CPPCHECK=ON -DNO_TESTS=ON -DCMAKE_CXX_COMPILER="g++-8" ..
       - make
       - make install
       - make check
