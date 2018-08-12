@@ -26,10 +26,10 @@ struct assert<>
 {};
 
 template<typename T>
-using void_t = typename std::conditional<sizeof(T*) >= 0, void, T>::type
+using void_t = typename std::conditional<sizeof(T*) >= 0, void, T>::type;
 
-    template<typename T>
-    using type_t = typename T::type;
+template<typename T>
+using type_t = typename T::type;
 
 template<typename T, typename... Args>
 using apply_t = type_t<typename T::template apply<Args...>>;
