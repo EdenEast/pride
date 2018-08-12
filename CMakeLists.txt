@@ -44,12 +44,10 @@ endif()
 
 if(ENABLE_CPPCHECK)
   include(cppcheck)
-  sf_cppcheck_add_target(${PRIDE_LIB})
-  sf_cppcheck_create_command()
+  sf_cppcheck_add_target(${PRIDE_LIB} EXCLUDE_REGEX_LIST "cli" "fmt")
+  sf_cppcheck_create_command(CHECKS warning,performance)
 endif()
 
 if(ENABLE_CODECOV)
   include(codecov)
 endif()
-
-message("compiler id: ${CMAKE_CXX_COMPILER_ID}")
