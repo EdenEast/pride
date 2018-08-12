@@ -324,12 +324,12 @@ TEST_CASE("uint128_t")
                 const uint128_t zero(0);
                 const uint128_t one(1);
 
-                REQUIRE(t   << zero == t);
-                REQUIRE(f   << zero == f);
-                REQUIRE(u8  << zero == u8);
-                REQUIRE(u16 << zero == u16);
-                REQUIRE(u32 << zero == u32);
-                REQUIRE(u64 << zero == u64);
+                REQUIRE((t   << zero) == t);
+                REQUIRE((f   << zero) == f);
+                REQUIRE((u8  << zero) == u8);
+                REQUIRE((u16 << zero) == u16);
+                REQUIRE((u32 << zero) == u32);
+                REQUIRE((u64 << zero) == u64);
 
                 REQUIRE((t   <<= zero) == t);
                 REQUIRE((f   <<= zero) == f);
@@ -338,12 +338,12 @@ TEST_CASE("uint128_t")
                 REQUIRE((u32 <<= zero) == u32);
                 REQUIRE((u64 <<= zero) == u64);
 
-                REQUIRE(t   << one == uint128_t(t)   << 1);
-                REQUIRE(f   << one == uint128_t(f)   << 1);
-                REQUIRE(u8  << one == uint128_t(u8)  << 1);
-                REQUIRE(u16 << one == uint128_t(u16) << 1);
-                REQUIRE(u32 << one == uint128_t(u32) << 1);
-                REQUIRE(u64 << one == uint128_t(u64) << 1);
+                REQUIRE((t   << one) == uint128_t(t)   << 1);
+                REQUIRE((f   << one) == uint128_t(f)   << 1);
+                REQUIRE((u8  << one) == uint128_t(u8)  << 1);
+                REQUIRE((u16 << one) == uint128_t(u16) << 1);
+                REQUIRE((u32 << one) == uint128_t(u32) << 1);
+                REQUIRE((u64 << one) == uint128_t(u64) << 1);
 
                 REQUIRE((t   <<= one) == true);
                 REQUIRE((f   <<= one) == false);
@@ -352,10 +352,10 @@ TEST_CASE("uint128_t")
                 REQUIRE((u32 <<= one) == (uint32_t) 0xfffffffeULL);
                 REQUIRE((u64 <<= one) == (uint64_t) 0xfffffffffffffffeULL);
 
-                REQUIRE(u8  << uint128_t(7) ==  uint128_t(0x7f00ULL));
-                REQUIRE(u16 << uint128_t(15) == uint128_t(0x7fff0000ULL));
-                REQUIRE(u32 << uint128_t(31) == uint128_t(0x7fffffff00000000ULL));
-                REQUIRE(u64 << uint128_t(63) == uint128_t(0x7fffffffffffffff, 0x0000000000000000ULL));
+                REQUIRE((u8  << uint128_t(7)) ==  uint128_t(0x7f00ULL));
+                REQUIRE((u16 << uint128_t(15)) == uint128_t(0x7fff0000ULL));
+                REQUIRE((u32 << uint128_t(31)) == uint128_t(0x7fffffff00000000ULL));
+                REQUIRE((u64 << uint128_t(63)) == uint128_t(0x7fffffffffffffff, 0x0000000000000000ULL));
 
                 REQUIRE((u8  <<= uint128_t(7) ) ==  (uint8_t)  0);
                 REQUIRE((u16 <<= uint128_t(15)) == (uint16_t) 0);
