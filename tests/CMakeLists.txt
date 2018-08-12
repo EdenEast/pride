@@ -1,3 +1,5 @@
+enable_testing()
+
 option(CATCH_USE_VALGRIND "Perform SelfTests with Valgrind" OFF)
 option(CATCH_BUILD_EXAMPLES "Build documentation examples" OFF)
 option(CATCH_ENABLE_COVERAGE "Generate coverage for codecov.io" OFF)
@@ -17,6 +19,5 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/external/catch/.git)
     FOLDER Tests                          # In an IDE this target will be under the folder "Tests"
   )
 
-  enable_testing()
-  add_test(NAME unittests COMMAND tests)
+  add_test(NAME MyTest COMMAND tests)
 endif()

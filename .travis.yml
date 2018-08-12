@@ -188,7 +188,8 @@ matrix:
     script:
       - cmake -DCMAKE_CXX_COMPILER="g++-8" ..
       - make
-      - make tests
+      - cd tests
+      - ctest
 
   #
   # Clang 5.0
@@ -208,7 +209,8 @@ matrix:
     script:
       - cmake -DCMAKE_C_COMPILER=clang-5.0 -DCMAKE_CXX_COMPILER=clang++-5.0 ..
       - make
-      - make tests
+      - cd tests
+      - ctest
 
   #
   # Clang 6.0
@@ -228,7 +230,8 @@ matrix:
     script:
       - cmake -DCMAKE_C_COMPILER=clang-6.0 -DCMAKE_CXX_COMPILER=clang++-6.0 ..
       - make
-      - make tests
+      - cd tests
+      - ctest
 
   #
   # XCode 8.3
