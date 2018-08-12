@@ -6,6 +6,14 @@ language: cpp
 dist: trusty
 
 #
+# Branches
+#
+branches:
+  only:
+    - master
+    - develop
+
+#
 # Build Dependencies
 #
 before_script:
