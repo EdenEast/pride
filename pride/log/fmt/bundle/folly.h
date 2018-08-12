@@ -8,15 +8,16 @@
 #ifndef FMT_FOLLY_H_
 #define FMT_FOLLY_H_
 
-#include <folly/Range.h>
 #include "core.h"
+#include <folly/Range.h>
 
 FMT_BEGIN_NAMESPACE
-template <typename Ctx>
+template<typename Ctx>
 inline internal::typed_value<Ctx, internal::string_type>
-    make_value(folly::StringPiece s) {
-  return string_view(s.data(), s.size());
+    make_value(folly::StringPiece s)
+{
+    return string_view(s.data(), s.size());
 }
 FMT_END_NAMESPACE
 
-#endif  // FMT_FOLLY_H_
+#endif // FMT_FOLLY_H_
