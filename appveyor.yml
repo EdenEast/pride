@@ -1,5 +1,5 @@
 
-version: {build}
+version: '{build}'
 
 branches:
   only:
@@ -7,58 +7,33 @@ branches:
     - develop
     - support/appveyor
 
+
+image:
+  - Visual Studio 2017
+
 platform:
   - x86
   - x64
 
-configuration:
-  - Debug
-  - Release
+# configuration:
+#   - Debug
+#   - Release
 
-image:
-  - Visual Studio 15 2017
+init:
+  - cmake --version
+  - msbuild /version
 
-cache:
-  - C:\cmake-3.8.0-win32-x86
-
-environment:
-  global:
-    CYG_ROOT: C:\cygwin_ci_helloworld
-    CYG_BASH: C:\cygwin_ci_helloworld\bin\bash
-    CYG_MIRROR: http://mirrors.kernel.org/sourceware/cygwin/
-    CYG_PACKAGES: git,make,gcc-core,gcc-g++,cmake
-
-  matrix:
-    - BUILD_SYSTEM: msvc
-    - BUILD_SYSTEM: cygwin
-
-install:
+before_build:
   - ps: |
-    if (![IO.File]::Exists("C:\cmake-3.8.0-win32-x86\bin\cmake.exe")) {
-      Start-FileDownload 'https://cmake.org/files/v3.8/cmake-3.8.0-win32-x86.zip'
-      7z x -y cmake-3.8.0-win32-x86.zip -oC:\ }
-    $env:PATH="C:\cmake-3.8.0-win32-x86\bin;$env:PATH"
-
-  - ps: |
-    if ($env:BUILD_SYSTEM -match "cygwin"){
-      Start-FileDownload "https://cygwin.com/setup-x86_64.exe" -FileName "setup-x86_64.exe"'
-      setup-x86_64.exe --quiet-mode --no-shortcuts --only-site --root "%CYG_ROOT%" --site "%CYG_MIRROR%" --local-package-dir "%CYG_ROOT%\var\cache\setup" --packages "%CYG_PACKAGES%"'
-    }
-
-build_script:
-  - ps: |
-    mkdir build
-    cd build
-    if ("$env:BUILD_SYSTEM" -match "cygwin") {
-      '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/build; cmake .."'
-      '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/build; make"'
-      '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/build/tests; ctest"'
-    } else {
+      git submodule update --init --recursive
+      mkdir build
+      cd  build
       $env:generator="Visual Studio 15 2017"
       if ($env:PLATFORM -eq "x64") {
         $env:generator="$env:generator Win64"
       }
-      echo generator="$env:generator"
-      cmake .. -G "$env:generator"
-      cmake --build build --config %CONFIGURATION% -- /m /v:minimal
-    }
+      cmake .. -G "$env:generator" -DNO_TESTS=ON
+
+build_script:
+  - ps: |
+      cmake --build .  -- /m /v:minimal
