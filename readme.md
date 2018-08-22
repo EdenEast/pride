@@ -3,7 +3,7 @@
 > **General purpose C++17 core utility header-only library**
 
 [![Build Status](https://api.travis-ci.org/CruizeMissile/pride.svg?branch=master)](https://travis-ci.org/CruizeMissile/pride)
-[![Build status](https://ci.appveyor.com/api/projects/status/3nvyor0otap8fs17/branch/master?svg=true)](https://ci.appveyor.com/project/CruizeMissile/pride/branch/master)
+[![Build Status](https://ci.appveyor.com/api/projects/status/uc9btnlu78iqwepc/branch/master?svg=true)](https://ci.appveyor.com/project/CruizeMissile/pride/branch/master)
 
 Pride is written to be my core utility library that use in most of my projects. Is is written to be a header only library so that it is easy to include and use. Pride is ment to be added as a submodule and added to your cmake files.
 
